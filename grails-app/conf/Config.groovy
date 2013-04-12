@@ -145,6 +145,25 @@ environments {
             }
         }
     }
+
+    qa {
+
+	    // URLs
+	    grails.serverURL = "http://dc2b.intersect.org.au:9090/$appName"
+	    spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
+	    wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
+	    openIdProvider.url = "https://openid.emii.org.au/login"
+
+        facetedSearch.enabled = false
+
+        grails {
+            mail {
+                host = "localhost"
+                port = 25
+                props = ["mail.smtp.auth":"false"]
+            }
+        }
+    }
 }
 
 def defaultInstanceName = "AODN"

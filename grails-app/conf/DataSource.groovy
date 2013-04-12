@@ -47,4 +47,10 @@ environments {
 			jndiName = "java:comp/env/jdbc/aodnportal"
 		}
 	}
+
+	qa {
+		dataSource {
+			jndiName = "java:comp/env/jdbc/aodnportal-qa"
+		}
+	}
 }
