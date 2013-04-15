@@ -99,9 +99,9 @@ environments {
 		grails.resources.debug = true
 
         // URLs
-		grails.serverURL = "http://${java.net.InetAddress.getLocalHost().getHostAddress()}:8080/$appName"
-	    spatialsearch.url = "http://search.aodn.org.au/aodnsearch/search/index"
-		wmsScanner.url = "http://wmsscannerpublic.aodn.org.au/wmsscanner/"
+		grails.serverURL = "http://localhost:8080/$appName"
+	    spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
+		wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
 		openIdProvider.url = "https://openid.emii.org.au/login"
 
         facetedSearch.enabled = true
