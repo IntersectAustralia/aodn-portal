@@ -1,4 +1,3 @@
-
 <%--
 
  Copyright 2012 IMOS
@@ -9,7 +8,7 @@
 
 
 
-<%@ page import="au.org.emii.portal.User" %>
+<%@ page import="au.org.emii.portal.UserRole; au.org.emii.portal.Organization; au.org.emii.portal.User" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -63,6 +62,33 @@
                                     <g:textField name="fullName" value="${userInstance?.fullName}" />
                                 </td>
                             </tr>
+
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="organization"><g:message code="user.organization.label" default="Organization" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'organization', 'errors')}">
+                                    <g:select name="organization"
+                                              from="${Organization.list()}"
+                                              optionKey="id"
+                                              value="${userInstance?.organization?.id}"
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="role"><g:message code="user.role.label" default="Role" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'role', 'errors')}">
+                                    <g:select name="role"
+                                              from="${UserRole.list()}"
+                                              optionKey="id"
+                                              value="${userInstance?.role?.id}"
+                                    />
+                                </td>
+                            </tr>
+
                         </tbody>
 
                     </table>

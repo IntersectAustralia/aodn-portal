@@ -1,4 +1,3 @@
-
 <%--
 
  Copyright 2012 IMOS
@@ -9,7 +8,7 @@
 
 
 
-<%@ page import="au.org.emii.portal.User" %>
+<%@ page import="au.org.emii.portal.UserRole; au.org.emii.portal.Organization; au.org.emii.portal.User" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -39,8 +38,31 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
+
                             <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="openIdUrl"><g:message code="user.AAF.label" default="AAF" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'openIdUrl', 'errors')}">
+                                    <g:textField name="openIdUrl" value="${userInstance?.openIdUrl}" />
+                                </td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="organization"><g:message code="user.organization.label" default="organization" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'organization', 'errors')}">
+                                    <g:select name="organization"
+                                              from="${Organization.list()}"
+                                              optionKey="id"
+                                              value="${userInstance?.organization?.id}"
+                                    />
+                                </td>
+                            </tr>
+
+
+                        <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="emailAddress"><g:message code="user.emailAddress.label" default="Email Address" /></label>
                                 </td>
@@ -49,14 +71,7 @@
                                 </td>
                             </tr>
 
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="openIdUrl"><g:message code="user.openIdUrl.label" default="OpenID URL" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'openIdUrl', 'errors')}">
-                                    <g:textField name="openIdUrl" value="${userInstance?.openIdUrl}" />
-                                </td>
-                            </tr>
+
 
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -75,13 +90,18 @@
                                     
                                 </td>
                             </tr>
-                        
+
+
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="roles"><g:message code="user.roles.label" default="Roles" /></label>
+                                  <label for="role"><g:message code="user.role.label" default="Role" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'roles', 'errors')}">
-                                    <g:select name="roles" from="${au.org.emii.portal.UserRole.list()}" multiple="yes" optionKey="id" size="5" value="${userInstance?.roles*.id}" />
+                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'role', 'errors')}">
+                                    <g:select name="role"
+                                              from="${UserRole.list()}"
+                                              optionKey="id"
+                                              value="${userInstance?.role?.id}"
+                                    />
                                 </td>
                             </tr>
                         

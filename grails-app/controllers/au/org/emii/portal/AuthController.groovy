@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 IMOS
  *
@@ -77,10 +76,10 @@ class AuthController {
 
 	            // If there are no users to date make the first user an admin
 				if (User.count() < 1) {
-					userInstance.addToRoles UserRole.findByName("Administrator")
+					userInstance.role = UserRole.findByName("Administrator")
 				}
 	            else {
-                    userInstance.addToRoles UserRole.findByName( "SelfRegisteredUser" )
+                    userInstance.role = UserRole.findByName( "SelfRegisteredUser" )
 				}
             }
 

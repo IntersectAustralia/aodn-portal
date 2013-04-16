@@ -1,4 +1,3 @@
-
 <%--
 
  Copyright 2012 IMOS
@@ -35,7 +34,7 @@
 
       <g:layoutBody />
         <div id="controllerMenu">
-          <user:loggedInUserInRole roles="Administrator">
+          <user:loggedInUserInRole role="Administrator">
           <h2>Portal Config</h2>
           <ul>
             <li class="controllerMenuItems"><g:link controller="server" action="list" >Server</g:link>
@@ -59,6 +58,11 @@
               </span>
             </li>
 
+              <li class="controllerMenuItems"><g:link controller="organization"  >Organizations</g:link><span class="inline">
+                  <g:link controller="organization" action="create" class="" >create</g:link>
+              </span>
+              </li>
+
             <li class="controllerMenuItems"><g:link controller="user"  >Users</g:link><span class="inline">
                 <g:link controller="user" action="create" class="" >create</g:link>
               </span>
@@ -70,7 +74,7 @@
             <li class="controllerMenuItems"><g:link controller="systemTest" action="controls" >System Test Controls</g:link></li>
 
 		   </user:loggedInUserInRole>
-		   <user:loggedInUserInRole roles="Administrator,ServerOwner">
+		   <user:loggedInUserInRole role="Administrator,ServerOwner">
                <li class="controllerMenuItems"><g:link controller="wmsScanner" action="controls" >WMS Scanner Controls</g:link></li>
                 <li class="controllerMenuItems"><g:link controller="server" action="listByOwner">Edit Filters</g:link>
            </user:loggedInUserInRole>

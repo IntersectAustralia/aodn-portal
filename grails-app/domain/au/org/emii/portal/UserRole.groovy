@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 IMOS
  *
@@ -16,8 +15,7 @@ class UserRole {
 
     String name
 
-    static hasMany = [ users: User, permissions: String ]
-    static belongsTo = User
+    static hasMany = [ permissions: String ]
 
     static constraints = {
         name(nullable: false, blank: false, unique: true)

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 IMOS
  *
@@ -42,12 +41,14 @@ class UserTagLib {
 
         if ( !user ) return
 
-        def targetRoles = UserRole.findAll("from UserRole as b where b.name in (:roleNames)", [roleNames:attrs.roles?.split(",")])
+        def targetRoles = UserRole.findAll("from UserRole as b where b.name in (:roleNames)", [roleNames:attrs.role?.split(",")])
 
 
         def found = false
         targetRoles?.each(){
-            found = found || (user.roles.contains(it))
+			if ( user.role?.id==it?.id ) {
+				found = true;
+			}
         }
 
         if(found){

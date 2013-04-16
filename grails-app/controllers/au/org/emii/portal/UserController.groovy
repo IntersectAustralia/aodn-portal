@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 IMOS
  *
@@ -9,7 +8,7 @@
 package au.org.emii.portal
 
 import grails.converters.JSON
-import org.apache.shiro.SecurityUtils
+import org.apache.commons.collections.ListUtils
 
 class UserController {
 
@@ -20,7 +19,7 @@ class UserController {
     }
 
     def list = {
-        [userInstanceList: User.list(params), userInstanceTotal: User.count()]
+		[ userInstanceList: User.list(params), userInstanceTotal: User.count() ]
     }
 
     def create = {
@@ -31,7 +30,14 @@ class UserController {
 
     def save = {
 
-        def userInstance = new User( params )
+        def userInstance = new User()
+
+		def organization = getOrganizationFromParams( params )
+		def role = getUserRoleFromParams( params )
+
+		params.organization = organization
+		params.role = role
+		userInstance.properties = params
 
         if ( userInstance.save( flush: true ) ) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])}"
@@ -78,6 +84,17 @@ class UserController {
                     return
                 }
             }
+
+			def organization = getOrganizationFromParams( params )
+			def role = getUserRoleFromParams( params )
+			if ( !organization || !role ) {
+				render(view: "edit", model: [userInstance: userInstance])
+				return
+			}
+
+			// modify params, change it organization and roles value from String&String[] to objects
+			params.organization = organization
+			params.role = role
             userInstance.properties = params
             if (!userInstance.hasErrors() && userInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])}"
@@ -115,5 +132,71 @@ class UserController {
 	def current = {
 		def result = User.current()
 		render result as JSON
+	}
+
+	/**
+	 * Search function.
+	 * The result is the intersection of
+	 * 1) search result by keyword on columns [fullname | email | aaf] &
+	 * 2) search result by organization &
+	 * 3) search result by role.
+	 *
+	 * Due to the User List is quite small, so performance should not be a matter at here
+	 */
+	def search = {
+
+		if ( null == params.role && null == params.organization && (null == params.keyword || "" == params.keyword) ) {
+			redirect(action: "list")
+		} else {
+			def result = []
+			def terminated = false
+			if ( params.keyword != null && params.keyword != "" ) {
+				def result1 = User.findAllByFullNameIlikeOrEmailAddressIlike( "%" + params.keyword + "%",  "%" + params.keyword + "%")
+				def result2 = User.findAllByOpenIdUrlIlike("%" + params.keyword + "%")  // find by aaf.
+				result1.removeAll( result2 )
+				result = ListUtils.union( result1, result2 )
+
+				if( result.empty )	terminated = true
+			}
+
+			if ( params.role != "null" && !terminated)  {
+				def role = UserRole.findById( params.role )
+				def searchResult = User.findAllByRole( role );
+				if ( result.empty ) {
+					result = searchResult
+				} else {
+					result = ListUtils.intersection( result, searchResult )
+				}
+
+				if( result.empty )	terminated = true
+			}
+
+			if( "null" != params.organization && !terminated ) {
+				def organization = Organization.findById( params.organization )
+				def searchResult = User.findAllByOrganization( organization );
+				if ( result.empty ) {
+					result = searchResult
+				} else {
+					result = ListUtils.intersection( result, searchResult )
+				}
+			}
+
+			render(view: "list", model: [ userInstanceList: result, userInstanceTotal: result.size() ]
+			)
+		}
+	}
+
+	def getOrganizationFromParams = {
+		params ->
+			def organizationId = params.organization
+			def organization = Organization.findById(organizationId)
+			return organization;
+	}
+
+	def getUserRoleFromParams = {
+		params ->
+			def roleId = params.role
+			def role = UserRole.findById( roleId )
+			return role
 	}
 }

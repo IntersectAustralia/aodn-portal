@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 IMOS
  *
@@ -15,15 +14,19 @@ class User {
     String openIdUrl
     String emailAddress
     String fullName
+	Organization organization
+	UserRole role
 
     // Relationships
-    static hasMany = [ roles: UserRole, permissions: String ]
-    
+    static hasMany = [ permissions: String ]
+
     static constraints = {
 
         openIdUrl unique: true, blank: false
         emailAddress blank: false
         fullName blank: false
+		organization nullable: true
+		role nullable: false
     }
 
     User() {

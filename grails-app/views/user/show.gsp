@@ -1,4 +1,3 @@
-
 <%--
 
  Copyright 2012 IMOS
@@ -28,14 +27,28 @@
             <div class="message">${flash.message}</div>
             </g:if>
             <div class="dialog">
+
                 <table>
                     <tbody>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="user.id.label" default="Id" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: userInstance, field: "id")}</td>
                             
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="user.AAF.label" default="AAF" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: userInstance, field: "openIdUrl")}</td>
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="user.organization.label" default="Organization" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: userInstance, field: "organization")}</td>
+
                         </tr>
                     
                         <tr class="prop">
@@ -44,37 +57,24 @@
                             <td valign="top" class="value">${fieldValue(bean: userInstance, field: "emailAddress")}</td>
                         </tr>
 
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="user.openIdUrl.label" default="OpenID URL" /></td>
 
-                            <td valign="top" class="value">${fieldValue(bean: userInstance, field: "openIdUrl")}</td>
-                        </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="user.fullName.label" default="Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: userInstance, field: "fullName")}</td>
-                            
                         </tr>
 
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="user.permissions.label" default="Permissions" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: userInstance, field: "permissions")}</td>
-                            
                         </tr>
-                    
+
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="user.roles.label" default="Roles" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${userInstance.roles}" var="r">
-                                    <li><g:link controller="userRole" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
-                            
+                            <td valign="top" class="name"><g:message code="user.role.label" default="Role" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: userInstance, field: "role")}</td>
                         </tr>
                     
                     </tbody>

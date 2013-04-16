@@ -117,5 +117,6 @@ databaseChangeLog = {
 	include file: 'soos-changelog.groovy'
 
 
+	include file: '20130416-add-organization-to-user-changeRelationOf-user-to-userRole.groovy'
 }
 
