@@ -26,12 +26,11 @@ environments {
 
 	development {
 		dataSource {
-//            dbCreate = "update"
-			driverClassName = "org.postgresql.Driver"
-			url = "jdbc:postgresql://localhost:5432/aodn_portal"
-			username = "postgres"
-			password = "ling1128"
-//			dialect = "au.org.emii.portal.TableNameSequencePostgresDialect"
+            //dbCreate = "update"
+            driverClassName = "org.postgresql.Driver"
+		    url = "jdbc:postgresql://localhost:5432/aodn_portal"
+            username = "postgres"
+            password = "postgres"
 		}
 	}
 	
