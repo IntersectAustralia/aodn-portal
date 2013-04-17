@@ -10,7 +10,6 @@ package au.org.emii.portal
 
 import grails.test.ControllerUnitTestCase
 import org.codehaus.groovy.grails.web.json.JSONElement
-import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor
 
 class LayerControllerTests extends ControllerUnitTestCase {
 
@@ -42,11 +41,11 @@ class LayerControllerTests extends ControllerUnitTestCase {
             return role
         }
         
-        User user = new User(id:  100, roles: [role])
+        User user = new User(id:  100, role: role)
         mockDomain User, [user]
         
         try{
-            def server = new Server(id : 10, uri : "http://serverUriText.com", shortAcron : "A", name : "name1", type : "WMS-1.1.1", lastScanDate: null, scanFrequency : 0, disable : false, allowDiscoveries : true, opacity : 3, imageFormat : "image/png", infoFormat: 'text/html', comments : "", owners: [user] )
+            def server = new Server(id : 10, uri : "http://serverUriText.com", shortAcron : "A", name : "name1", type : "WMS-1.1.1", lastScanDate: null, scanFrequency : 0, disable : false, allowDiscoveries : true, opacity : 3, imageFormat : "image/png", infoFormat: 'text/html', comments : "", owners: user)
             mockDomain Server, [server]
             mockDomain Config, [validConfig]
 

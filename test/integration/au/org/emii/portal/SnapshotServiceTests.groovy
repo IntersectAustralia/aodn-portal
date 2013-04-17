@@ -26,7 +26,9 @@ class SnapshotServiceTests extends GroovyTestCase {
 
     void testServiceReferenceSaveJSONRequest() 
     {
-        def user = new User(emailAddress: "Joe.Bloggs@testing.com", fullName: "Joe Bloggs", openIdUrl: "http://www.example.com/openId")
+		def role = new UserRole(name: "default")
+		role.save()
+        def user = new User(emailAddress: "Joe.Bloggs@testing.com", fullName: "Joe Bloggs", openIdUrl: "http://www.example.com/openId", role: role)
         
         user.save()
 
@@ -61,7 +63,9 @@ class SnapshotServiceTests extends GroovyTestCase {
     
     void testLayerReferenceSaveJSONRequest() 
     {
-        def user = new User(emailAddress: "Joe.Bloggs@testing.com", fullName: "Joe Bloggs", openIdUrl: "http://www.totallysecuresites.com/" )
+		def role = new UserRole(name: "default")
+		role.save()
+        def user = new User(emailAddress: "Joe.Bloggs@testing.com", fullName: "Joe Bloggs", openIdUrl: "http://www.totallysecuresites.com/", role: role )
         
         user.save()
         
