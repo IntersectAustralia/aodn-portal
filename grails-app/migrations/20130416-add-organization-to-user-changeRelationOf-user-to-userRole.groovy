@@ -21,6 +21,15 @@ databaseChangeLog = {
 	}
 
 	changeSet(author: "htxiong (generated)", id: "1366074877370-2-1") {
+
+		// empty table: portal_user_permissions
+		delete(tableName: "portal_user_permissions") {
+		}
+
+		// empty table: portal_user_roles
+		delete(tableName: "portal_user_roles") {
+		}
+
 		// empty table: portal_user
 		delete(tableName: "portal_user") {
 		}
