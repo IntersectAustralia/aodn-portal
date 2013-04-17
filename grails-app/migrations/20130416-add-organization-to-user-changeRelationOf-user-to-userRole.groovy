@@ -20,6 +20,12 @@ databaseChangeLog = {
 		}
 	}
 
+	changeSet(author: "htxiong (generated)", id: "1366074877370-2-1") {
+		// empty table: portal_user
+		delete(tableName: "portal_user") {
+		}
+	}
+
 	changeSet(author: "htxiong (generated)", id: "1366074877370-2") {
 		addColumn(tableName: "portal_user") {
 			column(name: "organization_id", type: "int8")
