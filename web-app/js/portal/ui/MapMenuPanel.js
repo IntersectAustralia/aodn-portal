@@ -35,6 +35,9 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
         this.userDefinedWMSPanel = new Portal.ui.UserDefinedWMSPanel({});
         itemsToAdd.push(this.userDefinedWMSPanel);
 
+        this.datasetsPanel = new Portal.ui.DatasetsPanel({});
+        itemsToAdd.push(this.datasetsPanel);
+
         var config = Ext.apply({
             defaults:{
                 //padding: 5,
