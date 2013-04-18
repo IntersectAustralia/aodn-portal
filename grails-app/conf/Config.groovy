@@ -104,7 +104,7 @@ environments {
 		wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
 		openIdProvider.url = "https://openid.emii.org.au/login"
 
-        facetedSearch.enabled = true
+        facetedSearch.enabled = false
 
         grails {
             mail {

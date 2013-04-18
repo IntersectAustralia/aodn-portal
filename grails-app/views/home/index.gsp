@@ -22,6 +22,7 @@ ${buildInfo}
 <link rel="stylesheet" type="text/css"
       href="${resource(dir: 'js', file: 'ext-ux/SuperBoxSelect/superboxselect.css')}"/>
 <link rel="stylesheet" type="text/css" href="${resource(dir: 'js', file: 'ext-ux/Hyperlink/hyperlink.css')}"/>
+<link rel="stylesheet" type="text/css" href="${resource(dir: 'js', file: 'ext-ux/fileuploadfield/css/fileuploadfield.css')}"/>
 <!-- Portal classes-->
 <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'portal-search.css')}"/>
 
@@ -64,6 +65,7 @@ ${buildInfo}
         type="text/javascript"></script>
 <script src="${resource(dir: 'js', file: 'ext-ux/Hyperlink/Hyperlink.js')}" type="text/javascript"></script>
 <script src="${resource(dir: 'js', file: 'ext-ux/util/MessageBus.js')}" type="text/javascript"></script>
+<script src="${resource(dir: 'js', file: 'ext-ux/fileuploadfield/FileUploadField.js')}" type="text/javascript"></script>
 
 <g:if env="development">
 <script src="${resource(dir: 'js', file: 'portal/prototypes/Array.js')}?${jsVerNum}"
@@ -235,6 +237,8 @@ ${buildInfo}
 <script src="${resource(dir: 'js', file: 'portal/ui/MainTabPanel.js')}?${jsVerNum}"
         type="text/javascript"></script>
 <script src="${resource(dir: 'js', file: 'portal/ui/UserDefinedWMSPanel.js')}?${jsVerNum}"
+        type="text/javascript"></script>
+<script src="${resource(dir: 'js', file: 'portal/ui/DatasetsPanel.js')}?${jsVerNum}"
         type="text/javascript"></script>
 <script src="${resource(dir: 'js', file: 'portal/cart/DownloadCartConfirmationWindow.js')}?${jsVerNum}"
         type="text/javascript"></script>

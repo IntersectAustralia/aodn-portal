@@ -35,6 +35,69 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
         this.userDefinedWMSPanel = new Portal.ui.UserDefinedWMSPanel({});
         itemsToAdd.push(this.userDefinedWMSPanel);
 
+        this.datasetsPanel = new Ext.form.FormPanel({
+            title: 'Add Dataset',
+            layout: 'form',
+            cls: '',
+            items: [
+                {
+                    html: '<h4>Add new dataset</h4>'
+                },
+                {
+                    xtype: 'combo',
+                    fieldLabel: 'Date type',
+                    flex: 2,
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    lazyRender:true,
+                    mode: 'local',
+                    store: new Ext.data.ArrayStore({
+                        id: 0,
+                        fields: [
+                            'id',
+                            'displayText'
+                        ],
+                        data: [[1, 'Sonde survey'], [2, 'Nutrient sample'], [3, 'Carbon Dioxide survey']]
+                    }),
+                    valueField: 'id',
+                    displayField: 'displayText'
+                },
+                {
+                    xtype: 'fileuploadfield',
+                    id: 'dataset-file',
+                    emptyText: 'Browse',
+                    fieldLabel: 'Data file',
+                    name: 'dataset-path',
+                    buttonText: 'Browse'
+                },
+                {
+                    xtype: 'fileuploadfield',
+                    id: 'metadata-file',
+                    emptyText: 'Browse',
+                    fieldLabel: 'Metadata file(optional)',
+                    name: 'metadata-path',
+                    buttonText: 'Browse'
+                },
+                {
+                    xtype: 'container',
+                    layout: { type: 'hbox', pack: 'end' },
+                    items: [
+                        {
+                            margins: {top:0, right:1, bottom:4, left:0},
+                            ref: 'uploadButton',
+                            xtype: 'button',
+                            text: "Add dataset",
+                            tooltip: "Add dataset file",
+                            listeners:  {
+
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+        itemsToAdd.push(this.datasetsPanel);
+
         var config = Ext.apply({
             defaults:{
                 //padding: 5,
