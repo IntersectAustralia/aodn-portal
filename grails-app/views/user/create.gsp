@@ -82,7 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'role', 'errors')}">
                                     <g:select name="role"
-                                              from="${UserRole.list()}"
+                                              from="${visibleUserRoles}"
                                               optionKey="id"
                                               value="${userInstance?.role?.id}"
                                     />

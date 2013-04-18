@@ -39,7 +39,7 @@
                         </tr>
 
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="user.AAF.label" default="AAF" /></td>
+                            <td valign="top" class="name"><g:message code="user.AAF.label" default="AAF Token" /></td>
 
                             <td valign="top" class="value">${fieldValue(bean: userInstance, field: "openIdUrl")}</td>
                         </tr>
@@ -83,8 +83,13 @@
             <div class="buttons">
                 <g:form>
                     <g:hiddenField name="id" value="${userInstance?.id}" />
-                    <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <user:loggedInUserInRole role="Administrator,Data Custodian">
+                        <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+                    </user:loggedInUserInRole>
+
+                    <user:loggedInUserInRole role="Administrator">
+                        <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    </user:loggedInUserInRole>
                 </g:form>
             </div>
         </div>

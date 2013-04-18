@@ -34,50 +34,57 @@
 
       <g:layoutBody />
         <div id="controllerMenu">
-          <user:loggedInUserInRole role="Administrator">
-          <h2>Portal Config</h2>
-          <ul>
-            <li class="controllerMenuItems"><g:link controller="server" action="list" >Server</g:link>
-              <span class="inline">
-                <g:link controller="server" action="create" class="" >create</g:link>
-              </span>
-            </li>
-            <li class="controllerMenuItems"><g:link controller="layer" action="list" >Layer</g:link>
-              <span class="inline">
-                <g:link controller="layer" action="create" class="" >create</g:link>
-              </span>
-            </li>
-            <li class="controllerMenuItems"><g:link controller="menu" action="list" >Menu</g:link>
-              <span class="inline">
-                <g:link controller="menu" action="create" class="" >create</g:link>
-              </span>
-            </li>
-            <li class="controllerMenuItems"><g:link controller="motd" action="list" >MOTD</g:link>
-              <span class="inline">
-                <g:link controller="motd" action="create" class="" >create</g:link>
-              </span>
-            </li>
 
-              <li class="controllerMenuItems"><g:link controller="organization"  >Organizations</g:link><span class="inline">
-                  <g:link controller="organization" action="create" class="" >create</g:link>
-              </span>
-              </li>
+        <user:loggedInUserInRole role="Administrator">
+              <h2>Portal Config</h2>
+              <ul>
+                <li class="controllerMenuItems"><g:link controller="server" action="list" >Server</g:link>
+                  <span class="inline">
+                    <g:link controller="server" action="create" class="" >create</g:link>
+                  </span>
+                </li>
+                <li class="controllerMenuItems"><g:link controller="layer" action="list" >Layer</g:link>
+                  <span class="inline">
+                    <g:link controller="layer" action="create" class="" >create</g:link>
+                  </span>
+                </li>
+                <li class="controllerMenuItems"><g:link controller="menu" action="list" >Menu</g:link>
+                  <span class="inline">
+                    <g:link controller="menu" action="create" class="" >create</g:link>
+                  </span>
+                </li>
+                <li class="controllerMenuItems"><g:link controller="motd" action="list" >MOTD</g:link>
+                  <span class="inline">
+                    <g:link controller="motd" action="create" class="" >create</g:link>
+                  </span>
+                </li>
 
-            <li class="controllerMenuItems"><g:link controller="user"  >Users</g:link><span class="inline">
-                <g:link controller="user" action="create" class="" >create</g:link>
-              </span>
-            </li>
+                <li class="controllerMenuItems"><g:link controller="user"  >Users</g:link><span class="inline">
+                    <g:link controller="user" action="create" class="" >create</g:link>
+                  </span>
+                </li>
 
-			<li class="controllerMenuItems"><g:link controller="aodaacProductLink">AODAAC Product Links</g:link></li>
+                <li class="controllerMenuItems"><g:link controller="aodaacProductLink">AODAAC Product Links</g:link></li>
 
-            <li class="controllerMenuItems"><g:link controller="config"  >Site Configuration</g:link></li>
-            <li class="controllerMenuItems"><g:link controller="systemTest" action="controls" >System Test Controls</g:link></li>
+                <li class="controllerMenuItems"><g:link controller="config"  >Site Configuration</g:link></li>
+                <li class="controllerMenuItems"><g:link controller="systemTest" action="controls" >System Test Controls</g:link></li>
 
-		   </user:loggedInUserInRole>
-		   <user:loggedInUserInRole role="Administrator,ServerOwner">
-               <li class="controllerMenuItems"><g:link controller="wmsScanner" action="controls" >WMS Scanner Controls</g:link></li>
-                <li class="controllerMenuItems"><g:link controller="server" action="listByOwner">Edit Filters</g:link>
-           </user:loggedInUserInRole>
+		</user:loggedInUserInRole>
+
+    <user:loggedInUserInRole role="Data Custodian">
+        <h2>Portal Config</h2>
+        <ul>
+        <li class="controllerMenuItems"><g:link controller="user"  >Users</g:link><span class="inline">
+            <g:link controller="user" action="create" class="" >create</g:link>
+        </span>
+        </li>
+
+    </user:loggedInUserInRole>
+
+       <user:loggedInUserInRole role="Administrator,ServerOwner">
+           <li class="controllerMenuItems"><g:link controller="wmsScanner" action="controls" >WMS Scanner Controls</g:link></li>
+           <li class="controllerMenuItems"><g:link controller="server" action="listByOwner">Edit Filters</g:link>
+       </user:loggedInUserInRole>
 			</li>
           </ul>
           <br />

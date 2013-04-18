@@ -41,7 +41,7 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="openIdUrl"><g:message code="user.AAF.label" default="AAF" /></label>
+                                    <label for="openIdUrl"><g:message code="user.AAF.label" default="AAF Token" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'openIdUrl', 'errors')}">
                                     <g:textField name="openIdUrl" value="${userInstance?.openIdUrl}" />
@@ -98,7 +98,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'role', 'errors')}">
                                     <g:select name="role"
-                                              from="${UserRole.list()}"
+                                              from="${visibleUserRoles}"
                                               optionKey="id"
                                               value="${userInstance?.role?.id}"
                                     />
@@ -109,8 +109,13 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <user:loggedInUserInRole role="Administrator,Data Custodian">
+                        <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                    </user:loggedInUserInRole>
+
+                    <user:loggedInUserInRole role="Administrator">
+                        <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    </user:loggedInUserInRole>
                 </div>
             </g:form>
         </div>

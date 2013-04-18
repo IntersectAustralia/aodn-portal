@@ -79,7 +79,7 @@ class AuthController {
 					userInstance.role = UserRole.findByName("Administrator")
 				}
 	            else {
-                    userInstance.role = UserRole.findByName( "SelfRegisteredUser" )
+                    userInstance.role = UserRole.findByName( "Researcher" )
 				}
             }
 

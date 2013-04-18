@@ -118,5 +118,7 @@ databaseChangeLog = {
 
 
 	include file: '20130416-add-organization-to-user-changeRelationOf-user-to-userRole.groovy'
+	include file: '20130417-Inserting-UserRoles-and-fixed-permissions.groovy'
+	include file: '20130418-inserting-organization-data.groovy'
 }
 

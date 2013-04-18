@@ -26,4 +26,14 @@ class UserRole {
         
         return name
     }
+
+	/**
+	 * this function checks is the current role is higher than the given one.
+	 * based on their ids.
+	 * Due to in DB migration changelog, we inserting user roles in the order of
+	 * higher to lower, so higher roles always with smaller id.
+ 	 */
+	public boolean isHigherThan( UserRole role ) {
+		return this.id < role.id
+	}
 }

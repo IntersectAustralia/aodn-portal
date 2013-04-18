@@ -34,16 +34,28 @@
         <shiro:user>
             Welcome <user:loggedInUser property="fullName"/>
             <g:link controller="auth" action="logOut">Log out</g:link>
-            <shiro:hasPermission permission="config:edit">
-                - <g:link controller="config">Administration</g:link>
-            </shiro:hasPermission>
+
+            <user:loggedInUserInRole role="Administrator">
+                <g:link controller="config">Administration</g:link>
+            </user:loggedInUserInRole>
+
+            <user:loggedInUserInRole role="Data Custodian">
+                <g:link controller="user">Administration</g:link>
+            </user:loggedInUserInRole>
+
+            <user:loggedInUserNotInRoles roles="Administrator,Data Custodian">
+                <shiro:hasPermission permission="config:edit">
+                    - <g:link controller="config">Administration</g:link>
+                </shiro:hasPermission>
+            </user:loggedInUserNotInRoles>
+
             <shiro:hasPermission permission="wmsScanner:controls">
                 <shiro:lacksPermission permission="config:edit">
                     - <g:link controller="wmsScanner" action="controls">Administration</g:link>
                 </shiro:lacksPermission>
             </shiro:hasPermission>
-
         </shiro:user>
+
         <g:each in="${grailsApplication.config.portal.header.externalLinks}" var="link">
             <a class="external mainlinks" target="_blank" href="${link.href}"
                title="${link.tooltipText}">${link.linkText}</a></g:each>

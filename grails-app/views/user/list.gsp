@@ -80,7 +80,7 @@
                         <tr>
                             <g:sortableColumn property="id" title="${message(code: 'user.id.label', default: 'Id')}" />
 
-                            <g:sortableColumn property="openIdUrl" title="${message(code: 'user.AAF.label', default: 'AAF')}" />
+                            <g:sortableColumn property="openIdUrl" title="${message(code: 'user.AAF.label', default: 'AAF Token')}" />
 
                             <g:sortableColumn property="organization" title="${message(code: 'user.organization.label', default: 'Organization')}" />
 

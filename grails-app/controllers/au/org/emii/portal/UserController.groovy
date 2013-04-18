@@ -25,7 +25,8 @@ class UserController {
     def create = {
         def userInstance = new User()
         userInstance.properties = params
-        return [userInstance: userInstance]
+		def visibleUserRoles = getVisibleUserRoles(userInstance)
+		return [userInstance: userInstance, visibleUserRoles: visibleUserRoles]
     }
 
     def save = {
@@ -66,15 +67,24 @@ class UserController {
             redirect(action: "list")
         }
         else {
-            return [userInstance: userInstance]
+			if (!validateUpdatePermission(userInstance)) return
+
+			def visibleUserRoles = getVisibleUserRoles(userInstance)
+			return [userInstance: userInstance, visibleUserRoles: visibleUserRoles]
         }
     }
 
+	/**
+	 * there are some permission checking code at here, just because both Administrator and Data Custodian users can update users.
+	 * and Data Custodian users has only restricted update permissions.
+ 	 */
     def update = {
 
         def userInstance = User.get(params.id)
 
         if (userInstance) {
+			if (!validateUpdatePermission(userInstance)) return
+
             if (params.version) {
                 def version = params.version.toLong()
                 if (userInstance.version > version) {
@@ -95,6 +105,14 @@ class UserController {
 			// modify params, change it organization and roles value from String&String[] to objects
 			params.organization = organization
 			params.role = role
+
+			// for Self updating
+			if( isSelfUpdate(userInstance) && role?.id != userInstance.roleId ) {
+				flash.message = "${message(code: 'default.updated.not.permitted.changeOwnRole.message', args: [params.id])}"
+				render(view: "show", model: [userInstance: userInstance])
+				return
+			}
+
             userInstance.properties = params
             if (!userInstance.hasErrors() && userInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])}"
@@ -113,6 +131,8 @@ class UserController {
     def delete = {
         def userInstance = User.get(params.id)
         if (userInstance) {
+			if (!validateUpdatePermission(userInstance)) return
+
             try {
                 userInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
@@ -198,5 +218,50 @@ class UserController {
 			def roleId = params.role
 			def role = UserRole.findById( roleId )
 			return role
+	}
+
+	def getVisibleUserRoles = {
+		userInstance ->
+		List<UserRole> visibleUserRoles = UserRole.list()
+		User currentUser = User.current()
+		if( "Data Custodian".equalsIgnoreCase( currentUser?.role.name ) ) {
+			for( role in UserRole.list() ) {
+				if( "Administrator".equalsIgnoreCase( role?.name ) || "Data Custodian".equalsIgnoreCase( role?.name ) ) {
+					visibleUserRoles.remove(role)
+				}
+			}
+
+			if(isSelfUpdate(userInstance)) {
+				visibleUserRoles.add(userInstance.role)
+			}
+		}
+
+		return visibleUserRoles
+	}
+
+	def validateUpdatePermission = {
+		userInstance ->
+			if (!isUpdatePermitted(userInstance)) {
+				flash.message = "${message(code: 'default.updated.not.permitted.message', args: [params.id])}"
+				redirect(action: "show", id: userInstance.id)
+				return false
+			}
+
+			true
+	}
+	def isUpdatePermitted = {
+		userInstance ->
+			User currentUser = User.current()
+			if( "Administrator".equalsIgnoreCase( currentUser?.role.name ) || "Data Custodian".equalsIgnoreCase( currentUser?.role.name ) ) {
+				return currentUser.role?.isHigherThan( userInstance?.role ) || isSelfUpdate(userInstance)
+
+			} else {
+				return false
+			}
+	}
+
+	private boolean isSelfUpdate( User userInstance) {
+		User currentUser = User.current()
+		return currentUser?.id == userInstance?.id
 	}
 }
