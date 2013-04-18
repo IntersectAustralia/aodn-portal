@@ -35,10 +35,12 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
         this.userDefinedWMSPanel = new Portal.ui.UserDefinedWMSPanel({});
         itemsToAdd.push(this.userDefinedWMSPanel);
 
-        this.datasetsPanel = new Ext.form.FormPanel({
+        var datasetsPanel = new Ext.form.FormPanel({
             title: 'Add Dataset',
             layout: 'form',
             cls: '',
+            fileUpload: true,
+            autoHeight: true,
             items: [
                 {
                     html: '<h4>Add new dataset</h4>'
@@ -46,10 +48,9 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
                 {
                     xtype: 'combo',
                     fieldLabel: 'Date type',
-                    flex: 2,
                     typeAhead: true,
                     triggerAction: 'all',
-                    lazyRender:true,
+                    lazyRender: true,
                     mode: 'local',
                     store: new Ext.data.ArrayStore({
                         id: 0,
@@ -77,25 +78,24 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
                     fieldLabel: 'Metadata file(optional)',
                     name: 'metadata-path',
                     buttonText: 'Browse'
-                },
-                {
-                    xtype: 'container',
-                    layout: { type: 'hbox', pack: 'end' },
-                    items: [
-                        {
-                            margins: {top:0, right:1, bottom:4, left:0},
-                            ref: 'uploadButton',
-                            xtype: 'button',
-                            text: "Add dataset",
-                            tooltip: "Add dataset file",
-                            listeners:  {
-
-                            }
-                        }
-                    ]
                 }
-            ]
+            ],
+            buttons: [{
+                text: 'Add dataset',
+                handler: function(){
+                    if(datasetsPanel.getForm().isValid()){
+                        datasetsPanel.getForm().submit({
+                            url: 'datasets/upload',
+                            waitMsg: 'Uploading your datasets...',
+                            success: function(datasetsPanel, o){
+                                msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                            }
+                        });
+                    }
+                }
+            }]
         });
+	this.datasetsPanel = datasetsPanel;
         itemsToAdd.push(this.datasetsPanel);
 
         var config = Ext.apply({

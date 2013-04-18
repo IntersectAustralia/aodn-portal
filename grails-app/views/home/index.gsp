@@ -238,8 +238,6 @@ ${buildInfo}
         type="text/javascript"></script>
 <script src="${resource(dir: 'js', file: 'portal/ui/UserDefinedWMSPanel.js')}?${jsVerNum}"
         type="text/javascript"></script>
-<script src="${resource(dir: 'js', file: 'portal/ui/DatasetsPanel.js')}?${jsVerNum}"
-        type="text/javascript"></script>
 <script src="${resource(dir: 'js', file: 'portal/cart/DownloadCartConfirmationWindow.js')}?${jsVerNum}"
         type="text/javascript"></script>
 <script src="${resource(dir: 'js', file: 'portal/ui/FeatureInfoPopup.js')}?${jsVerNum}"
