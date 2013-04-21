@@ -29,6 +29,21 @@ class Constants {
 db = [url:"jdbc:postgresql://localhost:5432/${args[1]}", user:'aodn', password:'aodn', driver:'org.postgresql.Driver']
 sql = Sql.newInstance(db.url, db.user, db.password, db.driver)
 
+phenomena = [0, 0, 0, 0,
+             'urn:ogc:def:phenomenon:OGC:1.0.30:watertemperature',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:conductivity',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:salinity',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:depth',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:turbidity',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:batteryvoltage',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:ph',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:chlorophylla',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:chlorophyllflourescence',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:odopercent',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:odoconcentration',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:bp'
+            ]
+
 def csvfile = new File(args[0])
 csvfile.eachLine { line, index ->
 
@@ -51,6 +66,9 @@ csvfile.eachLine { line, index ->
     }
 
 }
+
+sql.close()
+System.exit(0) // quit normally
 
 private Boolean validateSchema(String[] attrs) {
     // Date,Time,Latitude,Longitude,Water temperature,Sp Conductivity,Salinity,Depth,Turbidity,Battery,pH,Chlorophyll,Chlorophyll RFU,ODO Percent,ODO Concentration,BP
@@ -93,11 +111,19 @@ private Boolean findFoi(String foiId) {
 }
 
 private void addFoi(String foiId, String[] attrs) {
-sql.execute("INSERT INTO feature_of_interest (feature_of_interest_id, feature_of_interest_name, feature_of_interest_description, geom, feature_type, schema_link) VALUES ('" + foiId + "', 'SHED', 'Sydney Harbour Environment Data', GeometryFromText('POINT(" + (attrs[LONGITUDE] ?: 0) + " " + (attrs[LATITUDE] ?: 0) + ")', 4326), 'sa:SamplingPoint', 'http://xyz.org/reference-url2.html')")
+    sql.execute("INSERT INTO feature_of_interest (feature_of_interest_id, feature_of_interest_name, feature_of_interest_description, geom, feature_type, schema_link) VALUES ('" + foiId + "', 'SHED', 'Sydney Harbour Environment Data', GeometryFromText('POINT(" + (attrs[LONGITUDE] ?: 0) + " " + (attrs[LATITUDE] ?: 0) + ")', 4326), 'sa:SamplingPoint', 'http://xyz.org/reference-url2.html')")
     sql.execute('INSERT INTO foi_off VALUES (?, ?)', [foiId, 'GAUGE_HEIGHT'])
     sql.execute('INSERT INTO proc_foi VALUES (?, ?)', ['urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', foiId])
 }
 
-private void addToFoi(String foi_id, String[] attrs) {
-    println("Going to add values")
+private void addToFoi(String foiId, String[] attrs) {
+    // INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id,phenomenon_id,offering_id,numeric_value) values ('2013-04-20 01:16', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', 'foi_1001','urn:ogc:def:phenomenon:OGC:1.0.30:waterlevel','GAUGE_HEIGHT','50.0'); 
+    // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'mm', '1','category', 'accuracy');
+    // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'percent', '10','quantity', 'completeness');
+
+    def timestamp = "${attrs[DATE]} ${attrs[TIME]}"
+
+    for (phenomenon in WATER_TEMPERATURE..BP) {
+        sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, numeric_value) VALUES ('" + timestamp + "', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: 0) + "')")
+    } 
 }
