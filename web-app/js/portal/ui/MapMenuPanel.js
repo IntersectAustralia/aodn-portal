@@ -85,7 +85,7 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
                 handler: function(){
                     if(datasetsPanel.getForm().isValid()){
                         datasetsPanel.getForm().submit({
-                            url: 'datasets/upload',
+                            url: 'dataset/upload',
                             waitMsg: 'Uploading your datasets...',
                             success: function(datasetsPanel, o){
                                 msg('Success', 'Processed file "' + o.result.file + '" on the server');
