@@ -246,8 +246,8 @@ INSERT INTO proc_phen VALUES ('urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1'
 
 -- ATMP
 INSERT INTO phenomenon VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:atmp', 'ATMP', '','numericType');
-INSERT INTO phen_off VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:ATMP','GAUGE_HEIGHT');
-INSERT INTO proc_phen VALUES ('urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1','urn:ogc:def:phenomenon:OGC:1.0.30:ATMP');
+INSERT INTO phen_off VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:atmp','GAUGE_HEIGHT');
+INSERT INTO proc_phen VALUES ('urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1','urn:ogc:def:phenomenon:OGC:1.0.30:atmp');
 
 -- Probe Type
 INSERT INTO phenomenon VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:probetype', 'Probe Type', '','numericType');

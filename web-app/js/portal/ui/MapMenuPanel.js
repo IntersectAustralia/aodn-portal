@@ -58,8 +58,9 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
                             'id',
                             'displayText'
                         ],
-                        data: [[1, 'Sonde survey'], [2, 'Nutrient sample'], [3, 'Carbon Dioxide survey']]
+                        data: [[0, 'Sonde survey'], [1, 'Nutrient sample'], [2, 'Carbon Dioxide survey']]
                     }),
+		    hiddenName: 'dataset-type',
                     valueField: 'id',
                     displayField: 'displayText'
                 },
@@ -87,9 +88,12 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
                         datasetsPanel.getForm().submit({
                             url: 'dataset/upload',
                             waitMsg: 'Uploading your datasets...',
-                            success: function(datasetsPanel, o){
-                                msg('Success', 'Processed file "' + o.result.file + '" on the server');
-                            }
+                            success: function(datasetsPanel, o) {
+                                Ext.Msg.alert('Success', 'Processed file "' + o.result.file + '" on the server');
+                            },
+			    failure: function() {
+				Ext.Msg.alert('Failed: empty file');
+			    }
                         });
                     }
                 }
