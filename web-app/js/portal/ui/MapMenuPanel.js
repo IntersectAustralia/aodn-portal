@@ -35,6 +35,17 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
         this.userDefinedWMSPanel = new Portal.ui.UserDefinedWMSPanel({});
         itemsToAdd.push(this.userDefinedWMSPanel);
 
+	var msg = function(title, msg) {
+            Ext.Msg.show({
+		title: title,
+		msg: msg,
+		minWidth: 200,
+		modal: true,
+		icon: Ext.Msg.INFO,
+		buttons: Ext.Msg.OK
+            });
+	};
+	
         var datasetsPanel = new Ext.form.FormPanel({
             title: 'Add Dataset',
             layout: 'form',
@@ -89,10 +100,10 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
                             url: 'dataset/upload',
                             waitMsg: 'Uploading your datasets...',
                             success: function(datasetsPanel, o) {
-                                Ext.Msg.alert(o.result.message);
+                                msg("Success", o.result.message);
                             },
 			    failure: function(datasetsPanel, o) {
-				Ext.Msg.alert(o.result.message);
+				msg("Failure", o.result.message);
 			    }
                         });
                     }

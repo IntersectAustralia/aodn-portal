@@ -57,8 +57,10 @@ csvfile.eachLine { line, index ->
 
     if (index > 2) { // Ignore units line, start getting values
         String[] values = line.split(',')
+        String foiId
+        
         try {
-            String foiId = getFoi(values)
+            foiId = getFoi(values)
         }
         catch(Exception e) {
             System.err << "ERROR: geom data error at line: ${index}"

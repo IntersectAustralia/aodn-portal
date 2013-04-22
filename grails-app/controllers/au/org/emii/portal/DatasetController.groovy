@@ -29,7 +29,7 @@ class DatasetController {
             f.transferTo(new File("/aodn-portal/data/${filename}"))
 
             def command = """/home/devel/.gvm/groovy/current/bin/groovy /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${filename} aodnportal"""
-            log.info(command)
+            //log.info(command)
             def proc = command.execute()                 // Call *execute* on the string
             proc.waitFor()                               // Wait for the command to finish
 
