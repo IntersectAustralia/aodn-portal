@@ -19,17 +19,20 @@ class DatasetController {
 
     def upload = {
         def datasetTypes = ['sonde', 'nutrient', 'carbondioxide']
-        def f = request.getFile('dataset-path')
+        def f = request.getFile('dataset-path')   // Dataset
+        def m = request.getFile('metadata-path')  // Metadata
         def result = [:]
+        def datasetType = datasetTypes[params.int('dataset-type')]
+        def filenamePrefix = datasetType + "_" + session.id + "_" + System.nanoTime()
 
         if (!f.empty) {
             // Destination file should be: datasettype_sessionid.csv
-            def datasetType = datasetTypes[params.int('dataset-type')]
-            def filename =  datasetType + "_" + session.id + ".csv"
-            f.transferTo(new File("/aodn-portal/data/${filename}"))
+            def datasetFile = filenamePrefix + ".csv"
+            def metadataFile = filenamePrefix + ".ifo"
+            f.transferTo(new File("/aodn-portal/data/${datasetFile}"))
+            m.transferTo(new File("/aodn-portal/data/${metadataFile}"))
 
-            def command = """/home/devel/.gvm/groovy/current/bin/groovy /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${filename} aodnportal"""
-            //log.info(command)
+            def command = """/home/devel/.gvm/groovy/current/bin/groovy /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} aodnportal"""
             def proc = command.execute()                 // Call *execute* on the string
             proc.waitFor()                               // Wait for the command to finish
 

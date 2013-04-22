@@ -1,4 +1,4 @@
-// Extract Sonde Data from CSV file
+// Extract Carbon Dioxide Data from CSV file
 // args[0]: CSV file path
 // args[1]: Database name(generated from grails environment)
 import static Constants.*
@@ -6,24 +6,26 @@ import groovy.sql.Sql
 this.class.classLoader.rootLoader.addURL(new URL("file:///usr/share/java/postgresql-jdbc-8.4.701.jar"))
 
 class Constants { 
-    // Sonde Survey Data Schema
-    // Date,Time,Latitude,Longitude,Water temperature,Sp Conductivity,Salinity,Depth,Turbidity,Battery,pH,Chlorophyll,Chlorophyll RFU,ODO Percent,ODO Concentration,BP
+    // Carbon Dioxide Survey Data Schema
+    // Date,Time,Latitude,Longitude,Water temperature,Salinity,Plot,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
     static final int              DATE = 0
     static final int              TIME = 1
     static final int          LATITUDE = 2
     static final int         LONGITUDE = 3
     static final int WATER_TEMPERATURE = 4
-    static final int   SP_CONDUCTIVITY = 5
-    static final int          SALINITY = 6
-    static final int             DEPTH = 7
-    static final int         TURBIDITY = 8
-    static final int           BATTERY = 9
-    static final int                PH = 10
-    static final int       CHLOROPHYLL = 11
-    static final int   CHLOROPHYLL_RFU = 12
-    static final int       ODO_PERCENT = 13
-    static final int ODO_CONCENTRATION = 14
-    static final int                BP = 15
+    static final int          SALINITY = 5
+    static final int              PLOT = 6
+    static final int             RECNO = 7
+    static final int            MB_REF = 8
+    static final int          MBR_TEMP = 9
+    static final int            OXYGEN = 10
+    static final int           INPUT_D = 11
+    static final int           INPUT_E = 12
+    static final int           INPUT_F = 13
+    static final int           INPUT_G = 14
+    static final int           INPUT_H = 15
+    static final int              ATMP = 16
+    static final int        PROBE_TYPE = 17
     }
 
 db = [url:"jdbc:postgresql://localhost:5432/${args[1]}", user:'aodn', password:'aodn', driver:'org.postgresql.Driver']
@@ -31,17 +33,19 @@ sql = Sql.newInstance(db.url, db.user, db.password, db.driver)
 
 phenomena = [0, 0, 0, 0,
              'urn:ogc:def:phenomenon:OGC:1.0.30:watertemperature',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:conductivity',
              'urn:ogc:def:phenomenon:OGC:1.0.30:salinity',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:depth',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:turbidity',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:batteryvoltage',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:acidity',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:chlorophylla',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:chlorophyllflourescence',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:odopercent',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:odoconcentration',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:bp'
+             'urn:ogc:def:phenomenon:OGC:1.0.30:plot',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:recno',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:mbref',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:mbrtemp',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:oxygen',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:inputd',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:inpute',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:inputf',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:inputg',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:inputh',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:atmp',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:probetype'
             ]
 
 def csvfile = new File(args[0])
@@ -92,24 +96,26 @@ sql.close()
 System.exit(0) // quit normally
 
 private Boolean validateSchema(String[] attrs) {
-    // Date,Time,Latitude,Longitude,Water temperature,Sp Conductivity,Salinity,Depth,Turbidity,Battery,pH,Chlorophyll,Chlorophyll RFU,ODO Percent,ODO Concentration,BP
+    // Date,Time,Latitude,Longitude,Water temperature,Salinity,Plot,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
     assertion = true
     assertion = assertion && (attrs[DATE].equalsIgnoreCase('Date')) \
     && (attrs[TIME].equalsIgnoreCase('Time')) \
     && (attrs[LATITUDE].equalsIgnoreCase('Latitude')) \
     && (attrs[LONGITUDE].equalsIgnoreCase('Longitude')) \
     && (attrs[WATER_TEMPERATURE].equalsIgnoreCase('Water temperature')) \
-    && (attrs[SP_CONDUCTIVITY].equalsIgnoreCase('Sp Conductivity')) \
     && (attrs[SALINITY].equalsIgnoreCase('Salinity')) \
-    && (attrs[DEPTH].equalsIgnoreCase('Depth')) \
-    && (attrs[TURBIDITY].equalsIgnoreCase('Turbidity')) \
-    && (attrs[BATTERY].equalsIgnoreCase('Battery')) \
-    && (attrs[PH].equalsIgnoreCase('pH')) \
-    && (attrs[CHLOROPHYLL].equalsIgnoreCase('Chlorophyll')) \
-    && (attrs[CHLOROPHYLL_RFU].equalsIgnoreCase('Chlorophyll RFU')) \
-    && (attrs[ODO_PERCENT].equalsIgnoreCase('ODO Percent')) \
-    && (attrs[ODO_CONCENTRATION].equalsIgnoreCase('ODO Concentration')) \
-    && (attrs[BP].equalsIgnoreCase('BP'))
+    && (attrs[PLOT].equalsIgnoreCase('Plot')) \
+    && (attrs[RECNO].equalsIgnoreCase('RecNo')) \
+    && (attrs[MB_REF].equalsIgnoreCase('mb Ref')) \
+    && (attrs[MBR_TEMP].equalsIgnoreCase('mbR Temp')) \
+    && (attrs[OXYGEN].equalsIgnoreCase('Oxygen')) \
+    && (attrs[INPUT_D].equalsIgnoreCase('Input D')) \
+    && (attrs[INPUT_E].equalsIgnoreCase('Input E')) \
+    && (attrs[INPUT_F].equalsIgnoreCase('Input F')) \
+    && (attrs[INPUT_G].equalsIgnoreCase('Input G')) \
+    && (attrs[INPUT_H].equalsIgnoreCase('Input H')) \
+    && (attrs[ATMP].equalsIgnoreCase('ATMP')) \
+    && (attrs[PROBE_TYPE].equalsIgnoreCase('Probe Type'))
 }
 
 private String getFoi(String[] attrs) {
@@ -144,7 +150,7 @@ private void addToFoi(String foiId, String[] attrs) {
 
     def timestamp = "${attrs[DATE]} ${attrs[TIME]}"
 
-    for (phenomenon in WATER_TEMPERATURE..BP) {
+    for (phenomenon in WATER_TEMPERATURE..PROBE_TYPE) {
         sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, numeric_value) VALUES (to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH:MI:SS'), 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: 0) + "')")
     } 
 }

@@ -210,9 +210,9 @@ INSERT INTO phen_off VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:mbref','GAUGE_HE
 INSERT INTO proc_phen VALUES ('urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1','urn:ogc:def:phenomenon:OGC:1.0.30:mbref');
 
 -- mb Temp
-INSERT INTO phenomenon VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:mbtemp', 'mb Temp', '','numericType');
-INSERT INTO phen_off VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:mbtemp','GAUGE_HEIGHT');
-INSERT INTO proc_phen VALUES ('urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1','urn:ogc:def:phenomenon:OGC:1.0.30:mbtemp');
+INSERT INTO phenomenon VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:mbrtemp', 'mbR Temp', '','numericType');
+INSERT INTO phen_off VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:mbrtemp','GAUGE_HEIGHT');
+INSERT INTO proc_phen VALUES ('urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1','urn:ogc:def:phenomenon:OGC:1.0.30:mbrtemp');
 
 -- Oxygen
 INSERT INTO phenomenon VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:oxygen', 'Oxygen', 'percent','numericType');
