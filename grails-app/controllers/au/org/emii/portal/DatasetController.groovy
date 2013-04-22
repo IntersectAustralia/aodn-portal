@@ -12,6 +12,7 @@ package au.org.emii.portal
 //import au.org.emii.portal.display.MenuJsonCache
 //import au.org.emii.portal.display.MenuPresenter
 import grails.converters.JSON
+import grails.util.Environment
 
 class DatasetController {
 
@@ -32,7 +33,21 @@ class DatasetController {
             f.transferTo(new File("/aodn-portal/data/${datasetFile}"))
             m.transferTo(new File("/aodn-portal/data/${metadataFile}"))
 
-            def command = """/home/devel/.gvm/groovy/current/bin/groovy /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} aodnportal"""
+            def database = 'aodnportal' // Default set to production
+            
+            switch (Environment.getCurrent()) {
+            case Environment.DEVELOPMENT:
+                database = "aodn_portal"
+                break
+            case Environment.PRODUCTION:
+                database = "aodnportal"
+                break
+            case Environment.CUSTOM: // qa
+                database = "aodnportal-qa"
+                break
+            }
+
+            def command = """/home/devel/.gvm/groovy/current/bin/groovy /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} ${database}"""
             def proc = command.execute()                 // Call *execute* on the string
             proc.waitFor()                               // Wait for the command to finish
 
