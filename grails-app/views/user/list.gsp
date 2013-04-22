@@ -55,11 +55,11 @@
                         <span>
                             <g:select name="organization"
                               from="${Organization.list()}"
-                              noSelection="${['null':'Select One Organization']}"
+                              noSelection="${['null':'Select One Organisation']}"
                               optionKey="id"
                               value="${params.organization}"
                             />
-                            Limit search by organization
+                            Limit search by organisation
                         </span>
                     </div>
 
