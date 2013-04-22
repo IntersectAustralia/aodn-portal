@@ -42,8 +42,8 @@ class ServerController {
 		serverInstance.properties = params
 
         def allOwners = User.withCriteria{
-            roles{
-                eq('name', UserRole.SERVEROWNER)
+            role{
+                eq('name', UserRole.ADMINISTRATOR)
             }
         }
 
@@ -81,8 +81,8 @@ class ServerController {
 		}
 		else {
             def allOwners = User.withCriteria{
-                roles{
-                    eq('name', UserRole.SERVEROWNER)
+                role{
+                    eq('name', UserRole.ADMINISTRATOR)
                 }
             }
 

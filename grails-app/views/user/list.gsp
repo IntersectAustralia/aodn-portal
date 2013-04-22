@@ -51,7 +51,7 @@
                     </div>
 
                     <div>
-                        <label style="width:150px;">Organization filter</label>
+                        <label style="width:150px;">Organisation filter</label>
                         <span>
                             <g:select name="organization"
                               from="${Organization.list()}"
@@ -82,13 +82,13 @@
 
                             <g:sortableColumn property="openIdUrl" title="${message(code: 'user.AAF.label', default: 'AAF Token')}" />
 
-                            <g:sortableColumn property="organization" title="${message(code: 'user.organization.label', default: 'Organization')}" />
+                            <g:sortableColumn property="organization" title="${message(code: 'user.organization.label', default: 'Organisation')}" />
 
                             <g:sortableColumn property="emailAddress" title="${message(code: 'user.emailAddress.label', default: 'Email Address')}" />
 
                             <g:sortableColumn property="fullName" title="${message(code: 'user.fullName.label', default: 'Name')}" />
 
-                            <g:sortableColumn property="role" title="${message(code: 'user.role.label', default: 'role')}" />
+                            <g:sortableColumn property="role" title="${message(code: 'user.role.label', default: 'Role')}" />
                         </tr>
                     </thead>
                     <tbody>

@@ -45,7 +45,7 @@
                         </tr>
 
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="user.organization.label" default="Organization" /></td>
+                            <td valign="top" class="name"><g:message code="user.organization.label" default="Organisation" /></td>
 
                             <td valign="top" class="value">${fieldValue(bean: userInstance, field: "organization")}</td>
 

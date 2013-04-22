@@ -75,7 +75,7 @@ class Server {
         password(nullable:true)
         owners(nullable:  true, validator: {
             //This is totally not a great way to do things
-            def ownerRole = UserRole.findByName(UserRole.SERVEROWNER)
+            def ownerRole = UserRole.findByName(UserRole.ADMINISTRATOR)
 
             def valid = false
             if(it?.size() == 0)
@@ -127,17 +127,18 @@ class Server {
 		//save without whitespace to help avoid non-uniqueness
         uri = uri?.trim()
 
-//		save without trailing question mark to help avoid non-uniqueness
-		if(uri.getAt(uri.size()-1)=='?')
-		{
-			uri = uri.substring(0, uri.size()-1)
-		}
+		if(uri.size()>0) {
+			//save without trailing question mark to help avoid non-uniqueness
+			if(uri.getAt(uri.size()-1)=='?')
+			{
+				uri = uri.substring(0, uri.size()-1)
+			}
 //		//save without trailing slash to help avoid non-uniqueness
-		if(uri.getAt(uri.size()-1)=='/')
-		{
-			uri = uri.substring(0, uri.size()-1)
+			if(uri.getAt(uri.size()-1)=='/')
+			{
+				uri = uri.substring(0, uri.size()-1)
+			}
 		}
-
     }
 
 	def isCredentialled() {
