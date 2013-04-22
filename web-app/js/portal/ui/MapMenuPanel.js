@@ -89,10 +89,10 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
                             url: 'dataset/upload',
                             waitMsg: 'Uploading your datasets...',
                             success: function(datasetsPanel, o) {
-                                Ext.Msg.alert('Success', 'Processed file "' + o.result.file + '" on the server');
+                                Ext.Msg.alert(o.result.message);
                             },
-			    failure: function() {
-				Ext.Msg.alert('Failed: empty file');
+			    failure: function(datasetsPanel, o) {
+				Ext.Msg.alert(o.result.message);
 			    }
                         });
                     }

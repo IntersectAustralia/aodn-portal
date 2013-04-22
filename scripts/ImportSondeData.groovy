@@ -50,19 +50,38 @@ csvfile.eachLine { line, index ->
     if (index == 1) { // header line
         // Validate schema
         if (validateSchema(line.split(',')) == false) {
-            System.exit(-1)
+            System.err << "ERROR: schema validation error"
+            System.exit(-1) // Validation error number: -1
         }
     }
 
     if (index > 2) { // Ignore units line, start getting values
         String[] values = line.split(',')
-        String foiId = getFoi(values)
-
-        if (!findFoi(foiId)) {
-            addFoi(foiId, values)
+        try {
+            String foiId = getFoi(values)
+        }
+        catch(Exception e) {
+            System.err << "ERROR: geom data error at line: ${index}"
+            System.exit(-2) // Geom data error number: -2
         }
 
-        addToFoi(foiId, values)
+        if (!findFoi(foiId)) {
+            try {
+                addFoi(foiId, values)
+            }
+            catch(Exception e) {
+                System.err << "ERROR: Duplicate feature of interest at line: ${index}"
+                System.exit(-3) // Duplicate feature of interest error number: -3
+            }
+        }
+
+        try {
+            addToFoi(foiId, values)
+        }
+        catch(Exception e) {
+            System.err << "ERROR: Duplicate observation at line: ${index}"
+            System.exit(-4) // Duplicate observation error number: -4
+        }
     }
 
 }

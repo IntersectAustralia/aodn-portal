@@ -36,20 +36,20 @@ class DatasetController {
             if (proc.exitValue() == 0) {
                 result = [
                     success: true,
-                    file: filename
+                    message: "Success uploaded and processed ${f.getOriginalFilename()}"
                 ]
             }
             else {
                 result = [
                     success: false,
-                    message: "Validation failed"
+                    message: proc.err.text
                 ]
             }
         }
         else {
             result = [
                 success: false,
-                message: "Empty file"
+                message: "ERROR: empty file"
             ]
         }
 
