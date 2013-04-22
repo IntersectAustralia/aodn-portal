@@ -5,7 +5,7 @@ import static Constants.*
 import groovy.sql.Sql
 this.class.classLoader.rootLoader.addURL(new URL("file:///usr/share/java/postgresql-jdbc-8.4.701.jar"))
 
-class Constants { 
+class Constants {
     // Nutrient Survey Data Schema
     // Date,Time,Latitude,Longitude,Water temperature,Sp Conductivity,Salinity,Secci Depth,Turbid+,PO4R,PO4R-P,TSS(Photo),Si,PO4,TP,Nitrite,Nitrate,NH4-N,TN,TSS (Grav),AFDW,Weathr Station Site,24 hr Rain,72 hr Rain,Tide,Cloud,Wind Direction,Wind Speed,eta,pH,Chlorophyll,Dosat,DO,Sampling Run comment,Code comment,VertLoc comment
     static final int                  DATE = 0
@@ -49,20 +49,76 @@ class Constants {
 db = [url:"jdbc:postgresql://localhost:5432/${args[1]}", user:'aodn', password:'aodn', driver:'org.postgresql.Driver']
 sql = Sql.newInstance(db.url, db.user, db.password, db.driver)
 
-phenomena = [0, 0, 0, 0,
-             'urn:ogc:def:phenomenon:OGC:1.0.30:watertemperature',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:conductivity',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:salinity',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:depth',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:turbidity',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:batteryvoltage',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:ph',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:chlorophylla',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:chlorophyllflourescence',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:odopercent',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:odoconcentration',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:bp'
-            ]
+phenomena = [
+    0, 0, 0, 0,
+    'urn:ogc:def:phenomenon:OGC:1.0.30:watertemperature',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:conductivity',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:salinity',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:depth',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:turbidity',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:phosphater',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:phosphaterp',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:totalsuspendedsolidsphoto',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:si',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:phosphate',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:tp',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:nitrite',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:nitrate',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:ammonium',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:totalnitrogen',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:totalsuspendedsolidsgrav',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:afdw',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:weatherstationsite',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:rainfall24h',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:rainfall72h',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:tide',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:cloud',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:winddirection',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:windspeed',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:eta',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:acidity',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:chlorophylla',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:dosat',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:do',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:sampleruncomment',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:codecomment',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:vertloccomment'
+]
+phenomenaDataType = [
+    '', '', '', '',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'textType',
+    'numericType',
+    'numericType',
+    'textType',
+    'textType',
+    'textType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'textType',
+    'textType',
+    'textType'
+]
 
 def csvfile = new File(args[0])
 csvfile.eachLine { line, index ->
@@ -70,19 +126,40 @@ csvfile.eachLine { line, index ->
     if (index == 1) { // header line
         // Validate schema
         if (validateSchema(line.split(',')) == false) {
-            System.exit(-1)
+            System.err << "ERROR: schema validation error"
+            System.exit(-1) // Validation error number: -1
         }
     }
 
     if (index > 2) { // Ignore units line, start getting values
         String[] values = line.split(',')
-        String foiId = getFoi(values)
+        String foiId
 
-        if (!findFoi(foiId)) {
-            addFoi(foiId, values)
+        try {
+            foiId = getFoi(values)
+        }
+        catch(Exception e) {
+            System.err << "ERROR: geom data error at line: ${index}"
+            System.exit(-2) // Geom data error number: -2
         }
 
-        addToFoi(foiId, values)
+        if (!findFoi(foiId)) {
+            try {
+                addFoi(foiId, values)
+            }
+            catch(Exception e) {
+                System.err << "ERROR: Duplicate feature of interest at line: ${index}"
+                System.exit(-3) // Duplicate feature of interest error number: -3
+            }
+        }
+
+        try {
+            addToFoi(foiId, values)
+        }
+        catch(Exception e) {
+            System.err << "ERROR: Duplicate observation at line: ${index}"
+            System.exit(-4) // Duplicate observation error number: -4
+        }
     }
 
 }
@@ -91,7 +168,7 @@ sql.close()
 System.exit(0) // quit normally
 
 private Boolean validateSchema(String[] attrs) {
-    // Date,Time,Latitude,Longitude,Water temperature,Sp Conductivity,Salinity,Depth,Turbidity,Battery,pH,Chlorophyll,Chlorophyll RFU,ODO Percent,ODO Concentration,BP
+    // Date,Time,Latitude,Longitude,Water temperature,Sp Conductivity,Salinity,Secci Depth,Turbid+,PO4R,PO4R-P,TSS(Photo),Si,PO4,TP,Nitrite,Nitrate,NH4-N,TN,TSS (Grav),AFDW,Weather Station Site,24 hr Rain,72 hr Rain,Tide,Cloud,Wind Direction,Wind Speed,eta,pH,Chlorophyll,Dosat,DO,Sampling Run comment,Code comment,VertLoc comment
     assertion = true
     assertion = assertion && (attrs[DATE].equalsIgnoreCase('Date')) \
     && (attrs[TIME].equalsIgnoreCase('Time')) \
@@ -100,7 +177,7 @@ private Boolean validateSchema(String[] attrs) {
     && (attrs[WATER_TEMPERATURE].equalsIgnoreCase('Water temperature')) \
     && (attrs[SP_CONDUCTIVITY].equalsIgnoreCase('Sp Conductivity')) \
     && (attrs[SALINITY].equalsIgnoreCase('Salinity')) \
-    && (attrs[DEPTH].equalsIgnoreCase('Depth')) \
+    && (attrs[DEPTH].equalsIgnoreCase('Secci Depth')) \
     && (attrs[TURBIDITY].equalsIgnoreCase('Turbidity')) \
     && (attrs[BATTERY].equalsIgnoreCase('Battery')) \
     && (attrs[PH].equalsIgnoreCase('pH')) \
@@ -137,7 +214,7 @@ private void addFoi(String foiId, String[] attrs) {
 }
 
 private void addToFoi(String foiId, String[] attrs) {
-    // INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id,phenomenon_id,offering_id,numeric_value) values ('2013-04-20 01:16', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', 'foi_1001','urn:ogc:def:phenomenon:OGC:1.0.30:waterlevel','GAUGE_HEIGHT','50.0'); 
+    // INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id,phenomenon_id,offering_id,numeric_value) values ('2013-04-20 01:16', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', 'foi_1001','urn:ogc:def:phenomenon:OGC:1.0.30:waterlevel','GAUGE_HEIGHT','50.0');
     // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'mm', '1','category', 'accuracy');
     // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'percent', '10','quantity', 'completeness');
 
@@ -145,5 +222,5 @@ private void addToFoi(String foiId, String[] attrs) {
 
     for (phenomenon in WATER_TEMPERATURE..BP) {
         sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, numeric_value) VALUES ('" + timestamp + "', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: 0) + "')")
-    } 
+    }
 }
