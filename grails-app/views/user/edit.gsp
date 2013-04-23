@@ -50,7 +50,7 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="organization"><g:message code="user.organization.label" default="organisation" /></label>
+                                    <label for="organization"><g:message code="user.organization.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'organization', 'errors')}">
                                     <g:select name="organization"
