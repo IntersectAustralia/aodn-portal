@@ -44,7 +44,7 @@ class UserRoleTests extends GrailsUnitTestCase {
     
     void testNameUnique() {
         def userRole2 = new UserRole(name: "TheRole")
-        mockForConstraintsTests(UserRole, [userRole])
+        mockForConstraintsTests(UserRole, [userRole, userRole2])
         
         assertFalse "Validation should have failed", userRole2.validate()
         assertEquals "unique", userRole2.errors.name

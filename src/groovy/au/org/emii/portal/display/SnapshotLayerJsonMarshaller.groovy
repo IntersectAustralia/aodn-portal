@@ -11,6 +11,7 @@ package au.org.emii.portal.display
 import au.org.emii.portal.Snapshot
 import au.org.emii.portal.SnapshotLayer
 import grails.converters.JSON
+import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.codehaus.groovy.grails.web.converters.ConverterUtil
 import org.codehaus.groovy.grails.web.converters.exceptions.ConverterException
@@ -24,7 +25,7 @@ import org.springframework.beans.BeanWrapper
 import org.springframework.beans.BeanWrapperImpl
 
 class SnapshotLayerJsonMarshaller extends DomainClassMarshaller {
-	
+	def static grailsApplication = ApplicationHolder.application;
 	static Logger log = LoggerFactory.getLogger(SnapshotLayerJsonMarshaller.class)
 	
 	static SNAPSHOT_LAYER_EXCLUDES = [
@@ -40,7 +41,7 @@ class SnapshotLayerJsonMarshaller extends DomainClassMarshaller {
 	]
 	
 	SnapshotLayerJsonMarshaller() {
-		super(false)
+		super(false, grailsApplication)
 	}
 
 	@Override

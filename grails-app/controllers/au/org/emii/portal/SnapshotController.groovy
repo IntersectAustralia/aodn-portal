@@ -34,7 +34,7 @@ class SnapshotController
 		}		
 		
                 params.max = Math.min(params.max ? params.int('max') : 10, 100)
-                [snapshotInstanceList: snapshotList, snapshotInstanceTotal: Snapshot.count()]
+                [snapshotInstanceList: snapshotList, snapshotInstanceTotal: Snapshot.count]
 		
     }
     
@@ -49,7 +49,7 @@ class SnapshotController
                     snapshotList = Snapshot.list(params)
 		}		
 		
-                def result = [ success: true, data: snapshotList, count: snapshotList.count() ]
+                def result = [ success: true, data: snapshotList, count: snapshotList.count ]
                 render text: result as JSON, contentType:"application/json"
 		
     }

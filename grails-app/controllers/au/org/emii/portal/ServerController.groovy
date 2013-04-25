@@ -139,7 +139,7 @@ class ServerController {
 		}
 	}
 
-	def showServerByItsId = {
+	def showServerByItsId() {
 
 		def serverInstance = null
 		// unencode layerId as per 'listAllLayers' to get just the id

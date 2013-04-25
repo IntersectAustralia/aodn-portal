@@ -1,14 +1,9 @@
-
-/*
- * Copyright 2012 IMOS
- *
- * The AODN/IMOS Portal is distributed under the terms of the GNU General Public License
- *
- */
-
+grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
+grails.project.target.level = 1.6
+grails.project.source.level = 1.6
 grails.project.war.file = "target/${appName}-${appVersion}-${grails.util.Environment.current.name}.war"
 
 grails.project.dependency.resolution = {
@@ -20,7 +15,11 @@ grails.project.dependency.resolution = {
 		excludes("catalina")
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    checksums true // Whether to verify checksums on resolve
+
     repositories {
+        inherits true // Whether to inherit repository definitions from plugins
+
         grailsPlugins()
         grailsHome()
         grailsCentral()
@@ -29,6 +28,8 @@ grails.project.dependency.resolution = {
         // from public Maven repositories
         mavenLocal()
         mavenCentral()
+
+        // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -41,7 +42,7 @@ grails.project.dependency.resolution = {
     }
 	
 	// Allow grails commands to be run as usual, see: http://grails.org/doc/latest/guide/conf.html#mavenIntegration
-	pom true	
+	pom true
 	plugins {
 		test ":build-test-data:1.1.2"
 	}
