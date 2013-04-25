@@ -130,7 +130,7 @@ environments {
     production {
 
 	    // URLs
-	    grails.serverURL = "http://dc2b.intersect.org.au:8080/$appName"
+	    grails.serverURL = "https://staging.dc2b.intersect.org.au/$appName"
 	    spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
 	    wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
 	    openIdProvider.url = "https://openid.emii.org.au/login"
@@ -149,7 +149,7 @@ environments {
     qa {
 
 	    // URLs
-	    grails.serverURL = "http://dc2b.intersect.org.au:9090/$appName"
+	    grails.serverURL = "https://qa.dc2b.intersect.org.au/$appName"
 	    spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
 	    wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
 	    openIdProvider.url = "https://openid.emii.org.au/login"
