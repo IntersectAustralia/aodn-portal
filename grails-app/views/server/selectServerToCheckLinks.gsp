@@ -31,7 +31,7 @@
 				<g:select name="server" from="${au.org.emii.portal.Server.list()}"
 												optionKey="id"
 												optionValue="name"
-												noSelection="noSelection="['':'Please Select...']" />
+												noSelection="['':'Please Select...']" />
 				
 		       	<g:actionSubmit value="Check" action="checkForBrokenLinks"/>
 		       <br/><br/>
