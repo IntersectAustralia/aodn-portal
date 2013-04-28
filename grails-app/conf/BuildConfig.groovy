@@ -13,6 +13,7 @@ grails.project.dependency.resolution = {
         // excludes 'ehcache'
 		excludes "xml-apis"
 		excludes("catalina")
+//		excludes("grails-plugin-log4j")
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
@@ -44,7 +45,24 @@ grails.project.dependency.resolution = {
 	// Allow grails commands to be run as usual, see: http://grails.org/doc/latest/guide/conf.html#mavenIntegration
 	pom true
 	plugins {
-		test ":build-test-data:1.1.2"
+		test ":code-coverage:1.2.6"
+
+		build ":tomcat:2.1.0"
+
+		compile ":build-test-data:2.0.5"
+		compile ":svn:1.0.2"
+		compile ":shiro:1.1.4"
+		compile ":quartz:0.4.2"
+		compile ":jquery-mobile-scaffolding:0.1"
+		compile ":jquery-mobile:1.1.0.5"
+		compile ":jquery:1.8.0"
+		compile ":plugin-config:0.1.8"
+		compile ":mail:1.0.1"
+		compile ":hibernate:2.1.0"
+		compile ":cache-headers:1.1.5"
+
+		runtime ":cached-resources:1.0"
+		runtime ":resources:1.1.6"
 	}
 }
 
