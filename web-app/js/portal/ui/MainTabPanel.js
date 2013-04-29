@@ -26,9 +26,9 @@ Portal.ui.MainTabPanel = Ext.extend(Ext.TabPanel, {
                 cls:'mainTabPanelHeader'  // Default class not applied if Custom element specified
             },
             items:[
+                this.searchTabPanel,
                 this.homePanel,
                 this.portalPanel,
-                this.searchTabPanel,
                 this.downloadCartPanel
             ]
         }, cfg);
