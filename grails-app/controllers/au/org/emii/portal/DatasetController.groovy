@@ -47,9 +47,19 @@ class DatasetController {
                 break
             }
 
-            def command = """/home/devel/.gvm/groovy/current/bin/groovy /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} ${database}"""
-            def proc = command.execute()                 // Call *execute* on the string
-            proc.waitFor()                               // Wait for the command to finish
+			def groovy = """/usr/bin/which groovy""".execute().text.trim()
+            def command = """${groovy} /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} ${database}"""
+            log.debug(command)
+			
+			def proc
+			
+			try {
+				proc = command.execute()                 // Call *execute* on the string
+				proc.waitFor()                               // Wait for the command to finish
+			}
+			catch(e) {
+				log.debug(e.message)
+			}
 
             if (proc.exitValue() == 0) {
                 result = [
