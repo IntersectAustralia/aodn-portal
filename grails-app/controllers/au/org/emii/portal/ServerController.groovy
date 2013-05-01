@@ -24,12 +24,17 @@ class ServerController {
 		redirect(action: "list", params: params)
 	}
 
+	def refreshList = {
+
+		flash.message = ""
+
+		redirect actionName: 'list'
+	}
+
 	def list = {
 		params.max = Math.min(params.max ? params.int('max') : 20, 100)
 
-        def jobProperties = getScannerStatus()
-
-		[serverInstanceList: Server.list(params), serverInstanceTotal: Server.count(), jobProperties:  jobProperties]
+        [serverInstanceList: Server.list(params), serverInstanceTotal: Server.count(), jobProperties: scannerStatus]
 	}
 
     def listAllowDiscoveriesAsJson = {
@@ -55,7 +60,7 @@ class ServerController {
 
 		if (serverInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'server.label', default: 'Server'), serverInstance.id])}"
-			redirect(action: "show", id: serverInstance.id)
+			redirect(action: "list", id: serverInstance.id)
 		}
 		else {
 			render(view: "create", model: [serverInstance: serverInstance])
@@ -108,7 +113,7 @@ class ServerController {
 
 			if (!serverInstance.hasErrors() && serverInstance.save(flush: true)) {
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'server.label', default: 'Server'), serverInstance.id])}"
-				redirect(action: "show", id: serverInstance.id)
+				redirect(action: "list", id: serverInstance.id)
 			}
 			else {
 				render(view: "edit", model: [serverInstance: serverInstance])
@@ -130,7 +135,7 @@ class ServerController {
 			}
 			catch (org.springframework.dao.DataIntegrityViolationException e) {
 				flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'server.label', default: 'Server'), params.id])}"
-				redirect(action: "show", id: params.id)
+				redirect(action: "edit", id: params.id)
 			}
 		}
 		else {
@@ -147,6 +152,7 @@ class ServerController {
 			def serverIdArr = params.serverId.split("_")
 			serverInstance = Server.get( serverIdArr[ serverIdArr.size() - 1 ])
 		}
+
 		if (serverInstance) {
 			render serverInstance as JSON
 		}
@@ -184,56 +190,60 @@ class ServerController {
     }
 
     def getScannerStatus(){
-        //show servers
 
-        //callout to check status of WMS server
-        def wmsList
-        //callout to check the status of WFS servers
-        def wfsList
-
-        //list of discoverable servers
+        //list of discoverable, with a list of w[m,f]s jobs
         def serverMap = [:]
 
-        def wmsScannerContactable = true
-        def wfsScannerContactable = true
-
-        try{
-            wmsList = wmsScannerService.getStatus()
-
-        }
-        catch(Exception e){
-            flash.message = "Cannot contact WMS scanner for a list of current jobs.  Please make sure WMS server is contactable"
-            wmsScannerContactable = false
-        }
-
-        try{
-            wfsList =  wfsScannerService.getStatus()
-        }
-        catch(Exception e){
-            flash.message = "Cannot contact WFS scanner for a list of current jobs.  Please make sure WFS server is contactable"
-            wfsScannerContactable = false
-        }
-
+        //list of discoverable servers
         def discoverables = Server.findAllByAllowDiscoveries(true)
+        def scannersContactable = new Boolean[2]
 
-        discoverables.each(){ discoverable ->
-            def wmsJob = null
-            def wfsJob = null
-            wmsList.each(){ job ->
-                if(job.uri == discoverable.uri){
-                    wmsJob = job
+        [wmsScannerService, wfsScannerService].eachWithIndex {
+            scannerService, index ->
+
+            try{
+                def jobList = scannerService.status
+                discoverables.each(){ discoverable ->
+
+                    if (serverMap[discoverable] == null){
+                        serverMap.put(discoverable, [null, null])
+                    }
+
+                    jobList.each(){ job ->
+
+                        def checkURL
+
+                        //TODO: Change WFS scanner to use the same variable name for uri...
+                        if(index == 0){
+                            checkURL = job.uri
+                        }
+                        else{
+                            checkURL = job.serverUrl
+                        }
+
+                        if(discoverable.uri == checkURL){
+                            serverMap[discoverable][index] = job
+                        }
+                    }
                 }
-            }
 
-            wfsList.each(){ job ->
-                if(job.serverUrl == discoverable.uri){
-                    wfsJob = job
-                }
+                scannersContactable[index] = true
             }
+            catch(Exception e){
+                log.debug(e.message)
 
-            serverMap.put(discoverable, [wmsJob, wfsJob])
+				if (flash.message) {
+					flash.message += "<hr>"
+				}
+				else {
+					flash.message = ""
+				}
+
+                flash.message += "Cannot contact scanner ${scannerService.scannerBaseUrl} for a list of current jobs.  Please make sure server is contactable."
+                scannersContactable[index]  = false
+            }
         }
 
-        return [serverMap: serverMap, wmsScannerContactable: wmsScannerContactable, wfsScannerContactable: wfsScannerContactable]
+        return [serverMap: serverMap, wmsScannerContactable: scannersContactable[0], wfsScannerContactable: scannersContactable[1]]
     }
 }
