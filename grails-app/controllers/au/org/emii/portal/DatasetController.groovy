@@ -33,20 +33,7 @@ class DatasetController {
             f.transferTo(new File("/aodn-portal/data/${datasetFile}"))
             m.transferTo(new File("/aodn-portal/data/${metadataFile}"))
 
-            def database = 'aodnportal' // Default set to production
-            
-            switch (Environment.getCurrent()) {
-            case Environment.DEVELOPMENT:
-                database = "aodn_portal"
-                break
-            case Environment.PRODUCTION:
-                database = "aodnportal"
-                break
-            case Environment.CUSTOM: // qa
-                database = "aodnportal-qa"
-                break
-            }
-
+            def database = 'sosdb' // 52north.org SOS server database name
 			def groovy = """/usr/bin/which groovy""".execute().text.trim()
             def command = """${groovy} /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} ${database}"""
             log.debug(command)
