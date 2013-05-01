@@ -21,6 +21,8 @@ class Metadata {
 	String dataAccess
 	String licence
 	User dataOwner
+	Date dateCreated
+	Date lastUpdated
 
     static constraints = {
     }

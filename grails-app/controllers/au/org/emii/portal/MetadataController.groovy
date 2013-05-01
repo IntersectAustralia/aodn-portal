@@ -3,6 +3,7 @@ package au.org.emii.portal
 import org.springframework.dao.DataIntegrityViolationException
 
 class MetadataController {
+	def portalInstance
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -16,7 +17,7 @@ class MetadataController {
     }
 
     def create() {
-        [metadataInstance: new Metadata(params)]
+        [metadataInstance: new Metadata(params), cfg: Config.activeInstance(), portalBuildInfo: _portalBuildInfo()]
     }
 
     def save() {
@@ -99,4 +100,11 @@ class MetadataController {
             redirect(action: "show", id: id)
         }
     }
+	
+	def _portalBuildInfo() {
+		
+		def md = grailsApplication.metadata
+		return "${ portalInstance.name() } Portal v${ md.'app.version' }, build date: ${md.'app.build.date'?:'<i>not recorded</i>'}"
+	}
+	
 }
