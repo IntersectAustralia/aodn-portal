@@ -45,7 +45,7 @@
                                   <label for="name"><g:message code="userRole.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: userRoleInstance, field: 'name', 'errors')}">
-                                    <g:textField name="name" value="${userRoleInstance?.name}" />
+                                    <g:textField name="name" value="${userRoleInstance?.name}" style="width:200px;" />
                                 </td>
                             </tr>
                         
@@ -54,18 +54,31 @@
                                   <label for="permissions"><g:message code="userRole.permissions.label" default="Permissions" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: userRoleInstance, field: 'permissions', 'errors')}">
-                                    
+                                    <g:each in="${userRoleInstance?.permissions}">
+                                        <g:textField name="permissions" value="${it}" style="width:200px;" />  <p/>
+                                    </g:each>
+                                    %{--<g:textField name="permissions" value="Add permissions at here" autofocus="true" style="width:200px;"/>--}%
+                                    <g:textArea name="permissions" value="Add permissions at here" autofocus="true" style="width:200px; height:50px" onscroll="true"/>
+                                </td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="permissions"><g:message code="userRole.permissions.label" default="Permission Format Reference" /></label>
+                                </td>
+                                <td valign="top">
+                                    <a href="http://shiro.apache.org/permissions.html">http://shiro.apache.org/permissions.html</a>
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="users"><g:message code="userRole.users.label" default="Users" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: userRoleInstance, field: 'users', 'errors')}">
-                                    
-                                </td>
-                            </tr>
+                            %{--<tr class="prop">--}%
+                                %{--<td valign="top" class="name">--}%
+                                  %{--<label for="users"><g:message code="userRole.users.label" default="Users" /></label>--}%
+                                %{--</td>--}%
+                                %{--<td valign="top" class="value ${hasErrors(bean: userRoleInstance, field: 'users', 'errors')}">--}%
+                                    %{----}%
+                                %{--</td>--}%
+                            %{--</tr>--}%
                         
                         </tbody>
                     </table>

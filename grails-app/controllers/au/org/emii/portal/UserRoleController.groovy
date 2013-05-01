@@ -72,8 +72,18 @@ class UserRoleController {
                     return
                 }
             }
+
+			// get the permission from textfields and remove the blank one.
+			ArrayList<String> permissions = new ArrayList<>()
+			for(int i=0; i< params.getList("permissions").size(); i++){
+				if(""!=params.getList("permissions").get(i) && "Add permissions at here"!=params.getList("permissions").get(i)) {
+					permissions.add(params.getList("permissions").get(i))
+				}
+			}
             userRoleInstance.properties = params
-            if (!userRoleInstance.hasErrors() && userRoleInstance.save(flush: true)) {
+			userRoleInstance.permissions = permissions
+
+			if (!userRoleInstance.hasErrors() && userRoleInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'userRole.label', default: 'UserRole'), userRoleInstance.id])}"
                 redirect(action: "show", id: userRoleInstance.id)
             }

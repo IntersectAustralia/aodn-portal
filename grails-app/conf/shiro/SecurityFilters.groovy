@@ -239,7 +239,7 @@ class SecurityFilters {
                 logRequest("all", controllerName, actionName)
 
                 // Ignore direct views (e.g. the default main index page).
-                if (!controllerName) return true
+                if (!controllerName || "home"==controllerName) return true
 
                 // Access control by convention.
                 if (!accessControl(auth: false)) { // "auth: false" means it will accept remembered users as well as those who logged-in in this session

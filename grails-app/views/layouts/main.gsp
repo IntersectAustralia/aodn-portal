@@ -59,9 +59,19 @@
                   </span>
                 </li>
 
+                <li class="controllerMenuItems"><g:link controller="userRole"  >UserRoles</g:link><span class="inline">
+                    <g:link controller="userRole" action="create" class="" >create</g:link>
+                </span>
+                </li>
+
                 <li class="controllerMenuItems"><g:link controller="user"  >Users</g:link><span class="inline">
                     <g:link controller="user" action="create" class="" >create</g:link>
                   </span>
+                </li>
+
+                <li class="controllerMenuItems"><g:link controller="organization"  >Organisations</g:link><span class="inline">
+                    <g:link controller="organization" action="create" class="" >create</g:link>
+                </span>
                 </li>
 
                 <li class="controllerMenuItems"><g:link controller="aodaacProductLink">AODAAC Product Links</g:link></li>
