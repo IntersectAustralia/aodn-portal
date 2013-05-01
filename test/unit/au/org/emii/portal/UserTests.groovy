@@ -75,7 +75,6 @@ class UserTests extends GrailsUnitTestCase {
 	}
 
     void testToString() {
-        
-        assertEquals "Joe Bloggs (http://www.example.com/openId)", user.toString()
+        assertEquals "Joe Bloggs [Role: null] (http://www.example.com/openId)", user.toString()
     }
 }
