@@ -28,7 +28,7 @@ Portal.ui.MainTabPanel = Ext.extend(Ext.TabPanel, {
             items:[
                 this.homePanel,
                 this.portalPanel,
-		this.searchTabPanel,
+		        this.searchTabPanel,
                 this.downloadCartPanel
             ]
         }, cfg);

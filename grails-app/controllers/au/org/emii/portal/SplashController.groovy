@@ -10,6 +10,8 @@ package au.org.emii.portal
 
 class SplashController {
 
+	static defaultAction = "index"
+
 	def oceanCurrentService
 	def portalInstance
 	def hostVerifier

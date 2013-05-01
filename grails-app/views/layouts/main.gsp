@@ -59,12 +59,12 @@
                   </span>
                 </li>
 
-                <li class="controllerMenuItems"><g:link controller="userRole"  >UserRoles</g:link><span class="inline">
+                <li class="controllerMenuItems"><g:link controller="userRole"  >UserRole</g:link><span class="inline">
                     <g:link controller="userRole" action="create" class="" >create</g:link>
                 </span>
                 </li>
 
-                <li class="controllerMenuItems"><g:link controller="user"  >Users</g:link><span class="inline">
+                <li class="controllerMenuItems"><g:link controller="user"  >User</g:link><span class="inline">
                     <g:link controller="user" action="create" class="" >create</g:link>
                   </span>
                 </li>

@@ -36,7 +36,7 @@ Portal.ui.HomePanel = Ext.extend(Ext.Panel, {
                             padding:  '15px',
                             id: 'mainHomePanel',
                             autoLoad:{
-                                url: 'splash',
+                                url: 'splash/index',
                                 renderer: 'html',
                                 scripts: true,
                                 extraParams: {
