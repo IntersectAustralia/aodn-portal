@@ -63,7 +63,7 @@ grails.project.dependency.resolution = {
 
 		runtime ":cached-resources:1.0"
 		runtime ":resources:1.1.6"
-		runtime ":database-migration:1.3.3"
+		runtime ":database-migration:1.1"
 	}
 }
 
