@@ -3,7 +3,6 @@
 // args[1]: Database name(generated from grails environment)
 import static Constants.*
 import groovy.sql.Sql
-this.class.classLoader.rootLoader.addURL(new URL("file:///usr/share/java/postgresql-jdbc-8.4.701.jar"))
 
 class Constants { 
     // Sonde Survey Data Schema

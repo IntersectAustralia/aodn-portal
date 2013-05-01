@@ -14,24 +14,53 @@ Portal.cart.DownloadCartPanel = Ext.extend(Ext.Panel, {
 
     constructor: function(cfg) {
 
-        this.listPanel = new Portal.cart.DownloadList();
+        this.listDataView = new Portal.cart.DownloadList();
+        this.lastCartRemovedUuid = [];
+
+        this.doUndoButton = new Ext.Button({
+            tooltip: OpenLayers.i18n('downloadCartUndo'),
+            cls : 'floatRight',
+            hidden: true,
+            html: '<a  class=\"styledButton\" href="#">' + OpenLayers.i18n('downloadCartUndo') + '<\/a>',
+            listeners: {
+
+                scope: this,
+                'click': function(button,event) {
+                    this.doUndo();
+                    return false;
+                },
+                'render': function() {
+                    if (this.lastCartRemovedUuid.length > 0){
+                        this.doUndoButton.enable();
+                    };
+                }
+            }
+        });
+        this.doDownloadButton = new Ext.Button({
+            tooltip: OpenLayers.i18n('okdownload') ,
+            cls : 'floatRight',
+            html: '<a  class="styledButton" href="#" onclick="javascript:doDownload();">' + OpenLayers.i18n('okdownload') + '</a>'
+        });
+        this.doClearCartButton = new Ext.Button({
+            tooltip: OpenLayers.i18n('clearcart'),
+            cls : 'floatRight',
+            html: '<a  class="styledButton" href="#" onclick="javascript:clearDownloadCart();">' + OpenLayers.i18n('clearcart') + '</a>'
+        });
+
+
+
 
         var footer = new Ext.Panel( {
             region: 'south',
             height: 80,
             padding: '10px',
             unstyled: true,
-            layout: 'fit',
-            anchor:'right 20%',
+            items: [
+                this.doUndoButton,
+                this.doClearCartButton,
+                this.doDownloadButton
+            ]
 
-            html: '<span class="styledButton">' +
-                '<a href="#" onclick="javascript:doDownload();">' +
-                OpenLayers.i18n('okdownload') +
-                '</a></span> ' +
-                '<span class="styledButton">' +
-                '<a href="javascript:clearDownloadCart();">' +
-                OpenLayers.i18n('clearcart') +
-                '</a></span>'
         });
 
         var config = Ext.apply({
@@ -54,7 +83,7 @@ Portal.cart.DownloadCartPanel = Ext.extend(Ext.Panel, {
                     padding: '0px 20px',
                     stateful: false,
                     items: [
-                        this.listPanel
+                        this.listDataView
                     ]
                 },
                 footer
@@ -65,6 +94,37 @@ Portal.cart.DownloadCartPanel = Ext.extend(Ext.Panel, {
 
 
         Portal.cart.DownloadCartPanel.superclass.constructor.call(this, config);
+
+        Ext.MsgBus.subscribe("downloadCart.cartRecordRemoved", function (name,record_uuid) {
+            this.lastCartRemovedUuid.push(record_uuid);
+            this.doUndoButton.enable().show();
+        }, this);
+
+        Ext.MsgBus.subscribe("downloadCart.cartCleared", function (name) {
+            this.lastCartRemovedUuid = [];
+            this.doUndoButton.disable();
+        }, this);
+
+        Ext.MsgBus.subscribe("downloadCart.cartContentsUpdated", function (name, count) {
+            if(count === "0") {
+                this.doClearCartButton.disable();
+                this.doDownloadButton.disable();
+            }
+            else {
+                this.doDownloadButton.enable();
+                this.doClearCartButton.enable();
+            }
+        }, this);
+    },
+
+    // cart last remove record undo
+    doUndo: function () {
+
+        setDownloadCartRecordDisableFlag(this.lastCartRemovedUuid.pop(),false);
+        if (this.lastCartRemovedUuid.length == 0){
+            this.doUndoButton.disable();
+        };
+
 
     }
 });

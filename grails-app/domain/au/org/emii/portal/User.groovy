@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2012 IMOS
  *
@@ -43,7 +44,9 @@ class User {
     @Override
     public String toString() {
 
-        return "${fullName} (${openIdUrl})"
+		def rolePart = role ? "[Role: ${role}]" : "[No Roles]"
+
+        return "$fullName $rolePart ($openIdUrl)"
     }
 
     void beforeDelete(){
