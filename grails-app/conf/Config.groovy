@@ -265,6 +265,7 @@ log4j = {
             'grails.app.controller'
 
     debug   'grails.app.controllers.au.org.emii.portal.DatasetController',
+	'grails.app.controllers.au.org.emii.portal.SplashController',
 			'grails.app.job',
             //'grails.app.service',
 		'grails.app.tagLib',

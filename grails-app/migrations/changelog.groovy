@@ -123,5 +123,7 @@ databaseChangeLog = {
 
 	// Inserts default user role permission data
 	include file: '20130501-inserting-userRole-permission-data.groovy'
+
+	include file: '20130501-SL-Create-Metadata-Publication.groovy'
 }
 
