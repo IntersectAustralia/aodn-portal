@@ -1,184 +1,228 @@
-/*
- * Copyright 2012 IMOS
- *
- * The AODN/IMOS Portal is distributed under the terms of the GNU General Public License
- *
- */
-
 package au.org.emii.portal
 
 import org.apache.shiro.SecurityUtils
-import org.openid4java.consumer.ConsumerManager
-import org.openid4java.discovery.DiscoveryInformation
-import org.openid4java.message.ParameterList
-import org.openid4java.message.ax.AxMessage
-import org.openid4java.message.ax.FetchRequest
-import org.openid4java.message.ax.FetchResponse
+import org.apache.shiro.authc.AuthenticationException
+import org.apache.shiro.authc.UnknownAccountException
+import org.apache.shiro.authc.DisabledAccountException
+import org.apache.shiro.authc.IncorrectCredentialsException
+import org.apache.shiro.web.util.SavedRequest
+import org.apache.shiro.web.util.WebUtils
+
+import grails.plugins.federatedgrails.*
 
 class AuthController {
+	static defaultAction = "login"
+	public final String TARGET = 'grails.controllers.AuthController.shiro:TARGET'
 
-    static def consumerManager = new ConsumerManager()
+	def grailsApplication
 
-    def index = {
+	def login = {
+		// Stores initial content user is attempting to access to redirect when auth complete
+		if (params.targetUri)
+			session.setAttribute(TARGET, params.targetUri)
 
-        forward action: "login"
-    }
+		// Integrates with Shibboleth NativeSPSessionCreationParameters as per https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPSessionCreationParameters
+		// This allows us to mix and match publicly available and private content within by making use of security filters in conf/SecurityFilters.groovy
+		def localAction = createLink([action: 'federatedlogin', absolute: true])
+		def url = "${grailsApplication.config.federation.ssoendpoint}?target=${localAction}"
 
-    def register = {
-		_authenticateWithOpenId(true)
-    }
-
-    def login = {
-		_authenticateWithOpenId(false)
-    }
-
-    def verifyResponse = {
-
-        // Todo - DN: How to redirect them back to where they were before they clicked 'login' (or 'register', 'logout', etc.)?
-
-        // extract the parameters from the authentication response
-        // (which comes in as a HTTP request from the OpenID provider)
-
-        log.debug "request.parameterMap: ${ request.parameterMap }"
-
-        def openidResp = new ParameterList( request.parameterMap )
-
-        // retrieve the previously stored discovery information
-        def discovered = session.getAttribute( "discovered" )
-
-        // extract the receiving URL from the HTTP request
-        def portalUrl = grailsApplication.config.grails.serverURL
-        def receivingURL = portalUrl + ( request.forwardURI - request.contextPath )
-        def queryString = request.queryString
-
-        if ( queryString ) {
-
-            receivingURL += "?${ request.queryString }"
-        }
-
-        log.debug "receivingURL: $receivingURL"
-
-        // verify the response
-        def verification = consumerManager.verify( receivingURL as String,
-                                                   openidResp,
-                                                   discovered as DiscoveryInformation )
-
-        // examine the verification result and extract the verified identifier
-        def verified = verification.getVerifiedId()
-
-        if ( verified ) { // success, use the verified identifier to identify the user
-
-            def userInstance = User.findByOpenIdUrl( verified.identifier )
-
-            if ( !userInstance ) {
-
-                userInstance = new User( openIdUrl: verified.identifier )
-
-	            // If there are no users to date make the first user an admin
-				if (User.count() < 1) {
-					userInstance.role = UserRole.findByName("Administrator")
-				}
-	            else {
-                    userInstance.role = UserRole.findByName( "Researcher" )
-				}
-            }
-
-            // Get values from attribute exchange
-            def authResponse = verification.authResponse
-
-            log.debug "authResponse: ${ authResponse }"
-
-            if ( authResponse.hasExtension( AxMessage.OPENID_NS_AX ) )
-            {
-                // Validate response
-                authResponse.validate()
-
-                def ext = authResponse.getExtension( AxMessage.OPENID_NS_AX )
-
-                if ( ext instanceof FetchResponse ) {
-
-                    log.debug "Setting attributes from '$ext'"
-
-                    userInstance.fullName = ext.getAttributeValueByTypeUri( "http://schema.openid.net/namePerson" ) ?: "Unk."
-                    userInstance.emailAddress = ext.getAttributeValueByTypeUri( "http://schema.openid.net/contact/email" ) ?: "Unk."
-                }
-                else {
-
-                    log.warn "Unknown response type from OpenID (ie. not a FetchResponse). ext: '$ext' (${ ext?.class?.name })"
-                }
-            }
-            else {
-
-                log.warn "Response doesn't have extension AxMessage.OPENID_NS_AX. Unable to set/update User fields."
-            }
-
-            // Save updated User
-            userInstance.save flush: true, failOnError: true
-
-            // Log the User in
-            def authToken = new OpenIdAuthenticationToken( userInstance.id, userInstance.openIdUrl ) // Todo - DN: Remember me option
-            SecurityUtils.subject.login authToken
-        }
-        else { // OpenID authentication failed
-
-            log.info "OpenID authentication failed. verification.statusMsg: ${ verification.statusMsg }; params: $params"
-
-            flash.message = ( params["openid.mode"] == "cancel" ) ? "Log in cancelled." : "Could not log in (${ verification.statusMsg })"
-        }
-        redirect controller: "home"
-    }
-
-    def logOut = {
-
-        // Log the user out of the application.
-        SecurityUtils.subject?.logout()
-
-		redirect(url: "${grailsApplication.config.openIdProvider.url}/logout")
-    }
-
-    def unauthorized = {
-
-        redirect controller: "home"
-    }
-
-	def _authenticateWithOpenId(register) {
-
-		def openIdProviderUrl = grailsApplication.config.openIdProvider.url
-		def portalUrl = grailsApplication.config.grails.serverURL
-
-		// Perform discovery on our OpenID provider
-		def discoveries = consumerManager.discover( openIdProviderUrl ) // User-supplied String
-
-		// Attempt to associate with the OpenID provider
-		// and retrieve one service endpoint for authentication
-		def discovered = consumerManager.associate( discoveries )
-
-		// Store the discovery information in the user's session for later use
-		// leave out for stateless operation / if there is no session
-		session.setAttribute "discovered", discovered
-
-		// Retrieve accounts details w/ attribute exchange (http://code.google.com/p/openid4java/wiki/AttributeExchangeHowTo)
-		def fetch = FetchRequest.createFetchRequest()
-		fetch.addAttribute "email", "http://schema.openid.net/contact/email", true /* required */
-		fetch.addAttribute "fullname", "http://schema.openid.net/namePerson", true /* required */
-
-		// obtain a AuthRequest message to be sent to the OpenID provider
-		def returnUrl = "${portalUrl}/auth/verifyResponse"
-		def authReq = consumerManager.authenticate( discovered, returnUrl )
-		authReq.addExtension fetch
-
-		def url = authReq.getDestinationUrl( true )
-		if (register) {
-			url += "&r=true"
+		// If this a production scenario we defer to shibboleth
+		if (grailsApplication.config.federation.automatelogin) {
+			redirect(url: url)
+			return
 		}
 
-		redirect url: url
+ 		[spsession_url: url]
 	}
 
-    def beforeInterceptor = {
-        request.exceptionHandler = { ex ->
-            flash.message = "There was a problem with authentication."
-            redirect controller: "home"
-        }
-    }
+	def logout = {
+		log.info("Signing out subject [${subject?.id}]${subject?.principal}")
+		SecurityUtils.subject?.logout()
+		redirect(uri: '/')
+	}
+
+	def echo = {
+		def attr = [:]
+		if (grailsApplication.config.federation.request.attributes) {
+			request.attributeNames.each {
+				attr.put(it, (String) request.getAttribute(it))
+			}
+		} else {
+			request.headerNames.each {
+				attr.put(it, (String) request.getHeader(it))
+			}
+		}
+		return [attr: attr]
+	}
+
+	def federatedlogin = {
+		if (!grailsApplication.config.federation.federationactive) {
+			log.error("Attempt to do federated login when Apache SP is not marked active in local configuration")
+			response.sendError(403)
+			return
+		}
+
+		def incomplete = false
+		def errors = []
+
+		def principal = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.principal)
+		def credential = request.getSession(true).id//federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.credential)
+
+		def attributes = [:]
+
+		/*
+		Depending on your application requirements you can request as many or as few attributes as necessary,
+		the below gives an example of what is possible. Refer to the AAF core attributes for a complete set of possibilities.
+
+
+		attributes.entityID = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.entityID)
+		attributes.displayName =  federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.displayName)
+		attributes.email = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.email)
+		attributes.entitlements = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.entitlement)
+		attributes.homeOrganization = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.homeOrganization)
+		attributes.homeOrganizationType = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.homeOrganizationType)
+        */
+
+		if (!principal) {
+			incomplete = true
+			errors.add "Unique subject identifier (principal) was not presented"
+		}
+
+		if (!credential) {
+			incomplete = true
+			errors.add "Internal SAML session identifier (credential) was not presented"
+		}
+
+		log.warn("------------Name-------------" + federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.displayName))
+
+		// Add additional checks for any other attribute your application can't live without here. For example displayName or email.
+
+		if (incomplete) {
+			log.warn "Incomplete federated authentication attempt was aborted"
+			errors.each { log.warn it }
+			render(view: "federatedincomplete", model: [errors: errors])
+			return
+		}
+
+		log.debug "Attempting Federation invoked based authentication event for subject $principal based on credential provided in $credential"
+
+		try {
+			def remoteHost = request.getRemoteHost()
+			def ua = request.getHeader("User-Agent")
+			ua = ua.length() > 254 ? ua.substring(0, 254) : ua // Handle stupid user agents that present every detail known to man about corporate environments
+
+			def token = new FederatedToken(principal: principal, credential: credential, attributes: attributes, remoteHost: remoteHost, userAgent: ua)
+
+			SecurityUtils.subject.login(token)
+			log.info "Successfully processed federation based authentication event for subject $principal based on credential provided in $credential, redirecting to content"
+
+			// TODO: save a user to portal_user table if needed.
+
+
+			def targetUri = session.getAttribute(TARGET)
+			session.removeAttribute(TARGET)
+			targetUri ? redirect(uri: targetUri) : redirect(uri: "/")
+			return
+		}
+		catch (IncorrectCredentialsException e) {
+			log.warn "Federated credentials failure for subject $principal, incorrect credentials."
+			log.debug e
+		}
+		catch (DisabledAccountException e) {
+			log.warn "Federated credentials failure for subject $principal, account disabled locally"
+			log.debug e
+		}
+		catch (AuthenticationException e) {
+			log.warn "Federated credentials failure for subject $principal, generic fault"
+			log.debug e
+		}
+
+		redirect(action: "federatederror")
+	}
+
+	def federatedincomplete = {}
+
+	def federatederror = {}
+
+	def locallogin = {
+		if (!grailsApplication.config.federation.developmentactive) {
+			log.error "Authentication diverted to local development/testing accounts but this mode is not enabled in configuration"
+			response.sendError(403)
+			return
+		}
+
+		def incomplete = false
+		def errors = []
+
+		// Instead of SAML attributes we setup the session via form posted name/val
+		def principal = params.principal
+		def credential = params.credential
+		def attributes = params.attributes
+
+		if (!principal) {
+			incomplete = true
+			errors.add "Unique subject identifier (principal) was not presented"
+		}
+
+		if (!credential) {
+			incomplete = true
+			errors.add "Internal SAML session identifier (credential) was not presented"
+		}
+
+		// Add additional checks for any other attribute your application can't live without here. For example displayName or email.
+
+		if (incomplete) {
+			log.info "Incomplete federated authentication attempt was aborted"
+			errors.each { log.warn it }
+			render(view: "federatedincomplete", model: [errors: errors])
+			return
+		}
+
+		log.debug "Attempting local authentication event for subject $principal based on credential provided in $credential"
+
+		try {
+			def remoteHost = request.getRemoteHost()
+			def ua = request.getHeader("User-Agent")
+			ua = ua.length() > 254 ? ua.substring(0, 254) : ua // Handle stupid user agents that present every detail known to man about corporate environments
+
+			def token = new FederatedToken(principal: principal, credential: credential, attributes: attributes, remoteHost: remoteHost, userAgent: ua)
+
+
+
+			SecurityUtils.subject.login(token)
+			log.info "Successfully processed local development/testing authentication event for subject $principal based on credential provided in $credential, redirecting to content"
+
+			def targetUri = session.getAttribute(TARGET)
+			session.removeAttribute(TARGET)
+			targetUri ? redirect(uri: targetUri) : redirect(uri: "/")
+			return
+		}
+		catch (IncorrectCredentialsException e) {
+			log.warn "Local credentials failure for subject $principal, incorrect credentials."
+			log.debug e
+		}
+		catch (DisabledAccountException e) {
+			log.warn "Local credentials failure for subject $principal, account disabled locally"
+			log.debug e
+		}
+		catch (AuthenticationException e) {
+			log.warn "Local credentials failure for subject $principal, generic fault"
+			log.debug e
+		}
+
+		redirect(action: "login")
+	}
+
+	private String federatedAttributeValue(def grailsApplication, String attr) {
+		def value = null
+		if (grailsApplication.config.federation.request.attributes) {
+			if (request.getAttribute(attr))
+				value = new String(request.getAttribute(attr).getBytes("ISO-8859-1"))
+		} else {
+			if (request.getHeader(attr))
+				value = new String(request.getHeader(attr).getBytes("ISO-8859-1"))  // Not as secure
+		}
+
+		value
+	}
 }

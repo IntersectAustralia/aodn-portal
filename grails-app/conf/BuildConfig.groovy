@@ -51,7 +51,7 @@ grails.project.dependency.resolution = {
 
 		compile ":build-test-data:2.0.5"
 		compile ":svn:1.0.2"
-		compile ":shiro:1.1.4"
+		compile ":shiro:1.1.3"
 		compile ":quartz:0.4.2"
 		compile ":jquery-mobile-scaffolding:0.1"
 		compile ":jquery-mobile:1.1.0.5"
@@ -60,10 +60,11 @@ grails.project.dependency.resolution = {
 		compile ":mail:1.0.1"
 		compile ":hibernate:2.1.0"
 		compile ":cache-headers:1.1.5"
+		compile ":federated-grails:0.3.1"
 
 		runtime ":cached-resources:1.0"
 		runtime ":resources:1.1.6"
-		runtime ":database-migration:1.3.3"
+		compile ":database-migration:1.1"
 	}
 }
 
