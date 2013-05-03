@@ -14,7 +14,7 @@ federation {
 	request.attributes = true
 
 	// the ssoendpoint setting can be found in Config.groovy (just search keywords 'federation.ssoendpoint').
-	ssoendpoint = "/Shibboleth.sso/Login"
+	//ssoendpoint = "https://staging.dc2b.intersect.org.au/Shibboleth.sso/Login"
 
 	// The subject class being utilized by the host application
 	app.subject = "au.org.emii.portal.User"

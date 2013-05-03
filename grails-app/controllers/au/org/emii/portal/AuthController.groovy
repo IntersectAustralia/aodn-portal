@@ -85,7 +85,7 @@ class AuthController {
 
 		if (!principal) {
 			incomplete = true
-			errors.add "Unique subject identifier (principal) was not presented"
+			errors.add "Unique subject identifier (principal) was not presented ----- And the Header names are: " + request.getHeaderNames().toList()
 		}
 
 		if (!credential) {

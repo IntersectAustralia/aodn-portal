@@ -104,6 +104,7 @@ environments {
 	    spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
 		wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
 		openIdProvider.url = "https://openid.emii.org.au/login"
+		federation.ssoendpoint = "https://staging.dc2b.intersect.org.au/Shibboleth.sso/Login"
 
         facetedSearch.enabled = false
 
@@ -135,6 +136,7 @@ environments {
 	    spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
 	    wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
 	    openIdProvider.url = "https://openid.emii.org.au/login"
+		federation.ssoendpoint = "https://staging.dc2b.intersect.org.au/Shibboleth.sso/Login"
 
         facetedSearch.enabled = false
 
@@ -154,6 +156,7 @@ environments {
 	    spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
 	    wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
 	    openIdProvider.url = "https://openid.emii.org.au/login"
+		federation.ssoendpoint = "https://qa.dc2b.intersect.org.au/Shibboleth.sso/Login"
 
         facetedSearch.enabled = false
 
