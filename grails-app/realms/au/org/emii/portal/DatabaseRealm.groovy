@@ -10,19 +10,20 @@ class DatabaseRealm {
 	def hasRole(principal, roleName) {
 		log.debug "Checking hasRole($principal, $roleName)"
 
-		User user = User.findByOpenIdUrl(principal)
+		User user = User.findById(principal)
 		if (!user) return false
 
-		return user?.role?.name?.equalsIgnoreCase(roleName)
+		return user.role?.name?.equalsIgnoreCase(roleName)
 	}
 
 	def hasAllRoles(principal, roles) {
+		log.debug "Checking hasAllRoles($principal, $roles)"
 
-		User user = User.findAllByPrincipal(principal)
+		User user = User.findById(principal)
 		if (!user) return false
 
 		for (String role : roles) {
-			if (!user?.role?.name?.equalsIgnoreCase(roleName)) return false
+			if (!user.role?.name?.equalsIgnoreCase(role)) return false
 		}
 
 		return true

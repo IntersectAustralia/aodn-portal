@@ -46,19 +46,30 @@ class AuthController {
 
         def emailAddress = request['mail']
         def fullName = request['displayName']
-        def userInstance = User.findByEmailAddress( emailAddress )
+		def aafToken = request['auEduPersonSharedToken']
+		String organisationName = request['o']
+
+		// In dev openIdURL stores openId info, and in prod we store aaf token in this column.
+        def userInstance = User.findByOpenIdUrl(aafToken)
 
         if ( !userInstance ) {
 
-            userInstance = new User( fullName: fullName, emailAddress: emailAddress, openIdUrl: emailAddress )
+			UserRole role
+			Organization organization;
+			if (organisationName.contains("Sydney") && organisationName.contains("University")) {
+				organization = Organization.findByName("The University of Sydney")
+				role = UserRole.findByName(UserRole.RESEARCHER)
+			} else {
+				organization = Organization.findByName("Other")
+				role = UserRole.findByName(UserRole.EXTERNALRESEARCHER)
+			}
 
-            // If there are no users to date make the first user an admin
-            if (User.count() < 1) {
-                userInstance.role = UserRole.findByName("Administrator")
-            }
-            else {
-                userInstance.role = UserRole.findByName( "Researcher" )
-            }
+			// If there are no users to date make the first user an admin
+			if (User.count() < 1) {
+				role = UserRole.findByName(UserRole.ADMINISTRATOR)
+			}
+
+			userInstance = new User(openIdUrl: aafToken, emailAddress: emailAddress, fullName: fullName, organization: organization, role: role)
 
             userInstance.save flush: true, failOnError: true
         }
@@ -66,6 +77,7 @@ class AuthController {
         // Log the User in
         def authToken = new OpenIdAuthenticationToken( userInstance.id, userInstance.openIdUrl ) // Todo - DN: Remember me option
         SecurityUtils.subject.login authToken
+		log.debug("Successfully login User with AAF Token ${userInstance.openIdUrl}")
 
         redirect controller: "home"
     }
@@ -114,10 +126,10 @@ class AuthController {
 
 	            // If there are no users to date make the first user an admin
 				if (User.count() < 1) {
-					userInstance.addToRoles UserRole.findByName("Administrator")
+					userInstance.role = UserRole.findByName(UserRole.ADMINISTRATOR)
 				}
 	            else {
-                    userInstance.addToRoles UserRole.findByName( "SelfRegisteredUser" )
+                    userInstance.role = UserRole.findByName(UserRole.RESEARCHER)
 				}
             }
 
