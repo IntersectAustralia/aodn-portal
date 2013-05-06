@@ -8,6 +8,8 @@
 
 package au.org.emii.portal
 
+import org.codehaus.groovy.grails.commons.DefaultGrailsControllerClass
+
 class UserRoleController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -56,7 +58,7 @@ class UserRoleController {
             redirect(action: "list")
         }
         else {
-            return [userRoleInstance: userRoleInstance]
+            return [userRoleInstance: userRoleInstance, controllerActions: getAllControllerActions()]
         }
     }
 
@@ -115,4 +117,26 @@ class UserRoleController {
             redirect(action: "list")
         }
     }
+
+	private HashMap<String, List<String>> getAllControllerActions() {
+		DefaultGrailsControllerClass[] controllers = grailsApplication.controllerClasses
+
+		HashMap<String, List<String>> controllerActions = new HashMap<String, List<String>>()
+
+		controllers.each {
+			String controllerName = it.name
+
+			List<String> actions = controllerActions.get(controllerName)
+			if (!actions) {
+				actions = []
+				controllerActions.put(controllerName, actions)
+			}
+
+			for (String uri : it.getURIs() ) {
+				actions.add(it.getMethodActionName(uri) )
+			}
+		}
+
+		return controllerActions
+	}
 }

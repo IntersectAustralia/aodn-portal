@@ -8,9 +8,11 @@
 package au.org.emii.portal
 
 class UserRole {
-    public static String SERVEROWNER = "ServerOwner"
+    public static String DATACUSTODIAN = "Data Custodian"
     public static String ADMINISTRATOR = "Administrator"
-    public static String SELFREGISTERED = "SelfRegisteredUser"
+    public static String RESEARCHERWITHUPLOAD = "Researcher with Upload"
+	public static String RESEARCHER = "Researcher"
+	public static String EXTERNALRESEARCHER = "External Researcher"
 
     String name
 

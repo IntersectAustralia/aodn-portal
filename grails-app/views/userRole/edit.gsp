@@ -82,6 +82,27 @@
                         
                         </tbody>
                     </table>
+
+                    <table>
+                        <thead>
+                        <tr>
+                            <g:sortableColumn property="controller" title="${message(code: 'userRole.id.label', default: 'Controller')}" />
+
+                            <g:sortableColumn property="actions" title="${message(code: 'userRole.name.label', default: 'Actions')}" />
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                            <g:each in="${controllerActions}" status="i" var="controllerAction">
+                                <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+                                    <td>${controllerAction.getKey()}</td>
+
+                                    <td>${controllerAction.getValue()}</td>
+                                </tr>
+                            </g:each>
+                        </tbody>
+                    </table>
+
                 </div>
                 <div class="buttons">
                     <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
