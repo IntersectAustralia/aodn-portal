@@ -1,9 +1,14 @@
-grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
+
+/*
+ * Copyright 2012 IMOS
+ *
+ * The AODN/IMOS Portal is distributed under the terms of the GNU General Public License
+ *
+ */
+
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
-grails.project.target.level = 1.6
-grails.project.source.level = 1.6
 grails.project.war.file = "target/${appName}-${appVersion}-${grails.util.Environment.current.name}.war"
 
 grails.project.dependency.resolution = {
@@ -13,14 +18,9 @@ grails.project.dependency.resolution = {
         // excludes 'ehcache'
 		excludes "xml-apis"
 		excludes("catalina")
-//		excludes("grails-plugin-log4j")
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
-    checksums true // Whether to verify checksums on resolve
-
     repositories {
-        inherits true // Whether to inherit repository definitions from plugins
-
         grailsPlugins()
         grailsHome()
         grailsCentral()
@@ -29,8 +29,6 @@ grails.project.dependency.resolution = {
         // from public Maven repositories
         mavenLocal()
         mavenCentral()
-
-        // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -43,28 +41,9 @@ grails.project.dependency.resolution = {
     }
 	
 	// Allow grails commands to be run as usual, see: http://grails.org/doc/latest/guide/conf.html#mavenIntegration
-	pom true
+	pom true	
 	plugins {
-		test ":code-coverage:1.2.6"
-
-		build ":tomcat:2.1.0"
-
-		compile ":build-test-data:2.0.5"
-		compile ":svn:1.0.2"
-		compile ":shiro:1.1.3"
-		compile ":quartz:0.4.2"
-		compile ":jquery-mobile-scaffolding:0.1"
-		compile ":jquery-mobile:1.1.0.5"
-		compile ":jquery:1.8.0"
-		compile ":plugin-config:0.1.8"
-		compile ":mail:1.0.1"
-		compile ":hibernate:2.1.0"
-		compile ":cache-headers:1.1.5"
-		//compile ":federated-grails:0.3.1"
-
-		runtime ":cached-resources:1.0"
-		runtime ":resources:1.1.6"
-		compile ":database-migration:1.1"
+		test ":build-test-data:1.1.2"
 	}
 }
 

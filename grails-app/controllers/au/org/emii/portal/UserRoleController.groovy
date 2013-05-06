@@ -74,7 +74,7 @@ class UserRoleController {
             }
 
 			// get the permission from textfields and remove the blank one.
-			ArrayList<String> permissions = new ArrayList<>()
+			ArrayList<String> permissions = new ArrayList()
 			for(int i=0; i< params.getList("permissions").size(); i++){
 				if(""!=params.getList("permissions").get(i) && "Add permissions at here"!=params.getList("permissions").get(i)) {
 					permissions.add(params.getList("permissions").get(i))

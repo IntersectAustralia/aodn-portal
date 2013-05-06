@@ -131,9 +131,10 @@ environments {
     production {
 
 	    // URLs
-	grails.serverURL = "https://staging.dc2b.intersect.org.au/$appName"
+	grails.serverURL = "http://staging.dc2b.intersect.org.au"
 	spatialsearch.url = "http://staging.dc2b.intersect.org.au/spatialsearch/index"
 	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
+	wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
 	shibboleth.url = "https://staging.dc2b.intersect.org.au/Shibboleth.sso"
 
         facetedSearch.enabled = false
@@ -150,9 +151,10 @@ environments {
     qa {
 
 	    // URLs
-	grails.serverURL = "https://qa.dc2b.intersect.org.au/$appName"
+	grails.serverURL = "http://qa.dc2b.intersect.org.au"
 	spatialsearch.url = "http://staging.dc2b.intersect.org.au/spatialsearch/index"
 	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
+	wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
 	shibboleth.url = "https://qa.dc2b.intersect.org.au/Shibboleth.sso"
 
         facetedSearch.enabled = false
