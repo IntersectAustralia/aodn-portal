@@ -30,7 +30,7 @@ environments {
             driverClassName = "org.postgresql.Driver"
 		    url = "jdbc:postgresql://localhost:5432/aodn_portal"
             username = "postgres"
-            password = "ling1128"
+            password = "postgres"
 		}
 	}
 	
