@@ -36,7 +36,7 @@ class AuthController {
                 _authenticateWithOpenId(false)
                 break
             case Environment.PRODUCTION:
-            case Environment.QA:
+            case Environment.CUSTOM:
                 forward action: "verifyResponseAAF"
                 break
         }
@@ -187,7 +187,7 @@ class AuthController {
 		redirect(url: "${grailsApplication.config.openIdProvider.url}/logout")
                 break
             case Environment.PRODUCTION:
-            case Environment.QA:
+            case Environment.CUSTOM:
 		redirect(url: "${grailsApplication.config.shibboleth.url}/Logout")
                 break
         }
