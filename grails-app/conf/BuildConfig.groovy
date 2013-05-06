@@ -60,7 +60,7 @@ grails.project.dependency.resolution = {
 		compile ":mail:1.0.1"
 		compile ":hibernate:2.1.0"
 		compile ":cache-headers:1.1.5"
-		compile ":federated-grails:0.3.1"
+		//compile ":federated-grails:0.3.1"
 
 		runtime ":cached-resources:1.0"
 		runtime ":resources:1.1.6"
