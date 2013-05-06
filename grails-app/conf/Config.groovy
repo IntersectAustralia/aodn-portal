@@ -101,8 +101,8 @@ environments {
 
         // URLs
 	grails.serverURL = "http://localhost:8080/$appName"
-	spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
-	wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
+	spatialsearch.url = "http://staging.dc2b.intersect.org.au/spatialsearch/index"
+	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 	openIdProvider.url = "https://openid.emii.org.au/login"
 
         facetedSearch.enabled = false
@@ -132,8 +132,8 @@ environments {
 
 	    // URLs
 	grails.serverURL = "https://staging.dc2b.intersect.org.au/$appName"
-	spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
-	wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
+	spatialsearch.url = "http://staging.dc2b.intersect.org.au/spatialsearch/index"
+	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 	shibboleth.url = "https://staging.dc2b.intersect.org.au/Shibboleth.sso"
 
         facetedSearch.enabled = false
@@ -151,8 +151,8 @@ environments {
 
 	    // URLs
 	grails.serverURL = "https://qa.dc2b.intersect.org.au/$appName"
-	spatialsearch.url = "http://dc2b.intersect.org.au:8080/spatialsearch/index"
-	wmsScanner.url = "http://dc2b.intersect.org.au:8080/wmsscanner/"
+	spatialsearch.url = "http://staging.dc2b.intersect.org.au/spatialsearch/index"
+	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 	shibboleth.url = "https://qa.dc2b.intersect.org.au/Shibboleth.sso"
 
         facetedSearch.enabled = false
