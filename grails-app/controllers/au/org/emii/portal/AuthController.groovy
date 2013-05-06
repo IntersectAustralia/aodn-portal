@@ -194,7 +194,7 @@ class AuthController {
     }
 
     def unauthorized = {
-
+		flash.message = "You do not have permission to do this request"
         redirect controller: "home"
     }
 

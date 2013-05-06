@@ -58,7 +58,7 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
                 },
                 {
                     xtype: 'combo',
-                    fieldLabel: 'Date type',
+                    fieldLabel: 'Data type',
                     typeAhead: true,
                     triggerAction: 'all',
                     lazyRender: true,
