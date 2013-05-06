@@ -224,9 +224,9 @@ class UserController {
 		userInstance ->
 		List<UserRole> visibleUserRoles = UserRole.list()
 		User currentUser = User.current()
-		if( "Data Custodian".equalsIgnoreCase( currentUser?.role.name ) ) {
+		if( UserRole.DATACUSTODIAN.equalsIgnoreCase( currentUser?.role.name ) ) {
 			for( role in UserRole.list() ) {
-				if( "Administrator".equalsIgnoreCase( role?.name ) || "Data Custodian".equalsIgnoreCase( role?.name ) ) {
+				if( UserRole.ADMINISTRATOR.equalsIgnoreCase( role?.name ) || UserRole.DATACUSTODIAN.equalsIgnoreCase( role?.name ) ) {
 					visibleUserRoles.remove(role)
 				}
 			}
@@ -252,8 +252,8 @@ class UserController {
 	def isUpdatePermitted = {
 		userInstance ->
 			User currentUser = User.current()
-			if( "Administrator".equalsIgnoreCase( currentUser?.role.name ) || "Data Custodian".equalsIgnoreCase( currentUser?.role.name ) ) {
-				return currentUser.role?.isHigherThan( userInstance?.role ) || isSelfUpdate(userInstance)
+			if( UserRole.ADMINISTRATOR.equalsIgnoreCase( currentUser?.role?.name ) || UserRole.DATACUSTODIAN.equalsIgnoreCase( currentUser?.role?.name ) ) {
+				return currentUser.role?.isHigherThan(userInstance?.role) || isSelfUpdate(userInstance)
 
 			} else {
 				return false

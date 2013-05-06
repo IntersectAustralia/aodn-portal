@@ -118,17 +118,17 @@ class UserRoleController {
         }
     }
 
-	private HashMap<String, List<String>> getAllControllerActions() {
+	private HashMap<String, Collection<String>> getAllControllerActions() {
 		DefaultGrailsControllerClass[] controllers = grailsApplication.controllerClasses
 
-		HashMap<String, List<String>> controllerActions = new HashMap<String, List<String>>()
+		HashMap<String, Collection<String>> controllerActions = new HashMap<String, Collection<String>>()
 
 		controllers.each {
 			String controllerName = it.name
 
-			List<String> actions = controllerActions.get(controllerName)
+			Collection<String> actions = controllerActions.get(controllerName)
 			if (!actions) {
-				actions = []
+				actions = new HashSet<String>()
 				controllerActions.put(controllerName, actions)
 			}
 
