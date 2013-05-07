@@ -44,6 +44,16 @@ grails.project.dependency.resolution = {
 	pom true	
 	plugins {
 		test ":build-test-data:1.1.2"
+		test ":code-coverage:1.2.4"
+
+		compile ":hibernate:1.3.7"
+		compile ":database-migration:1.0"
+		compile ":mail:1.0-SNAPSHOT"
+		compile ":plugin-config:0.1.5"
+		compile ":quartz:0.4.2"
+		compile ":shiro:1.1.4"
+
+		build ":tomcat:1.3.7"
 	}
 }
 

@@ -128,12 +128,12 @@ class UserRoleController {
 
 			Collection<String> actions = controllerActions.get(controllerName)
 			if (!actions) {
-				actions = new HashSet<String>()
+				actions = new TreeSet<String>()
 				controllerActions.put(controllerName, actions)
 			}
 
 			for (String uri : it.getURIs() ) {
-				actions.add(it.getMethodActionName(uri) )
+				actions.add(it.getClosurePropertyName(uri) )
 			}
 		}
 

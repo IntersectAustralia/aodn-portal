@@ -206,22 +206,19 @@ class UserController {
 		}
 	}
 
-	def getOrganizationFromParams = {
-		params ->
-			def organizationId = params.organization
-			def organization = Organization.findById(organizationId)
-			return organization;
+	private Organization getOrganizationFromParams() {
+		def organizationId = params.organization
+		def organization = Organization.findById(organizationId)
+		return organization;
 	}
 
-	def getUserRoleFromParams = {
-		params ->
-			def roleId = params.role
-			def role = UserRole.findById( roleId )
-			return role
+	private UserRole getUserRoleFromParams() {
+		def roleId = params.role
+		def role = UserRole.findById( roleId )
+		return role
 	}
 
-	def getVisibleUserRoles = {
-		userInstance ->
+	private List<UserRole> getVisibleUserRoles(User userInstance) {
 		List<UserRole> visibleUserRoles = UserRole.list()
 		User currentUser = User.current()
 		if( UserRole.DATACUSTODIAN.equalsIgnoreCase( currentUser?.role.name ) ) {
@@ -239,8 +236,7 @@ class UserController {
 		return visibleUserRoles
 	}
 
-	def validateUpdatePermission = {
-		userInstance ->
+	private boolean validateUpdatePermission(User userInstance) {
 			if (!isUpdatePermitted(userInstance)) {
 				flash.message = "${message(code: 'default.updated.not.permitted.message', args: [params.id])}"
 				redirect(action: "show", id: userInstance.id)
@@ -249,8 +245,8 @@ class UserController {
 
 			true
 	}
-	def isUpdatePermitted = {
-		userInstance ->
+
+	private boolean isUpdatePermitted(User userInstance) {
 			User currentUser = User.current()
 			if( UserRole.ADMINISTRATOR.equalsIgnoreCase( currentUser?.role?.name ) || UserRole.DATACUSTODIAN.equalsIgnoreCase( currentUser?.role?.name ) ) {
 				return currentUser.role?.isHigherThan(userInstance?.role) || isSelfUpdate(userInstance)
