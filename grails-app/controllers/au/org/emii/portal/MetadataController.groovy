@@ -1,110 +1,100 @@
 package au.org.emii.portal
 
-import org.springframework.dao.DataIntegrityViolationException
-
 class MetadataController {
-	def portalInstance
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def index() {
+    def index = {
         redirect(action: "list", params: params)
     }
 
-    def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+    def list = {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
         [metadataInstanceList: Metadata.list(params), metadataInstanceTotal: Metadata.count()]
     }
 
-    def create() {
-        [metadataInstance: new Metadata(params), cfg: Config.activeInstance(), portalBuildInfo: _portalBuildInfo()]
+    def create = {
+        def metadataInstance = new Metadata()
+        metadataInstance.properties = params
+        return [metadataInstance: metadataInstance, cfg: Config.activeInstance()]
     }
 
-    def save() {
+    def save = {
         def metadataInstance = new Metadata(params)
-        if (!metadataInstance.save(flush: true)) {
+        if (metadataInstance.save(flush: true)) {
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
+            redirect(action: "show", id: metadataInstance.id)
+        }
+        else {
             render(view: "create", model: [metadataInstance: metadataInstance])
-            return
         }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])
-        redirect(action: "show", id: metadataInstance.id)
     }
 
-    def show(Long id) {
-        def metadataInstance = Metadata.get(id)
+    def show = {
+        def metadataInstance = Metadata.get(params.id)
         if (!metadataInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), id])
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
             redirect(action: "list")
-            return
         }
-
-        [metadataInstance: metadataInstance]
+        else {
+            [metadataInstance: metadataInstance]
+        }
     }
 
-    def edit(Long id) {
-        def metadataInstance = Metadata.get(id)
+    def edit = {
+        def metadataInstance = Metadata.get(params.id)
         if (!metadataInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), id])
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
             redirect(action: "list")
-            return
         }
-
-        [metadataInstance: metadataInstance]
+        else {
+            return [metadataInstance: metadataInstance]
+        }
     }
 
-    def update(Long id, Long version) {
-        def metadataInstance = Metadata.get(id)
-        if (!metadataInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (metadataInstance.version > version) {
-                metadataInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'metadata.label', default: 'Metadata')] as Object[],
-                          "Another user has updated this Metadata while you were editing")
+    def update = {
+        def metadataInstance = Metadata.get(params.id)
+        if (metadataInstance) {
+            if (params.version) {
+                def version = params.version.toLong()
+                if (metadataInstance.version > version) {
+                    
+                    metadataInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'metadata.label', default: 'Metadata')] as Object[], "Another user has updated this Metadata while you were editing")
+                    render(view: "edit", model: [metadataInstance: metadataInstance])
+                    return
+                }
+            }
+            metadataInstance.properties = params
+            if (!metadataInstance.hasErrors() && metadataInstance.save(flush: true)) {
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
+                redirect(action: "show", id: metadataInstance.id)
+            }
+            else {
                 render(view: "edit", model: [metadataInstance: metadataInstance])
-                return
             }
         }
-
-        metadataInstance.properties = params
-
-        if (!metadataInstance.save(flush: true)) {
-            render(view: "edit", model: [metadataInstance: metadataInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])
-        redirect(action: "show", id: metadataInstance.id)
-    }
-
-    def delete(Long id) {
-        def metadataInstance = Metadata.get(id)
-        if (!metadataInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), id])
-            redirect(action: "list")
-            return
-        }
-
-        try {
-            metadataInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'metadata.label', default: 'Metadata'), id])
+        else {
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
             redirect(action: "list")
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'metadata.label', default: 'Metadata'), id])
-            redirect(action: "show", id: id)
+    }
+
+    def delete = {
+        def metadataInstance = Metadata.get(params.id)
+        if (metadataInstance) {
+            try {
+                metadataInstance.delete(flush: true)
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
+                redirect(action: "list")
+            }
+            catch (org.springframework.dao.DataIntegrityViolationException e) {
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
+                redirect(action: "show", id: params.id)
+            }
+        }
+        else {
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
+            redirect(action: "list")
         }
     }
-	
-	def _portalBuildInfo() {
-		
-		def md = grailsApplication.metadata
-		return "${ portalInstance.name() } Portal v${ md.'app.version' }, build date: ${md.'app.build.date'?:'<i>not recorded</i>'}"
-	}
-	
 }
