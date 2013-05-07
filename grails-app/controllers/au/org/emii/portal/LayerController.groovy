@@ -344,7 +344,7 @@ class LayerController {
 
 	        log.debug "Before save"
 
-            server.save( failOnError: true )
+            server .save( failOnError: true )
 
 	        log.debug "After save, before render success message"
 

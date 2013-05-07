@@ -35,12 +35,12 @@ class LayerControllerTests extends ControllerUnitTestCase {
         this.controller.params.metadata = metadata
         this.controller.params.capabilitiesData = "012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789"
 
-        UserRole role = new UserRole(name: "ServerOwner", id:  100)
+        UserRole role = new UserRole(name: UserRole.ADMINISTRATOR, id:  100)
         mockDomain UserRole, [role]
         UserRole.metaClass.findByName{
             return role
         }
-        
+
         User user = new User(id:  100, role: role)
         mockDomain User, [user]
 

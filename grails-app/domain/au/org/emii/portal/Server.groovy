@@ -81,7 +81,7 @@ class Server {
             if(it?.size() == 0)
                 return true
 
-            it?.roles?.each(){ r ->
+            it?.role?.each(){ r ->
                 r.each(){  rr->
                     if(rr.id == ownerRole.id) {
                         valid = true

@@ -49,7 +49,7 @@ class SnapshotController
                     snapshotList = Snapshot.list(params)
 		}		
 		
-                def result = [ success: true, data: snapshotList, count: snapshotList.count ]
+                def result = [ success: true, data: snapshotList, count: snapshotList.count() ]
                 render text: result as JSON, contentType:"application/json"
 		
     }
