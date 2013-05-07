@@ -51,7 +51,6 @@
       <!-- Import extra pluggins-->
       <script language="JavaScript" type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery-autocomplete1.1.js')}"></script>
       <script language="JavaScript" type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery.rotate.1-1.js')}"></script>
-	  <script language="JavaScript" type="text/javascript" src="${resource(dir:'js',file:'jquery/select2.js')}"></script>
 
       <script src="${resource(dir:'js/portal/common',file:'helpers.js')}"   type="text/javascript"></script>
 
@@ -59,7 +58,6 @@
       <link rel="stylesheet" type="text/css" href="${resource(dir:'js', file:'ext-3.3.1/resources/css/xtheme-gray.css')}" />
       <link rel="stylesheet" type="text/css" href="${resource(dir:'css', file:'extThemeOverrides.css')}" />
       <link rel="stylesheet" type="text/css" href="${resource(dir:'css', file:'general.css')}" />
-      <link rel="stylesheet" type="text/css" href="${resource(dir:'css', file:'select2.css')}" />
       <g:if test="${grailsApplication.config.portal.instance?.css}">
           <link rel="stylesheet" type="text/css" href="${grailsApplication.config.portal.instance.css}" />
       </g:if>
