@@ -295,7 +295,7 @@ ${buildInfo}
 <%-- Display message from Grails app --%>
 <g:if test="${flash.message}">
     <script type="text/javascript">
-        Ext.Msg.alert("Message", "${flash.message.encodeAsHTML()}");
+        window.alert("${flash.message.encodeAsHTML()}");
     </script>
 </g:if>
 </body>
