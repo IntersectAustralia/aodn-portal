@@ -7,6 +7,7 @@ class Metadata {
 	String datasetName
 	Date collectionPeriodFrom
 	Date collectionPeriodTo
+	String description
 	String dataType
 	String researchCode
 	Boolean embargo
@@ -212,4 +213,5 @@ class Metadata {
 	static relatedPartyTypeList() {
 		[[id: 0, name: 'Collector'], [id: 1, name: 'Principal investigator']]
 	}
+	
 }

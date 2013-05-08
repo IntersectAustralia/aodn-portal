@@ -1,4 +1,5 @@
 <%@ page import="au.org.emii.portal.Metadata"%>
+<%@ page import="au.org.emii.portal.Publication"%>
 <!doctype html>
 <div class="p-centre">
 	<div class="p-centre-item" style="width: 520px">
