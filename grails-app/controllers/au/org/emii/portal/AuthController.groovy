@@ -23,14 +23,29 @@ class AuthController {
 
     def index = {
 
-        forward action: "login"
+        forward action: "logon"
     }
 
     def register = {
 		_authenticateWithOpenId(true)
     }
 
-    def login = {
+	/**
+	 * This is walk around for the boring redirection to /auth/login by
+	 * GrailsShiroPlugin when the anonymous user's request be blocked by
+	 * SecurityFilter permission checking.
+	 *
+	 * Because Portal2 does not force anonymous users to login, so just redirect
+	 * the request back to home page.
+	 *
+	 * The real login action is logon. And SP monitors /auth/logon url all the time.
+	 */
+	def login = {
+		flash.message = "You need to login first to do this request."
+		redirect controller: "home"
+	}
+
+    def logon = {
 	switch (Environment.current) {
     	    case Environment.DEVELOPMENT:
                 _authenticateWithOpenId(false)
