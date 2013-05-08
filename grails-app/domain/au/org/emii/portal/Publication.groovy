@@ -2,8 +2,13 @@ package au.org.emii.portal
 
 class Publication {
 	
-	String type
-	String value
+	String identifierType
+	String identifier
+	String title
+	
+	static mapping = {
+		notes type: "text"
+	}
 	
 	static belongsTo = [metadata: Metadata]
 
