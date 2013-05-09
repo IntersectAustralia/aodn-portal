@@ -20,9 +20,14 @@ class Metadata {
 		]
 	String dataAccess
 	String licence
-	User dataOwner
+	Boolean studentOwned
+	User studentDataOwner
 	Date dateCreated
 	Date lastUpdated
+	
+	static mapping = {
+		description type: "text"
+	}
 
     static constraints = {
     }
@@ -190,4 +195,23 @@ class Metadata {
 				'2299 Other Philosophy and Religious Studies'
 			]
 	}
+
+	static dataAccessList() {
+		[[id: 0, name: 'Public'], [id: 1, name: 'Mediated'], [id: 2, name: 'Private']]
+	}
+
+	static licenceList() {
+		[
+			[id: 0, name: 'Creative Commons: Allow Remixing', text: 'This work is licensed under a Creative Commons Attribution Australia 3.0 License', url: 'http://creativecommons.org/licenses/by/3.0/au/'],
+			[id: 1, name: 'Creative Commons: Prohibit Commercial Use', text: 'This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs Australia 3.0 License', url: 'http://creativecommons.org/licenses/by-nc-nd/2.5/au/'],
+			[id: 2, name: 'Creative Commons: Allow Remixing + Prohibit Commercial', text: 'This work is licensed under a Creative Commons Attribution-NonCommercial Australia 3.0 License', url: 'http://creativecommons.org/licenses/by-nc/3.0/au/'],
+			[id: 3, name: 'Creative Commons: Allow Remixing + Requires Share-Alike', text: 'This work is licensed under a Creative Commons Attribution-ShareAlike Australia 3.0 License', url: 'http://creativecommons.org/licenses/by-sa/3.0/au/'],
+			[id: 4, name: 'Creative Commons: Allow Remixing + Requires Share-Alike + Prohibit Commercial Use', text: 'This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike Australia 2.5 License', url: 'http://creativecommons.org/licenses/by-nc-sa/3.0/au/']
+		]
+	}
+	
+	static relatedPartyTypeList() {
+		[[id: 0, name: 'Collector'], [id: 1, name: 'Principal investigator']]
+	}
+	
 }

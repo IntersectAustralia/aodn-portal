@@ -1,104 +1,11 @@
-<style type="text/css">
-	body {
-		font:13px/1.3 arial,helvetica,clean,sans-serif;
-		*font-size:small;
-		*font:x-small;
-		padding: 20px !important;
-	}
-	#page {
-		width: 700px;
-	}
-	p {
-		color: #333;
-		margin-bottom: 7px;
-		font-size: 14px;
-	}
-	form p {
-		margin-top: 7px;
-	}
-	code {
-		color: #000;
-	}
-	#intro p {
-		color: #000;
-		font-size: 15px;
-		margin-bottom: 20px;
-	}
-	h1 {
-		font-size: 1.6em;
-		line-height: 2.0em;
-		margin-bottom: 0.8em;
-	}
-	h2 {
-		font-size: 1.2em;
-		line-height: 1.6em;
-		margin-bottom: 0.6em;
-	}
-	.exForm{
-		padding: 20px 20px 20px 0px;
-		font-size: 12px;
-	}
-	.x-tag {
-		color: #693;
-		background-image: url(tag_green.gif);
-		background-repeat: no-repeat;
-		background-position:  2px center;
-		padding-left: 17px !important;
-		*text-indent: 17px !important;
-    }
-	.x-flag{
-        background-image: url("${resource(dir: 'js', file: 'ext-3.3.1/resources/images/default/s.gif')}");
-        background-repeat: no-repeat;
-        background-position:  2px center;
-        text-indent: 17px !important;
-    }
-	body.ext-ie6 .x-flag .x-superboxselect-item-close {
-		top: 4px;
-		right: 2px;
-	}
-    .x-flag-au{
-        background-image: url(flags/Australia.png);
-		
-    }
-    .x-flag-at{
-        background-image: url(flags/Austria.png);
-    }
-    .x-flag-ca{
-        background-image: url(flags/Canada.png);
-    }
-    .x-flag-fr{
-        background-image: url(flags/France.png);
-    }
-    .x-flag-it{
-        background-image: url(flags/Italy.png);
-    }
-    .x-flag-jp{
-        background-image: url(flags/Japan.png);
-    }
-    .x-flag-nz{
-        background-image: url("flags/New Zealand.png");
-    }
-    .x-flag-us{
-        background-image: url(flags/USA.png);
-    }
-
-	.small {
-		font-size: small;
-	}
-	
-	#f2Form .x-superboxselect-item-focus {
-		color: #fff;
-	}
-	
-</style>
 <script language="javascript">
 	Ext.onReady(function() {
 		new Ext.ux.form.SuperBoxSelect({
 			transform: 'researchCode',
-            allowBlank:false,
+            allowBlank: true,
 			msgTarget: 'title',
             id:'researchCodeSelector',
-            fieldLabel: 'States',
+            fieldLabel: 'Research Code',
             resizable: true,
             name: 'researchCode',
             width:400,
@@ -106,11 +13,165 @@
             valueField: 'value',
             classField: 'cls',
             styleField: 'style',
-			extraItemCls: 'x-flag',
             extraItemStyle: 'border-width:2px',
             stackItems: true
          });
+		new Ext.ux.form.SuperBoxSelect({
+			transform: 'grantedUsers',
+            allowBlank: true,
+			msgTarget: 'title',
+            id:'grantedUsersSelector',
+            fieldLabel: 'Granted Users',
+            resizable: true,
+            name: 'grantedUsers',
+            width:200,
+            displayField: 'text',
+            valueField: 'value',
+            classField: 'cls',
+            styleField: 'style',
+            extraItemStyle: 'border-width:2px',
+            stackItems: true,
+            emptyText: 'Enter name of user here'
+         });
+		new Ext.ux.form.SuperBoxSelect({
+			transform: 'studentDataOwner',
+            allowBlank: true,
+			msgTarget: 'title',
+            id:'studentDataOwnerSelector',
+            fieldLabel: 'Student Owner',
+            resizable: true,
+            name: 'studentDataOwner',
+            width:250,
+            displayField: 'text',
+            valueField: 'value',
+            classField: 'cls',
+            styleField: 'style',
+            extraItemStyle: 'border-width:2px',
+            stackItems: true,
+            emptyText: 'Enter name of the student data owner'
+         });
+		new Ext.ux.form.SuperBoxSelect({
+			transform: 'collectors',
+            allowBlank: true,
+			msgTarget: 'title',
+            id:'collectorsSelector',
+            fieldLabel: 'Collectors',
+            resizable: true,
+            name: 'collectors',
+            width:250,
+            displayField: 'text',
+            valueField: 'value',
+            classField: 'cls',
+            styleField: 'style',
+            extraItemStyle: 'border-width:2px',
+            stackItems: true,
+            emptyText: 'Enter name of the collector here'
+         });
+		new Ext.ux.form.SuperBoxSelect({
+			transform: 'principalInvestigators',
+            allowBlank: true,
+			msgTarget: 'title',
+            id:'principalInvestigatorsSelector',
+            fieldLabel: 'Principal Investigators',
+            resizable: true,
+            name: 'principalInvestigators',
+            width:300,
+            displayField: 'text',
+            valueField: 'value',
+            classField: 'cls',
+            styleField: 'style',
+            extraItemStyle: 'border-width:2px',
+            stackItems: true,
+            emptyText: 'Enter name of the principal investigator here'
+         });
+		new Ext.ux.form.SuperBoxSelect({
+			transform: 'publications',
+            allowBlank: true,
+			msgTarget: 'title',
+            id:'publicationsSelector',
+            fieldLabel: 'Publications',
+            resizable: true,
+            name: 'publications',
+            width:300,
+            displayField: 'text',
+            valueField: 'value',
+            classField: 'cls',
+            styleField: 'style',
+            extraItemStyle: 'border-width:2px',
+            stackItems: true,
+            emptyText: 'Enter publication here'
+         });
+		licenceList = ${au.org.emii.portal.Metadata.licenceList().encodeAsJSON()};
+		$('.embargoParams').hide();
+		$('.studentDataOwner').hide();
+		$('.principalInvestigators').hide();
+		initLicenceHint();
 	});
+
+	function initLicenceHint() {
+		var index = $('#licenceSelector')[0].value || 0;
+		$('#licenceHint').html(licenceList[index].text + "<br><a href='" + licenceList[index].url + "'>" + licenceList[index].url + "</a>");
+	}
+
+	function toggleEmbargoParams(cb) {
+		if (cb.checked) {
+			$('.embargoParams').show();
+		}
+		else {
+			$('.embargoParams').hide();
+		}
+	}
+
+	function toggleStudentDataOwner(cb) {
+		if (cb.checked) {
+			$('.studentDataOwner').show();
+		}
+		else {
+			$('.studentDataOwner').hide();
+		}
+	}
+
+	function changeLicenceHint(s) {
+		var index = s.value;
+		$('#licenceHint').html(licenceList[index].text + "<br><a href='" + licenceList[index].url + "'>" + licenceList[index].url + "</a>");
+	}
+
+	function changeRelatedPartyType(s) {
+		var index = s.value;
+
+		if (index == 0) {
+			$('.principalInvestigators').hide();
+			$('.collectors').show();
+		}
+		else {
+			$('.collectors').hide();
+			$('.principalInvestigators').show();
+		}
+	}
+
+	function addPublication() {
+		var publicationsSelector = Ext.getCmp('publicationsSelector');
+		var data = {
+			publications: publicationsSelector.getValue(),
+			identifierType: $('#identifierType')[0].value,
+			identifier: $('#identifier')[0].value,
+			title: $('#title')[0].value,
+			notes: $('#notes')[0].value
+		};
+		$.ajax({
+			async: false,
+			type: 'POST',
+			contentType: 'application/json; charset=utf-8',
+			url: "/publication/add",
+			data: JSON.stringify("{name: 'Sean Lin', email: 'seanl@intersect.org.au'}"),
+			dataType: 'json',
+			success: function(result) {
+				//publicationsSelector.setValue(result);
+			},
+			error: function(result) {
+			}
+		});
+	}
 </script>
 
 <tr class="prop">
@@ -201,3 +262,190 @@
 			multiple="true" />
 	</td>
 </tr>
+
+<tr class="prop">
+	<td valign="top" class="name"><label for="embargo"><g:message
+				code="config.embargo.label"
+				default="Embargo" /></label></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'embargo', 'errors')}">
+		<g:checkBox name="embargo" value="${metadataInstance?.embargo}" onChange="toggleEmbargoParams(this);" />
+		Embargo the dataset
+	</td>
+</tr>
+
+<tr class="prop embargoParams">
+	<td valign="top" class="name"></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'embargoExpiryDate', 'errors')}">
+		<label for="embargoExpiryDate"><g:message
+				code="config.embargoExpiryDate.label"
+				default="Embargo expiry" /></label>
+		<g:datePicker name="embargoExpiryDate" precision="day" value="${metadataInstance?.embargoExpiryDate}"
+			noSelection="['':'--']" />
+	</td>
+</tr>
+
+<tr class="prop embargoParams">
+	<td valign="top" class="name"></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'grantedUsers', 'errors')}">
+		<g:select style="width: 200px;" name="grantedUsers" id="grantedUsers"
+			optionValue="fullName" optionKey="id"
+			from="${au.org.emii.portal.User.list()}"
+			value="${metadataInstance?.grantedUsers}"
+			multiple="true" />
+		<font class="hint">
+			Hint: for the embargo to never expire leave the embargo expiry empty<br/><br/>
+			To grant access to this dataset, enter the users name in the text box above!
+		</font>
+	</td>
+</tr>
+
+<tr class="prop">
+	<td valign="top" class="name"><label for="dataAccess"><g:message
+				code="config.dataAccess.label"
+				default="Data Access" /></label></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'dataAccess', 'errors')}">
+		<g:select name="dataAccess" optionValue="name"
+			from="${au.org.emii.portal.Metadata.dataAccessList()}" optionKey="id"
+			value="${metadataInstance?.dataAccess}" />
+		<font class="hint">
+			Hint: Public access data must have a Creative Commons 3.0 licence
+		</font>
+	</td>
+</tr>
+
+<tr class="prop">
+	<td valign="top" class="name"><label for="licence"><g:message
+				code="config.licence.label"
+				default="Licence" /></label></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'licence', 'errors')}">
+		<g:select name="licence" optionValue="name" id="licenceSelector"
+			from="${au.org.emii.portal.Metadata.licenceList()}" optionKey="id"
+			value="${metadataInstance?.licence}"
+			onChange="changeLicenceHint(this)" />
+		<font class="hint" id="licenceHint"></font>
+	</td>
+</tr>
+
+<tr class="prop">
+	<td valign="top" class="name"><label for="studentOwned"><g:message
+				code="config.studentOwned.label"
+				default="Data Owner" /></label></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'studentOwned', 'errors')}">
+		<g:checkBox name="dataOwner" value="${metadataInstance?.studentOwned}" onChange="toggleStudentDataOwner(this);" />
+		This is student owned data
+	</td>
+</tr>
+
+<tr class="prop studentDataOwner">
+	<td valign="top" class="name"></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'studentDataOwner', 'errors')}">
+		<g:select style="width: 250px;" name="studentDataOwner" id="studentDataOwner"
+			optionValue="fullName" optionKey="id"
+			from="${au.org.emii.portal.User.list()}"
+			value="${metadataInstance?.studentDataOwner}"
+			multiple="true" />
+		<font class="hint">
+			If this data is owned by a student please identify the student, it is important to seek formal permission
+			from the student before using this system to manage their data!<br><br>
+			If the data is not owned by a student the default owner for the data is The University of Sydney			
+		</font>
+	</td>
+</tr>
+
+<tr class="prop">
+	<td valign="top" class="name"><label for="relatedPartyType"><g:message
+				code="config.relatedPartyType.label"
+				default="Related parties" /></label></td>
+	<td valign="top" class="value">
+		<g:select name="relatedPartyType" optionValue="name" id="relatedPartyTypeSelector"
+			from="${au.org.emii.portal.Metadata.relatedPartyTypeList()}" optionKey="id"
+			onChange="changeRelatedPartyType(this)" />
+	</td>
+</tr>
+
+<tr class="prop collectors">
+	<td valign="top" class="name"></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'collectors', 'errors')}">
+		<g:select style="width: 250px;" name="collectors" id="collectors"
+			optionValue="fullName" optionKey="id"
+			from="${au.org.emii.portal.User.list()}"
+			value="${metadataInstance?.collectors}"
+			multiple="true" />
+	</td>
+</tr>
+
+<tr class="prop principalInvestigators">
+	<td valign="top" class="name"></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'principalInvestigators', 'errors')}">
+		<g:select style="width: 300px;" name="principalInvestigators" id="principalInvestigators"
+			optionValue="fullName" optionKey="id"
+			from="${au.org.emii.portal.User.list()}"
+			value="${metadataInstance?.principalInvestigators}"
+			multiple="true" />
+	</td>
+</tr>
+
+<tr class="prop">
+	<td valign="top" class="name"><label for="publications"><g:message
+				code="config.publications.label"
+				default="Related publications" /></label></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'publications', 'errors')}">
+		<g:select style="width: 300px;" name="publications" id="publications"
+			optionValue="title" optionKey="id"
+			from="${metadataInstance?.publications}"
+			value="${metadataInstance?.publications}"
+			multiple="true" />
+	</td>
+</tr>
+
+<tr class="prop">
+	<td valign="top" class="name">
+		<input type="button" name="create" class="save"
+			value="${message(code: 'default.button.add.label', default: 'Add publication')}"
+			onClick="addPublication();" /></td>
+	<td valign="top" class="value">
+		<g:select style="width: 300px;" name="identifierType" id="identifierType"
+			optionValue="name" optionKey="id"
+			from="${au.org.emii.portal.Publication.identifierTypeList()}" />
+	</td>
+</tr>
+
+<tr class="prop">
+	<td valign="top" class="name"></td>
+	<td valign="top" class="value">
+		<g:textField style="width: 300px;" name="identifier" id="identifier"
+			placeholder="What is publication URI or identifier?" escapeHtml="false" />
+	</td>
+</tr>
+
+<tr class="prop">
+	<td valign="top" class="name"></td>
+	<td valign="top" class="value">
+		<g:textField style="width: 300px;" name="title" id="title"
+			placeholder="What is the title of the publication?" escapeHtml="false" />
+	</td>
+</tr>
+
+<tr class="prop">
+	<td valign="top" class="name"></td>
+	<td valign="top" class="value">
+		<g:textArea rows="4" style="width: 300px;" name="notes" id="notes"
+			placeholder="Enter additional information in here" escapeHtml="false" />
+		<br>
+		<font class="hint">
+			Hint: for local publication types use the additional information text box to record
+			the publications full citation information!			
+		</font>
+	</td>
+</tr>
+
