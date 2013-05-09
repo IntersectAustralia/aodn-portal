@@ -1,5 +1,7 @@
 package au.org.emii.portal
 
+import grails.converters.JSON
+
 class PublicationController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -31,14 +33,19 @@ class PublicationController {
     }
 
     def add = {
-        def publicationInstance = new Publication(params)
+		def json = request.JSON
+		render 'OK'
+        def publicationInstance = new Publication(JSON.parse(params))
         if (publicationInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'publication.label', default: 'Publication'), publicationInstance.id])}"
-            redirect(action: "show", id: publicationInstance.id)
+			result = [
+				success: true
+			]
         }
         else {
-            render(view: "create", model: [publicationInstance: publicationInstance])
+            
         }
+		
+		//render text: result as JSON, contentType: "text/html"
     }
 
     def show = {

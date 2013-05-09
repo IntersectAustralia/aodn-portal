@@ -109,7 +109,7 @@
 	});
 
 	function initLicenceHint() {
-		var index = $('#licenceSelector').value || 0;
+		var index = $('#licenceSelector')[0].value || 0;
 		$('#licenceHint').html(licenceList[index].text + "<br><a href='" + licenceList[index].url + "'>" + licenceList[index].url + "</a>");
 	}
 
@@ -150,7 +150,27 @@
 	}
 
 	function addPublication() {
-		
+		var publicationsSelector = Ext.getCmp('publicationsSelector');
+		var data = {
+			publications: publicationsSelector.getValue(),
+			identifierType: $('#identifierType')[0].value,
+			identifier: $('#identifier')[0].value,
+			title: $('#title')[0].value,
+			notes: $('#notes')[0].value
+		};
+		$.ajax({
+			async: false,
+			type: 'POST',
+			contentType: 'application/json; charset=utf-8',
+			url: "/publication/add",
+			data: JSON.stringify("{name: 'Sean Lin', email: 'seanl@intersect.org.au'}"),
+			dataType: 'json',
+			success: function(result) {
+				//publicationsSelector.setValue(result);
+			},
+			error: function(result) {
+			}
+		});
 	}
 </script>
 
@@ -390,7 +410,7 @@
 
 <tr class="prop">
 	<td valign="top" class="name">
-		<g:submitButton name="create" class="save"
+		<input type="button" name="create" class="save"
 			value="${message(code: 'default.button.add.label', default: 'Add publication')}"
 			onClick="addPublication();" /></td>
 	<td valign="top" class="value">
