@@ -162,8 +162,8 @@
 			async: false,
 			type: 'POST',
 			contentType: 'application/json; charset=utf-8',
-			url: "/publication/add",
-			data: JSON.stringify("{name: 'Sean Lin', email: 'seanl@intersect.org.au'}"),
+			url: "${createLink(controller:'publication', action:'add')}",
+			data: JSON.stringify({name: 'Sean Lin', email: 'seanl@intersect.org.au'}),
 			dataType: 'json',
 			success: function(result) {
 				//publicationsSelector.setValue(result);

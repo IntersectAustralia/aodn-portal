@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 class PublicationController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [add: "POST", save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
@@ -33,19 +33,8 @@ class PublicationController {
     }
 
     def add = {
-		def json = request.JSON
+		log.debug(JSON.parse(request))
 		render 'OK'
-        def publicationInstance = new Publication(JSON.parse(params))
-        if (publicationInstance.save(flush: true)) {
-			result = [
-				success: true
-			]
-        }
-        else {
-            
-        }
-		
-		//render text: result as JSON, contentType: "text/html"
     }
 
     def show = {
