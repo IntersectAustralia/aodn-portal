@@ -61,6 +61,12 @@ class AuthController {
 
         def emailAddress = request['mail']
         def fullName = request['displayName']
+		def givenName = "", familyName = ""
+		def cn = request['cn'].toString().split(" ")
+		if (cn) {
+			givenName = cn[0]
+			familyName = cn[cn?.length-1]
+		}
 		def aafToken = request['auEduPersonSharedToken']
 		String organisationName = request['o']
 
@@ -84,7 +90,8 @@ class AuthController {
 				role = UserRole.findByName(UserRole.ADMINISTRATOR)
 			}
 
-			userInstance = new User(openIdUrl: aafToken, emailAddress: emailAddress, fullName: fullName, organization: organization, role: role)
+			userInstance = new User(openIdUrl: aafToken, emailAddress: emailAddress, fullName: fullName,
+									organization: organization, role: role, givenName: givenName, familyName: familyName)
 
             userInstance.save flush: true, failOnError: true
         }

@@ -131,5 +131,7 @@ databaseChangeLog = {
 	include file: '20130507-add-metadata-create-permission-to-userRoles.groovy'
 
 	include file: '20130509-SL-ChangeMetadataAndPublication.groovy'
+
+	include file: '20130509-add-givenname-familyname-to-user.groovy'
 }
 
