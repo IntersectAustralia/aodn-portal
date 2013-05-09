@@ -158,20 +158,48 @@
 			title: $('#title')[0].value,
 			notes: $('#notes')[0].value
 		};
+		
 		$.ajax({
 			async: false,
 			type: 'POST',
 			contentType: 'application/json; charset=utf-8',
 			url: "${createLink(controller:'publication', action:'add')}",
-			data: JSON.stringify({name: 'Sean Lin', email: 'seanl@intersect.org.au'}),
+			data: JSON.stringify(data),
 			dataType: 'json',
-			success: function(result) {
-				//publicationsSelector.setValue(result);
+			success: function(data) {
+				Ext.getCmp('publicationsSelector').addItem({id: data.publication.id, title: data.publication.title});
+				$('.publications').hide().show();
 			},
 			error: function(result) {
 			}
 		});
 	}
+
+	function extAddPublication() {
+		var publicationsSelector = Ext.getCmp('publicationsSelector');
+		var data = {
+			publications: publicationsSelector.getValue(),
+			identifierType: $('#identifierType')[0].value,
+			identifier: $('#identifier')[0].value,
+			title: $('#title')[0].value,
+			notes: $('#notes')[0].value
+		};
+		
+		Ext.Ajax.request ({
+			url: "${createLink(controller:'publication', action:'extAdd')}",
+			params: data,
+			success: function(response) {
+				alert(response);
+				json = JSON.parse(response);
+				alert(data.publication.id);
+				Ext.getCmp('publicationsSelector').addItem({id: data.publication.id, title: data.publication.title});
+				$('.publications').hide().show();
+			},
+			error: function(result) {
+			}
+		});
+	}
+	
 </script>
 
 <tr class="prop">
@@ -245,7 +273,7 @@
 	<td valign="top"
 		class="value ${hasErrors(bean: metadataInstance, field: 'dataType', 'errors')}">
 		<g:select name="dataType" optionValue="name"
-			from="${au.org.emii.portal.Metadata.dataTypeList()}" optionKey="id"
+			from="${au.org.emii.portal.Metadata.dataTypeList()}" optionKey="name"
 			value="${metadataInstance?.dataType}" />
 	</td>
 </tr>
@@ -309,7 +337,7 @@
 	<td valign="top"
 		class="value ${hasErrors(bean: metadataInstance, field: 'dataAccess', 'errors')}">
 		<g:select name="dataAccess" optionValue="name"
-			from="${au.org.emii.portal.Metadata.dataAccessList()}" optionKey="id"
+			from="${au.org.emii.portal.Metadata.dataAccessList()}" optionKey="name"
 			value="${metadataInstance?.dataAccess}" />
 		<font class="hint">
 			Hint: Public access data must have a Creative Commons 3.0 licence
@@ -365,7 +393,7 @@
 				default="Related parties" /></label></td>
 	<td valign="top" class="value">
 		<g:select name="relatedPartyType" optionValue="name" id="relatedPartyTypeSelector"
-			from="${au.org.emii.portal.Metadata.relatedPartyTypeList()}" optionKey="id"
+			from="${au.org.emii.portal.Metadata.relatedPartyTypeList()}" optionKey="name"
 			onChange="changeRelatedPartyType(this)" />
 	</td>
 </tr>
@@ -394,7 +422,7 @@
 	</td>
 </tr>
 
-<tr class="prop">
+<tr class="prop publications">
 	<td valign="top" class="name"><label for="publications"><g:message
 				code="config.publications.label"
 				default="Related publications" /></label></td>
@@ -402,7 +430,7 @@
 		class="value ${hasErrors(bean: metadataInstance, field: 'publications', 'errors')}">
 		<g:select style="width: 300px;" name="publications" id="publications"
 			optionValue="title" optionKey="id"
-			from="${metadataInstance?.publications}"
+			from="${au.org.emii.portal.Publication.list()}"
 			value="${metadataInstance?.publications}"
 			multiple="true" />
 	</td>
@@ -412,10 +440,10 @@
 	<td valign="top" class="name">
 		<input type="button" name="create" class="save"
 			value="${message(code: 'default.button.add.label', default: 'Add publication')}"
-			onClick="addPublication();" /></td>
+			onClick="extAddPublication();" /></td>
 	<td valign="top" class="value">
 		<g:select style="width: 300px;" name="identifierType" id="identifierType"
-			optionValue="name" optionKey="id"
+			optionValue="name" optionKey="name"
 			from="${au.org.emii.portal.Publication.identifierTypeList()}" />
 	</td>
 </tr>

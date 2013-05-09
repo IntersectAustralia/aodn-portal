@@ -49,6 +49,9 @@ class DatasetController {
 			}
 
             if (proc.exitValue() == 0) {
+				session.setAttribute('datasetFile', datasetFile)
+				session.setAttribute('metadataFile', metadataFile)
+				
                 result = [
                     success: true,
                     message: "Success uploaded and processed ${f.getOriginalFilename()}"

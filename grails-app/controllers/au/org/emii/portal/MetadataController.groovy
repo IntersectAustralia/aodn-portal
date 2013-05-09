@@ -1,5 +1,7 @@
 package au.org.emii.portal
 
+import java.text.SimpleDateFormat
+
 class MetadataController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -14,20 +16,33 @@ class MetadataController {
     }
 
     def create = {
+		def datasetPath = "/aodn-portal/data/"
+		def datasetFile = session.getAttribute('datasetFile')
+		def seq = Metadata.count() + 1
         def metadataInstance = new Metadata()
         metadataInstance.properties = params
+		metadataInstance.serviceKey = "www.sydney.edy.au/shed/col/${seq}"
+		metadataInstance.key = metadataInstance.serviceKey
+		metadataInstance.datasetName = datasetFile
+		metadataInstance
+		metadataInstance.collectionPeriodFrom = getPeriodFrom("${datasetPath}${datasetFile}")
+		metadataInstance.collectionPeriodTo = getPeriodTo("${datasetPath}${datasetFile}")
         return [metadataInstance: metadataInstance, cfg: Config.activeInstance()]
     }
 
     def save = {
+		redirect(action: "list")
+		return
+		/*
         def metadataInstance = new Metadata(params)
+		
         if (metadataInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
             redirect(action: "show", id: metadataInstance.id)
         }
         else {
             render(view: "create", model: [metadataInstance: metadataInstance])
-        }
+        }*/
     }
 
     def show = {
@@ -97,4 +112,57 @@ class MetadataController {
             redirect(action: "list")
         }
     }
+	
+	def getPeriodFrom(file) {
+		def csvfile = new File(file)
+		def sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
+		def periodFrom = null
+		def tempTimestamp
+		
+		csvfile.eachLine { line, index ->
+		
+			if (index > 2) { // Ignore header line and units line, start getting values
+				String[] values = line.split(',')
+				tempTimestamp = sdf.parse("${values[0]} ${values[1]}")
+				
+				if (periodFrom) {
+					if (tempTimestamp < periodFrom) {
+						periodFrom = tempTimestamp
+					}
+				}
+				else {
+					periodFrom = tempTimestamp
+				}
+			}
+		}
+		
+		return periodFrom
+	}
+
+	def getPeriodTo(file) {
+		def csvfile = new File(file)
+		def sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
+		def periodTo = null
+		def tempTimestamp
+		
+		csvfile.eachLine { line, index ->
+		
+			if (index > 2) { // Ignore header line and units line, start getting values
+				String[] values = line.split(',')
+				tempTimestamp = sdf.parse("${values[0]} ${values[1]}")
+				
+				if (periodTo) {
+					if (tempTimestamp > periodTo) {
+						periodTo = tempTimestamp
+					}
+				}
+				else {
+					periodTo = tempTimestamp
+				}
+			}
+		}
+		
+		return periodTo
+	}
+
 }
