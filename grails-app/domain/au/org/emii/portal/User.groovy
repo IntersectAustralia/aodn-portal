@@ -15,6 +15,8 @@ class User {
     String openIdUrl
     String emailAddress
     String fullName
+	String givenName
+	String familyName
 	Organization organization
 	UserRole role
 
@@ -28,6 +30,8 @@ class User {
         fullName blank: false
 		organization nullable: true
 		role nullable: false
+		givenName nullable: true, blank: true
+		familyName nullable: true, blank: true
     }
 
     User() {
