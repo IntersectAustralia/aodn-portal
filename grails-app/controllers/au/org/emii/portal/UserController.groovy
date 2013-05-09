@@ -95,8 +95,8 @@ class UserController {
                 }
             }
 
-			def organization = getOrganizationFromParams( params )
-			def role = getUserRoleFromParams( params )
+			def organization = getOrganizationFromParams()
+			def role = getUserRoleFromParams()
 			if ( !organization || !role ) {
 				render(view: "edit", model: [userInstance: userInstance])
 				return
