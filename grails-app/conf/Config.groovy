@@ -230,53 +230,6 @@ catch (e) {
 	System.setProperty "INSTANCE_NAME", portal.instance.name
 }
 
-// log4j configuration
 log4j = {
-    appenders {
-
-        console name:'stdout', layout: pattern(conversionPattern: "%-5p %d [%-12t] %30.30c %X{userInfoForFile}- %m%n")
-    }
-
-    root {
-        error 'stdout'
-    }
-
-    error   'org.codehaus.groovy.grails.web.servlet',  //  controllers
-            'org.codehaus.groovy.grails.web.pages', //  GSP
-            'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-            'org.codehaus.groovy.grails.web.mapping', // URL mapping
-            'org.codehaus.groovy.grails.commons', // core / classloading
-            'org.codehaus.groovy.grails.plugins', // plugins
-            'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-            'org.springframework',
-            'org.hibernate',
-            'net.sf.ehcache.hibernate',
-            'org.grails.plugin.resource.ResourceMeta'
-
-    warn    'org.mortbay.log'
-
-    info    'grails.app.tagLib.au.org.emii.portal.UserTagLib',
-            'grails.app.filters.shiro.SecurityFilters',
-            'grails.app.controller.au.org.emii.portal.LayerController',
-            'grails.app.controller.au.org.emii.portal.AuthController',
-            'grails.app.service.au.org.emii.portal.LayerService',
-            'grails.app.service.au.org.emii.portal.AodaacAggregatorService',
-            'au.org.emii.portal.display.MenuJsonCache',
-            'org.apache.shiro',
-            'grails.app.controller'
-
-    debug   'grails.app.controllers.au.org.emii.portal.DatasetController',
-	'grails.app.controllers.au.org.emii.portal.SplashController',
-			'grails.app.job',
-            //'grails.app.service',
-		'grails.app.tagLib',
-            'grails.app.domain',
-            'grails.app.realms'
-            //'au.org.emii.portal'
-            //'au.org.emii.portal.display'
-		    //'org.hibernate.SQL',
-		    //'org.hibernate.type',
-		    //'liquibase',
-		    //'grails'
+    debug  'grails.app'
 }
