@@ -30,6 +30,8 @@ class Metadata {
 	}
 
     static constraints = {
+		embargoExpiryDate(nullable: true)
+		studentDataOwner(nullable: true)
     }
 	
 	static dataTypeList() {

@@ -18,7 +18,7 @@
 			<div class="buttons">
 				<span class="button"><g:submitButton name="create"
 						class="save"
-						value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
+						value="${message(code: 'default.button.create.label', default: 'Save')}" /></span>
 			</div>
 		</g:form>
 

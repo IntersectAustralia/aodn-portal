@@ -42,7 +42,7 @@ class DatasetController {
 			
 			try {
 				proc = command.execute()                 // Call *execute* on the string
-				proc.waitFor()                               // Wait for the command to finish
+				proc.waitFor()                           // Wait for the command to finish
 			}
 			catch(e) {
 				log.debug(e.message)
@@ -51,6 +51,7 @@ class DatasetController {
             if (proc.exitValue() == 0) {
 				session.setAttribute('datasetFile', datasetFile)
 				session.setAttribute('metadataFile', metadataFile)
+				session.setAttribute('datasetType', params.int('dataset-type'))
 				
                 result = [
                     success: true,

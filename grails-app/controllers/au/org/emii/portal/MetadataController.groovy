@@ -18,31 +18,67 @@ class MetadataController {
     def create = {
 		def datasetPath = "/aodn-portal/data/"
 		def datasetFile = session.getAttribute('datasetFile')
-		def seq = Metadata.count() + 1
-        def metadataInstance = new Metadata()
+        
+		// A "default" metadata, which is used to get id for key and populate default value to DB
+		def metadataInstance = new Metadata(
+			collectionPeriodFrom: new Date(),
+			collectionPeriodTo: new Date(),
+			dataAccess: 'Public',
+			dataType: 'Sonde survey',
+			datasetName: 'sampleData',
+			description: 'Description',
+			embargo: false,
+			key: '123456',
+			licence: 'licence',
+			researchCode: 'Research Code',
+			serviceKey: 'www.sydney.edu.au/sho/svc/1',
+			studentOwned: false
+        )
+		
+		metadataInstance.save(flush: true)
         metadataInstance.properties = params
-		metadataInstance.serviceKey = "www.sydney.edy.au/shed/col/${seq}"
-		metadataInstance.key = metadataInstance.serviceKey
-		metadataInstance.datasetName = datasetFile
-		metadataInstance
+		metadataInstance.key = "www.sydney.edu.au/sho/col/${metadataInstance.id}"
 		metadataInstance.collectionPeriodFrom = getPeriodFrom("${datasetPath}${datasetFile}")
 		metadataInstance.collectionPeriodTo = getPeriodTo("${datasetPath}${datasetFile}")
+		metadataInstance.dataType = Metadata.dataTypeList()[session.getAttribute('datasetType')].name
+		metadataInstance.datasetName = "${metadataInstance.dataType} ${formatDate(format: 'yyyy-MM-dd', date: metadataInstance.collectionPeriodFrom)} to ${formatDate(format: 'yyyy-MM-dd', date: metadataInstance.collectionPeriodTo)} ${metadataInstance.id}"
         return [metadataInstance: metadataInstance, cfg: Config.activeInstance()]
     }
 
     def save = {
-		redirect(action: "list")
-		return
-		/*
-        def metadataInstance = new Metadata(params)
+        def metadataInstance = Metadata.findById(params.id)
 		
+		if (params.grantedUsers == 'Enter name of user here') {
+			params.remove(grantedUsers)
+		}
+		
+		if (params.collectors == 'Enter name of the collector here') {
+			params.remove(collectors)
+		}
+		
+		if (params.principalInvestigators == 'Enter name of the principal investigator here') {
+			params.remove(principalInvestigators)
+		}
+		
+		if (params.publications == 'Enter publication here') {
+			params.remove(publications)
+		}
+		
+		if (params.studentDataOwner == 'Enter name of the student data owner') {
+			params.remove(studentDataOwner)
+		}
+		
+		metadataInstance.properties = params
+		redirect "home"
+		/*
         if (metadataInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
-            redirect(action: "show", id: metadataInstance.id)
+            redirect(action: "list", id: metadataInstance.id)
         }
         else {
             render(view: "create", model: [metadataInstance: metadataInstance])
-        }*/
+        }
+        */
     }
 
     def show = {

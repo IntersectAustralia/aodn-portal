@@ -202,6 +202,8 @@
 	
 </script>
 
+<g:hiddenField name="id" value="${metadataInstance.id}" />
+
 <tr class="prop">
 	<td valign="top" class="name"><label><g:message
 				code="config.serviceKey.label" default="Service key" /></label></td>
@@ -233,7 +235,7 @@
 				code="config.dateCreated.label" default="Created at" /></label>
 	</td>
 	<td valign="top" class="value">
-		${metadataInstance?.dateCreated}
+		<g:formatDate format="yyyy-MM-dd'T'HH:mm:ssZZ" date="${metadataInstance?.dateCreated}" />
 	</td>
 </tr>
 
@@ -242,7 +244,7 @@
 				code="config.lastUpdated.label" default="Updated at" /></label>
 	</td>
 	<td valign="top" class="value">
-		${metadataInstance?.lastUpdated}
+		<g:formatDate format="yyyy-MM-dd'T'HH:mm:ssZZ" date="${metadataInstance?.lastUpdated}" /> 
 	</td>
 </tr>
 
@@ -251,7 +253,7 @@
 				code="config.collectionPeriod.label" default="Collection period" /></label>
 	</td>
 	<td valign="top" class="value">
-		${metadataInstance?.collectionPeriodFrom} to ${metadataInstance?.collectionPeriodTo}
+		<g:formatDate format="yyyy-MM-dd" date="${metadataInstance?.collectionPeriodFrom}" /> to <g:formatDate format="yyyy-MM-dd" date="${metadataInstance?.collectionPeriodTo}" />
 	</td>
 </tr>
 
@@ -310,7 +312,7 @@
 				code="config.embargoExpiryDate.label"
 				default="Embargo expiry" /></label>
 		<g:datePicker name="embargoExpiryDate" precision="day" value="${metadataInstance?.embargoExpiryDate}"
-			noSelection="['':'--']" />
+			noSelection="['':'--']" default="none" />
 	</td>
 </tr>
 
@@ -365,7 +367,7 @@
 				default="Data Owner" /></label></td>
 	<td valign="top"
 		class="value ${hasErrors(bean: metadataInstance, field: 'studentOwned', 'errors')}">
-		<g:checkBox name="dataOwner" value="${metadataInstance?.studentOwned}" onChange="toggleStudentDataOwner(this);" />
+		<g:checkBox name="studentOwned" value="${metadataInstance?.studentOwned}" onChange="toggleStudentDataOwner(this);" />
 		This is student owned data
 	</td>
 </tr>
