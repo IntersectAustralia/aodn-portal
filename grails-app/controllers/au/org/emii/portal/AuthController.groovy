@@ -26,10 +26,6 @@ class AuthController {
         forward action: "logon"
     }
 
-    def register = {
-		_authenticateWithOpenId(true)
-    }
-
 	/**
 	 * This is walk around for the boring redirection to /auth/login by
 	 * GrailsShiroPlugin when the anonymous user's request be blocked by

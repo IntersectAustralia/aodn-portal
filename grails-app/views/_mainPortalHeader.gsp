@@ -28,8 +28,7 @@
             <strong>${flash.openidErrorMessage}</strong>
         </g:if>
         <shiro:notUser>
-            <g:link controller="auth" action="logon">Log in</g:link> or
-            <g:link controller="auth" action="register">Register</g:link>
+            <g:link controller="auth" action="logon">Log in</g:link>
         </shiro:notUser>
         <shiro:user>
             Welcome <user:loggedInUser property="fullName"/>
