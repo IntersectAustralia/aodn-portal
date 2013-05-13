@@ -135,5 +135,9 @@ databaseChangeLog = {
 	include file: '20130509-add-givenname-familyname-to-user.groovy'
 
 	include file: '20130513-SL-ChangeMetadataConstraints.groovy'
+
+	include file: '20130513-SL-ChangeMetadata.groovy'
+
+	include file: '20130513-SL-ChangeMetadataResearchCodes.groovy'
 }
 

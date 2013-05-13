@@ -1,6 +1,7 @@
 package au.org.emii.portal
 
 import java.text.SimpleDateFormat
+import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 class MetadataController {
 
@@ -16,6 +17,7 @@ class MetadataController {
     }
 
     def create = {
+		def grailsApplication
 		def datasetPath = "/aodn-portal/data/"
 		def datasetFile = session.getAttribute('datasetFile')
         
@@ -26,16 +28,28 @@ class MetadataController {
 			dataAccess: 'Public',
 			dataType: 'Sonde survey',
 			datasetName: 'sampleData',
-			description: 'Description',
+			description: '',
 			embargo: false,
 			key: '123456',
-			licence: 'licence',
-			researchCode: 'Research Code',
+			licence: 0,
+			researchCodes: [
+				'0405 Oceanography',
+				'0502 Environmental Science and Management',
+				'0704 Fisheries Sciences',
+				'0803 Computer Software',
+				'0804 Data Format'
+				],
 			serviceKey: 'www.sydney.edu.au/sho/svc/1',
-			studentOwned: false
+			studentOwned: false,
+			principalInvestigator: User.findByEmailAddress(CH.config.principalInvestigator.email)
         )
 		
-		metadataInstance.save(flush: true)
+		if (metadataInstance.save(flush: true)) {
+			
+		}
+		else {
+			log.debug(metadataInstance.errors)
+		}
         metadataInstance.properties = params
 		metadataInstance.key = "www.sydney.edu.au/sho/col/${metadataInstance.id}"
 		metadataInstance.collectionPeriodFrom = getPeriodFrom("${datasetPath}${datasetFile}")
@@ -49,36 +63,34 @@ class MetadataController {
         def metadataInstance = Metadata.findById(params.id)
 		
 		if (params.grantedUsers == 'Enter name of user here') {
-			params.remove(grantedUsers)
+			params.remove('grantedUsers')
 		}
 		
 		if (params.collectors == 'Enter name of the collector here') {
-			params.remove(collectors)
+			params.remove('collectors')
 		}
 		
-		if (params.principalInvestigators == 'Enter name of the principal investigator here') {
-			params.remove(principalInvestigators)
+		if (params.principalInvestigator == 'Enter name of the principal investigator here') {
+			params.remove('principalInvestigator')
 		}
 		
 		if (params.publications == 'Enter publication here') {
-			params.remove(publications)
+			params.remove('publications')
 		}
 		
 		if (params.studentDataOwner == 'Enter name of the student data owner') {
-			params.remove(studentDataOwner)
+			params.remove('studentDataOwner')
 		}
 		
 		metadataInstance.properties = params
-		redirect "home"
-		/*
+		
         if (metadataInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
-            redirect(action: "list", id: metadataInstance.id)
+            redirect(controller: "home")
         }
         else {
             render(view: "create", model: [metadataInstance: metadataInstance])
         }
-        */
     }
 
     def show = {

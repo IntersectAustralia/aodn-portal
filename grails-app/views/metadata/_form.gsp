@@ -1,13 +1,13 @@
 <script language="javascript">
 	Ext.onReady(function() {
 		new Ext.ux.form.SuperBoxSelect({
-			transform: 'researchCode',
+			transform: 'researchCodes',
             allowBlank: true,
 			msgTarget: 'title',
-            id:'researchCodeSelector',
-            fieldLabel: 'Research Code',
+            id:'researchCodesSelector',
+            fieldLabel: 'Research Codes',
             resizable: true,
-            name: 'researchCode',
+            name: 'researchCodes',
             width:400,
             displayField: 'text',
             valueField: 'value',
@@ -68,13 +68,13 @@
             emptyText: 'Enter name of the collector here'
          });
 		new Ext.ux.form.SuperBoxSelect({
-			transform: 'principalInvestigators',
+			transform: 'principalInvestigator',
             allowBlank: true,
 			msgTarget: 'title',
-            id:'principalInvestigatorsSelector',
-            fieldLabel: 'Principal Investigators',
+            id:'principalInvestigatorSelector',
+            fieldLabel: 'Principal Investigator',
             resizable: true,
-            name: 'principalInvestigators',
+            name: 'principalInvestigator',
             width:300,
             displayField: 'text',
             valueField: 'value',
@@ -104,7 +104,7 @@
 		licenceList = ${au.org.emii.portal.Metadata.licenceList().encodeAsJSON()};
 		$('.embargoParams').hide();
 		$('.studentDataOwner').hide();
-		$('.principalInvestigators').hide();
+		$('.principalInvestigator').hide();
 		initLicenceHint();
 	});
 
@@ -140,12 +140,12 @@
 		var index = s.value;
 
 		if (index == 0) {
-			$('.principalInvestigators').hide();
+			$('.principalInvestigator').hide();
 			$('.collectors').show();
 		}
 		else {
 			$('.collectors').hide();
-			$('.principalInvestigators').show();
+			$('.principalInvestigator').show();
 		}
 	}
 
@@ -281,14 +281,14 @@
 </tr>
 
 <tr class="prop">
-	<td valign="top" class="name"><label for="researchCode"><g:message
-				code="config.researchCode.label"
+	<td valign="top" class="name"><label for="researchCodes"><g:message
+				code="config.researchCodes.label"
 				default="ANZSRC Field of Research Code(s)" /></label></td>
 	<td valign="top"
-		class="value ${hasErrors(bean: metadataInstance, field: 'researchCode', 'errors')}">
-		<g:select style="width: 400px;" name="researchCode" id="researchCode"
+		class="value ${hasErrors(bean: metadataInstance, field: 'researchCodes', 'errors')}">
+		<g:select style="width: 400px;" name="researchCodes" id="researchCodes"
 			from="${au.org.emii.portal.Metadata.researchCodeList()}"
-			value="${metadataInstance?.researchCode}"
+			value="${metadataInstance?.researchCodes}"
 			multiple="true" />
 	</td>
 </tr>
@@ -412,14 +412,14 @@
 	</td>
 </tr>
 
-<tr class="prop principalInvestigators">
+<tr class="prop principalInvestigator">
 	<td valign="top" class="name"></td>
 	<td valign="top"
-		class="value ${hasErrors(bean: metadataInstance, field: 'principalInvestigators', 'errors')}">
-		<g:select style="width: 300px;" name="principalInvestigators" id="principalInvestigators"
+		class="value ${hasErrors(bean: metadataInstance, field: 'principalInvestigator', 'errors')}">
+		<g:select style="width: 300px;" name="principalInvestigator" id="principalInvestigator"
 			optionValue="fullName" optionKey="id"
 			from="${au.org.emii.portal.User.list()}"
-			value="${metadataInstance?.principalInvestigators}"
+			value="${metadataInstance?.principalInvestigator}"
 			multiple="true" />
 	</td>
 </tr>
