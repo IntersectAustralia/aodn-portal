@@ -48,7 +48,7 @@
                         
                             <td>${fieldValue(bean: metadataInstance, field: "dataAccess")}</td>
                         
-                            <td>${fieldValue(bean: metadataInstance, field: "dataOwner")}</td>
+                            <td>${fieldValue(bean: metadataInstance, field: "studentDataOwner")}</td>
                         
                             <td>${fieldValue(bean: metadataInstance, field: "dataType")}</td>
                         
