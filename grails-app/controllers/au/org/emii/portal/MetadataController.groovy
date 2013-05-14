@@ -1,5 +1,7 @@
 package au.org.emii.portal
 
+import groovy.xml.MarkupBuilder
+
 import java.text.SimpleDateFormat
 
 class MetadataController {
@@ -29,6 +31,72 @@ class MetadataController {
 		metadataInstance.collectionPeriodTo = getPeriodTo("${datasetPath}${datasetFile}")
         return [metadataInstance: metadataInstance, cfg: Config.activeInstance()]
     }
+
+	private void createCompliantPrtryRecords(Metadata metadata) {
+		def relatedParties = new HashSet<User>()
+
+		if (metadata.collectors) {
+			relatedParties.addAll(metadata.collectors)
+		}
+
+		if (metadata.grantedUsers) {
+			relatedParties.addAll(metadata.grantedUsers)
+		}
+
+		if (metadata.principalInvestigators) {
+            relatedParties.addAll(metadata.principalInvestigators)
+        }
+
+		if (metadata.studentOwned && metadata.studentDataOwner) {
+			relatedParties.add(metadata.studentDataOwner)
+		}
+
+		for (User user : relatedParties) {
+			String path = "/aodn-portal/data/"
+			String fileName = "www.sydney.edy.au-shed-pty-" + user.id + ".xml"
+			File file = new File(path+fileName)
+			if (file==null || !file.exists()) {
+				createXmlRecord(user, path+fileName)
+			}
+		}
+	}
+
+	private void createXmlRecord(User user, String filePath) {
+		String id = "www.sydney.edy.au-shed-pty-" + user.id
+
+		def writer = new StringWriter()
+		def xml = new MarkupBuilder(writer)
+
+		xml.getMkp().xmlDeclaration(version:"1.0")
+		xml.registryObjects("xmlns":"http://ands.org.au/standards/rif-cs/registryObjects",
+				"xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance",
+				"xsi:schemaLocation":"http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd") {
+			registryObject(group:"The University of Sydney") {
+				key(id)
+				originatingSource("http://sho.sydney.edu.au")
+				party(type:"person") {
+					identifier(type:"AAF-token", user.openIdUrl)
+					name(type:"primary") {
+						namePart(type:"title","")
+						namePart(type:"given",user.givenName)
+						namePart(type:"family",user.familyName)
+					}
+					location() {
+						address() {
+							electronic(type:"email") {
+								value(user.emailAddress)
+							}
+						}
+					}
+				}
+			}
+		}
+
+		File file = new File(filePath)
+		file.createNewFile()
+		file.setWritable(true, false)
+		file.write(writer.toString())
+	}
 
     def save = {
 		redirect(action: "list")

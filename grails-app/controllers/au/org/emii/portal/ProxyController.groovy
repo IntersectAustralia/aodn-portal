@@ -10,6 +10,8 @@ package au.org.emii.portal
 
 class ProxyController {
 
+	def static defaultAction = "index"
+
     def grailsApplication
 	def hostVerifier
 

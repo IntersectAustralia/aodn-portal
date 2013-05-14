@@ -101,7 +101,7 @@ environments {
 
         // URLs
 	grails.serverURL = "http://localhost:8080/$appName"
-	spatialsearch.url = "http://staging.dc2b.intersect.org.au/spatialsearch/index"
+	spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
 	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 	openIdProvider.url = "https://openid.emii.org.au/login"
 
@@ -132,7 +132,7 @@ environments {
 
 	    // URLs
 	grails.serverURL = "http://staging.dc2b.intersect.org.au"
-	spatialsearch.url = "http://staging.dc2b.intersect.org.au/spatialsearch/index"
+	spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
 	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 	wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
 	shibboleth.url = "https://staging.dc2b.intersect.org.au/Shibboleth.sso"
