@@ -61,7 +61,47 @@ class MetadataController {
         return [metadataInstance: metadataInstance, cfg: Config.activeInstance()]
     }
 
-	private void createCompliantPrtryRecords(Metadata metadata) {
+    def save = {
+        def metadataInstance = Metadata.findById(params.id)
+		
+		if (params.grantedUsers == 'Enter name of user here') {
+			params.remove('grantedUsers')
+		}
+		
+		if (params.collectors == 'Enter name of the collector here') {
+			params.remove('collectors')
+		}
+		
+		if (params.principalInvestigator == 'Enter name of the principal investigator here') {
+			params.remove('principalInvestigator')
+		}
+		
+		if (params.publications == 'Enter publication here') {
+			params.remove('publications')
+		}
+		
+		if (params.studentDataOwner == 'Enter name of the student data owner') {
+			params.remove('studentDataOwner')
+		}
+		
+		metadataInstance.properties = params
+		
+        if (metadataInstance.save(flush: true)) {
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
+
+			// create RIF-CS 1.4 compliant Party records
+			if ("Mediated".equals(metadataInstance.dataAccess) || "Public".equals(metadataInstance.dataAccess)) {
+				createCompliantPartyRecords(metadataInstance)
+			}
+
+            redirect(controller: "home")
+        }
+        else {
+            render(view: "create", model: [metadataInstance: metadataInstance])
+        }
+    }
+
+	private void createCompliantPartyRecords(Metadata metadata) {
 		def relatedParties = new HashSet<User>()
 
 		if (metadata.collectors) {
@@ -72,17 +112,23 @@ class MetadataController {
 			relatedParties.addAll(metadata.grantedUsers)
 		}
 
-		if (metadata.principalInvestigators) {
-            relatedParties.addAll(metadata.principalInvestigators)
-        }
+		if (metadata.principalInvestigator) {
+			relatedParties.addAll(metadata.principalInvestigator)
+		}
 
 		if (metadata.studentOwned && metadata.studentDataOwner) {
 			relatedParties.add(metadata.studentDataOwner)
 		}
 
 		for (User user : relatedParties) {
-			String path = "/aodn-portal/data/"
-			String fileName = "www.sydney.edy.au-shed-pty-" + user.id + ".xml"
+			String path = "/aodn-portal/data/ptyRecords/"
+
+			File dir = new File(path)
+			if(!dir || !dir.exists()) {
+				dir.mkdir()
+			}
+
+			String fileName = "www.sydney.edu.au-shed-pty-" + user.id + ".xml"
 			File file = new File(path+fileName)
 			if (file==null || !file.exists()) {
 				createXmlRecord(user, path+fileName)
@@ -91,7 +137,7 @@ class MetadataController {
 	}
 
 	private void createXmlRecord(User user, String filePath) {
-		String id = "www.sydney.edy.au-shed-pty-" + user.id
+		String id = "www.sydney.edu.au/shed/pty/" + user.id
 
 		def writer = new StringWriter()
 		def xml = new MarkupBuilder(writer)
@@ -126,42 +172,7 @@ class MetadataController {
 		file.setWritable(true, false)
 		file.write(writer.toString())
 	}
-
-    def save = {
-        def metadataInstance = Metadata.findById(params.id)
-		
-		if (params.grantedUsers == 'Enter name of user here') {
-			params.remove('grantedUsers')
-		}
-		
-		if (params.collectors == 'Enter name of the collector here') {
-			params.remove('collectors')
-		}
-		
-		if (params.principalInvestigator == 'Enter name of the principal investigator here') {
-			params.remove('principalInvestigator')
-		}
-		
-		if (params.publications == 'Enter publication here') {
-			params.remove('publications')
-		}
-		
-		if (params.studentDataOwner == 'Enter name of the student data owner') {
-			params.remove('studentDataOwner')
-		}
-		
-		metadataInstance.properties = params
-		
-        if (metadataInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
-            redirect(controller: "home")
-        }
-        else {
-            render(view: "create", model: [metadataInstance: metadataInstance])
-        }
-    }
-
-    def show = {
+	def show = {
         def metadataInstance = Metadata.get(params.id)
         if (!metadataInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
