@@ -20,8 +20,6 @@ class MetadataController {
 
     def create = {
 		def grailsApplication
-//		def datasetPath = "/aodn-portal/data/"
-//		def datasetFile = session.getAttribute('datasetFile')
         
 		// A "default" metadata, which is used to get id for key and populate default value to DB
 		def metadataInstance = new Metadata(
@@ -43,7 +41,8 @@ class MetadataController {
 				],
 			serviceKey: 'www.sydney.edu.au/sho/svc/1',
 			studentOwned: false,
-			principalInvestigator: User.findByEmailAddress(CH.config.principalInvestigator.email)
+			principalInvestigator: User.findByEmailAddress(CH.config.principalInvestigator.email),
+			manager: User.findByEmailAddress(CH.config.principalInvestigator.email)
         )
 		
 		if (metadataInstance.save(flush: true)) {
@@ -52,6 +51,7 @@ class MetadataController {
 		else {
 			log.debug(metadataInstance.errors)
 		}
+		
         metadataInstance.properties = params
 		metadataInstance.key = "www.sydney.edu.au/sho/col/${metadataInstance.id}"
 		metadataInstance.collectionPeriodFrom = getPeriodFrom()
@@ -62,7 +62,7 @@ class MetadataController {
     }
 
     def save = {
-        def metadataInstance = Metadata.findById(params.id)
+        def metadataInstance = Metadata.get(params.id)
 		
 		if (params.grantedUsers == 'Enter name of user here') {
 			params.remove('grantedUsers')
@@ -72,16 +72,8 @@ class MetadataController {
 			params.remove('collectors')
 		}
 		
-		if (params.principalInvestigator == 'Enter name of the principal investigator here') {
-			params.remove('principalInvestigator')
-		}
-		
 		if (params.publications == 'Enter publication here') {
 			params.remove('publications')
-		}
-		
-		if (params.studentDataOwner == 'Enter name of the student data owner') {
-			params.remove('studentDataOwner')
 		}
 		
 		metadataInstance.properties = params
@@ -100,7 +92,8 @@ class MetadataController {
             redirect(controller: "home")
         }
         else {
-            render(view: "create", model: [metadataInstance: metadataInstance])
+			log.debug(metadataInstance.errors)
+            render(view: "create", model: [metadataInstance: metadataInstance, cfg: Config.activeInstance()])
         }
     }
 

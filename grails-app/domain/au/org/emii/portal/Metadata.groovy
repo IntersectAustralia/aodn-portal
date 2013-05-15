@@ -18,6 +18,7 @@ class Metadata {
 		publications: Publication
 	]
 	User principalInvestigator
+	User manager
 	String dataAccess
 	Long licence
 	Boolean studentOwned
@@ -204,16 +205,17 @@ class Metadata {
 
 	static licenceList() {
 		[
-			[id: 0, name: 'Creative Commons: Attribution + Allow Remixing', text: 'This work is licensed under a Creative Commons Attribution Australia 3.0 License', url: 'http://creativecommons.org/licenses/by/3.0/au/'],
-			[id: 1, name: 'Creative Commons: Attribution + Prohibit Commercial Use', text: 'This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs Australia 3.0 License', url: 'http://creativecommons.org/licenses/by-nc-nd/2.5/au/'],
-			[id: 2, name: 'Creative Commons: Attribution + Allow Remixing + Prohibit Commercial', text: 'This work is licensed under a Creative Commons Attribution-NonCommercial Australia 3.0 License', url: 'http://creativecommons.org/licenses/by-nc/3.0/au/'],
-			[id: 3, name: 'Creative Commons: Attribution + Allow Remixing + Requires Share-Alike', text: 'This work is licensed under a Creative Commons Attribution-ShareAlike Australia 3.0 License', url: 'http://creativecommons.org/licenses/by-sa/3.0/au/'],
-			[id: 4, name: 'Creative Commons: Attribution + Allow Remixing + Requires Share-Alike + Prohibit Commercial Use', text: 'This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike Australia 2.5 License', url: 'http://creativecommons.org/licenses/by-nc-sa/3.0/au/']
+			[id: 0, name: 'No Licence', text: 'No licence needed', url: ''],
+			[id: 1, name: 'Creative Commons: Attribution + Allow Remixing', text: 'This work is licensed under a Creative Commons Attribution Australia 3.0 License', url: 'http://creativecommons.org/licenses/by/3.0/au/'],
+			[id: 2, name: 'Creative Commons: Attribution + Prohibit Commercial Use', text: 'This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs Australia 3.0 License', url: 'http://creativecommons.org/licenses/by-nc-nd/2.5/au/'],
+			[id: 3, name: 'Creative Commons: Attribution + Allow Remixing + Prohibit Commercial', text: 'This work is licensed under a Creative Commons Attribution-NonCommercial Australia 3.0 License', url: 'http://creativecommons.org/licenses/by-nc/3.0/au/'],
+			[id: 4, name: 'Creative Commons: Attribution + Allow Remixing + Requires Share-Alike', text: 'This work is licensed under a Creative Commons Attribution-ShareAlike Australia 3.0 License', url: 'http://creativecommons.org/licenses/by-sa/3.0/au/'],
+			[id: 5, name: 'Creative Commons: Attribution + Allow Remixing + Requires Share-Alike + Prohibit Commercial Use', text: 'This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike Australia 2.5 License', url: 'http://creativecommons.org/licenses/by-nc-sa/3.0/au/']
 		]
 	}
 	
 	static relatedPartyTypeList() {
-		[[id: 0, name: 'Collector'], [id: 1, name: 'Principal investigator']]
+		[[id: 0, name: 'Collector'], [id: 1, name: 'Principal investigator'], [id: 2, name: 'manager']]
 	}
 	
 }
