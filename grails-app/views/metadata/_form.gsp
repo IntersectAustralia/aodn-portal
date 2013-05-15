@@ -52,7 +52,7 @@
          });
 		new Ext.ux.form.SuperBoxSelect({
 			transform: 'collectors',
-            allowBlank: true,
+            allowBlank: false,
 			msgTarget: 'title',
             id:'collectorsSelector',
             fieldLabel: 'Collectors',
@@ -69,7 +69,7 @@
          });
 		new Ext.ux.form.SuperBoxSelect({
 			transform: 'principalInvestigator',
-            allowBlank: true,
+            allowBlank: false,
 			msgTarget: 'title',
             id:'principalInvestigatorSelector',
             fieldLabel: 'Principal Investigator',
@@ -84,10 +84,13 @@
             stackItems: true,
             emptyText: 'Enter name of the principal investigator here'
          });
+        /*
 		new Ext.ux.form.SuperBoxSelect({
-			transform: 'publications',
+			transform: 'extpublications',
             allowBlank: true,
 			msgTarget: 'title',
+			allowAddNewData: true,
+			addNewDataOnBlur : true,
             id:'publicationsSelector',
             fieldLabel: 'Publications',
             resizable: true,
@@ -99,8 +102,30 @@
             styleField: 'style',
             extraItemStyle: 'border-width:2px',
             stackItems: true,
-            emptyText: 'Enter publication here'
-         });
+            emptyText: 'Enter publication here',
+            listeners: {
+                beforeadditem: function(bs,v){
+                    console.log('beforeadditem:', v);
+                    //return false;
+                },
+                additem: function(bs,v){
+                    console.log('additem:', v);
+                },
+                newitem: function(bs,v,f){
+					//console.log(f);
+                	console.log("-bs " + bs);
+                    console.log("-v  " + v);
+                    console.log("-f  " + f);
+                    
+                    v = v + '';
+                    var newObj = {
+                       value: v, // THE VALUE OF THE NEW ELEMENT
+                       id: f // THE ID OF THE NEW CREATED ELEMENT
+                    };
+                    bs.addItem(newObj);
+                }
+            }
+         }); */
 		licenceList = ${au.org.emii.portal.Metadata.licenceList().encodeAsJSON()};
 		$('.embargoParams').hide();
 		$('.studentDataOwner').hide();
@@ -150,13 +175,13 @@
 	}
 
 	function addPublication() {
-		var publicationsSelector = Ext.getCmp('publicationsSelector');
+		var publications = $('#publications');
 		var data = {
-			publications: publicationsSelector.getValue(),
-			identifierType: $('#identifierType')[0].value,
-			identifier: $('#identifier')[0].value,
-			title: $('#title')[0].value,
-			notes: $('#notes')[0].value
+			publications: publications.val(),
+			identifierType: $('#identifierType').val(),
+			identifier: $('#identifier').val(),
+			title: $('#title').val(),
+			notes: $('#notes').val()
 		};
 		
 		$.ajax({
@@ -167,8 +192,7 @@
 			data: JSON.stringify(data),
 			dataType: 'json',
 			success: function(data) {
-				Ext.getCmp('publicationsSelector').addItem({id: data.publication.id, title: data.publication.title});
-				$('.publications').hide().show();
+				publications.append(new Option(data.publication.title, data.publication.id, true, true));
 			},
 			error: function(result) {
 			}
@@ -189,11 +213,11 @@
 			url: "${createLink(controller:'publication', action:'extAdd')}",
 			params: data,
 			success: function(response) {
-				alert(response);
-				json = JSON.parse(response);
-				alert(data.publication.id);
-				Ext.getCmp('publicationsSelector').addItem({id: data.publication.id, title: data.publication.title});
-				$('.publications').hide().show();
+				var o = Ext.decode(response.responseText);
+				console.log(o.publication.id);
+				//Ext.getCmp('publicationsSelector').addItem({id: o.publication.id, title: o.publication.title});
+				publicationsSelector.setValueEx([{id:o.publication.id, title:o.publication.title}]);
+				//$('.publications').hide().show();
 			},
 			error: function(result) {
 			}
@@ -442,7 +466,7 @@
 	<td valign="top" class="name">
 		<input type="button" name="create" class="save"
 			value="${message(code: 'default.button.add.label', default: 'Add publication')}"
-			onClick="extAddPublication();" /></td>
+			onClick="addPublication();" /></td>
 	<td valign="top" class="value">
 		<g:select style="width: 300px;" name="identifierType" id="identifierType"
 			optionValue="name" optionKey="name"

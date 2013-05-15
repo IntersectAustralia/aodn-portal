@@ -169,7 +169,7 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
-	principalInvestigator.email = "seanl@intersect.org.au"
+	principalInvestigator.email = "ictintersect4@mail.usyd.edu.au"
     }
 }
 
