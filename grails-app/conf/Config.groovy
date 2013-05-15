@@ -101,7 +101,7 @@ environments {
 
         // URLs
 	grails.serverURL = "http://localhost:8080/$appName"
-	spatialsearch.url = "http://staging.dc2b.intersect.org.au/spatialsearch/index"
+	spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
 	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 	openIdProvider.url = "https://openid.emii.org.au/login"
 
@@ -169,7 +169,7 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
-	principalInvestigator.email = "seanl@intersect.org.au"
+	principalInvestigator.email = "ictintersect4@mail.usyd.edu.au"
     }
 }
 
