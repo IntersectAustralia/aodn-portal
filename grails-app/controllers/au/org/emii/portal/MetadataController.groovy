@@ -20,8 +20,8 @@ class MetadataController {
 
     def create = {
 		def grailsApplication
-		def datasetPath = "/aodn-portal/data/"
-		def datasetFile = session.getAttribute('datasetFile')
+//		def datasetPath = "/aodn-portal/data/"
+//		def datasetFile = session.getAttribute('datasetFile')
         
 		// A "default" metadata, which is used to get id for key and populate default value to DB
 		def metadataInstance = new Metadata(
@@ -54,8 +54,8 @@ class MetadataController {
 		}
         metadataInstance.properties = params
 		metadataInstance.key = "www.sydney.edu.au/sho/col/${metadataInstance.id}"
-		metadataInstance.collectionPeriodFrom = getPeriodFrom("${datasetPath}${datasetFile}")
-		metadataInstance.collectionPeriodTo = getPeriodTo("${datasetPath}${datasetFile}")
+		metadataInstance.collectionPeriodFrom = getPeriodFrom()
+		metadataInstance.collectionPeriodTo = getPeriodTo()
 		metadataInstance.dataType = Metadata.dataTypeList()[session.getAttribute('datasetType')].name
 		metadataInstance.datasetName = "${metadataInstance.dataType} ${formatDate(format: 'yyyy-MM-dd', date: metadataInstance.collectionPeriodFrom)} to ${formatDate(format: 'yyyy-MM-dd', date: metadataInstance.collectionPeriodTo)} ${metadataInstance.id}"
         return [metadataInstance: metadataInstance, cfg: Config.activeInstance()]
@@ -94,6 +94,9 @@ class MetadataController {
 				createCompliantPartyRecords(metadataInstance)
 			}
 
+			// create collection description record
+			createColletionDescriptionRecord(metadataInstance)
+
             redirect(controller: "home")
         }
         else {
@@ -101,7 +104,129 @@ class MetadataController {
         }
     }
 
-	private void createCompliantPartyRecords(Metadata metadata) {
+	private void createColletionDescriptionRecord(Metadata metadata) {
+		String path = "/aodn-portal/data/colRecords/"
+
+		File dir = new File(path)
+		if(!dir || !dir.exists()) {
+			dir.mkdir()
+		}
+
+		String fileName = path + "www.sydney.edu.au%2Fsho%2Fcol-" + metadata.id + ".xml"
+		File file = new File(path+fileName)
+		if (file && file.exists()) {
+			file.delete()
+		}
+
+		createColRecordXml(metadata, fileName)
+	}
+
+	private void createColRecordXml(Metadata metadata, String fileName) {
+		String id = "www.sydney.edu.au/sho/col/" + metadata.id
+
+		def writer = new StringWriter()
+		def xml = new MarkupBuilder(writer)
+
+		W3CDateFormat dateFormat = new W3CDateFormat(W3CDateFormat.Pattern.MILLISECOND)
+
+		xml.getMkp().xmlDeclaration(version:"1.0")
+		xml.registryObjects("xmlns":"http://ands.org.au/standards/rif-cs/registryObjects",
+				"xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance",
+				"xsi:schemaLocation":"http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd") {
+			registryObject(group:"The University of Sydney") {
+				key(id)
+				originatingSource("www.sydney.edu.au/sho")
+
+				def dateAccessioned = dateFormat.format(metadata.dateCreated)
+				def dateModified = dateFormat.format(metadata.lastUpdated)
+				collection(type:"dataset", dateAccessioned:dateAccessioned, dateModified:dateModified) {
+
+					identifier(type:"local", metadata.id)
+
+					name(type:"primary") {
+						namePart(type:"title","Sydney Harbor Environmental Data Facility " + metadata.dataType + " Data " + metadata.id)
+					}
+
+					location() {
+						address() {
+							electronic(type:"url") {
+								value("www.sydney.edu.au/sho")
+							}
+						}
+					}
+
+					coverage() {
+						temporal() {
+
+							def dateFrom = dateFormat.format(metadata.collectionPeriodFrom)
+							def dateTo = dateFormat.format(metadata.collectionPeriodTo)
+							date(type:"dateFrom", dateFormat:"W3CDTF", dateFrom)
+							date(type:"dateTo", dateFormat:"W3CDTF", dateTo)
+						}
+
+						def ploygonValues = getLatitudeLongitudeValues()
+						spatial(type:"kmlPolyCoords",ploygonValues)
+					}
+
+					// Data Custodian
+					Collection<User> dataCustodians = User.findAllByRole(UserRole.findByName(UserRole.DATACUSTODIAN))
+					for (User dataCustodian : dataCustodians) {
+						relatedObject() {
+							key("www.sydney.edu.au/sho/pty/" + dataCustodian.id)
+							relation(type:"isManagedBy")
+						}
+					}
+
+					// related Parties
+					Set<User> parties = getRelatedParties(metadata)
+					for (User party : parties) {
+						relatedObject() {
+							key("www.sydney.edu.au/sho/pty/" + party.id)
+							relation(type:"[parties.relation]")
+						}
+					}
+
+					// Owner
+					if (metadata.studentOwned && metadata.studentDataOwner) {
+						relatedObject() {
+							key("www.sydney.edu.au/sho/pty/" + metadata.studentDataOwner.id)
+							relation(type:"isOwnerOf")
+						}
+					}
+
+					//For all ANZSRC FoR Codes linked to he dataset
+					Set<String> codes = metadata.researchCodes
+					for (String code : codes) {
+						subject(type:"anzsrc-for", code)
+					}
+
+					description(type:"full", metadata.description)
+
+					rights() {
+						accessRights(metadata.dataAccess)
+						licence(rightsUri:Metadata.licenceList().get(metadata.licence.intValue()).url, Metadata.licenceList().get(metadata.licence.intValue()).name)
+					}
+
+					// Publications
+					def publications = metadata.publications
+					for (Publication publication : publications) {
+						relatedInfo(type:"publication") {
+							identifier(type:"[identifier type]",publication.identifier)
+							title(publication.title)
+							notes(publication.notes)
+						}
+					}
+				}
+			}
+		}
+
+		File file = new File(fileName)
+		file.createNewFile()
+		file.setWritable(true, false)
+		file.write(writer.toString())
+	}
+
+	private Set<User> getRelatedParties(Metadata metadata) {
 		def relatedParties = new HashSet<User>()
 
 		if (metadata.collectors) {
@@ -116,6 +241,11 @@ class MetadataController {
 			relatedParties.addAll(metadata.principalInvestigator)
 		}
 
+		return relatedParties
+	}
+
+	private void createCompliantPartyRecords(Metadata metadata) {
+		def relatedParties = getRelatedParties(metadata)
 		if (metadata.studentOwned && metadata.studentDataOwner) {
 			relatedParties.add(metadata.studentDataOwner)
 		}
@@ -128,16 +258,16 @@ class MetadataController {
 				dir.mkdir()
 			}
 
-			String fileName = "www.sydney.edu.au-shed-pty-" + user.id + ".xml"
+			String fileName = "www.sydney.edu.au%2Fsho%2Fpty-" + user.id + ".xml"
 			File file = new File(path+fileName)
 			if (file==null || !file.exists()) {
-				createXmlRecord(user, path+fileName)
+				createPtyRecordXml(user, path+fileName)
 			}
 		}
 	}
 
-	private void createXmlRecord(User user, String filePath) {
-		String id = "www.sydney.edu.au/shed/pty/" + user.id
+	private void createPtyRecordXml(User user, String filePath) {
+		String id = "www.sydney.edu.au/sho/pty/" + user.id
 
 		def writer = new StringWriter()
 		def xml = new MarkupBuilder(writer)
@@ -239,9 +369,9 @@ class MetadataController {
             redirect(action: "list")
         }
     }
-	
-	def getPeriodFrom(file) {
-		def csvfile = new File(file)
+
+	private Date getPeriodFrom() {
+		def csvfile = getCsvFile()
 		def sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
 		def periodFrom = null
 		def tempTimestamp
@@ -266,8 +396,8 @@ class MetadataController {
 		return periodFrom
 	}
 
-	def getPeriodTo(file) {
-		def csvfile = new File(file)
+	private Date getPeriodTo() {
+		def csvfile = getCsvFile()
 		def sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
 		def periodTo = null
 		def tempTimestamp
@@ -292,4 +422,30 @@ class MetadataController {
 		return periodTo
 	}
 
+
+	private String getLatitudeLongitudeValues() {
+		def csvfile = getCsvFile()
+		StringBuffer result = new StringBuffer()
+		boolean updated = false
+
+		csvfile.eachLine { line, index ->
+
+			if (index > 2) { // Ignore header line and units line, start getting values
+				String[] values = line.split(',')
+				if(updated) {
+					result.append(",")
+				}
+				result.append(values[2] + ", " + values[3])
+				updated = true
+			}
+		}
+
+		return result.toString()
+	}
+
+	private File getCsvFile() {
+		def datasetPath = "/aodn-portal/data/"
+		def datasetFile = session.getAttribute('datasetFile')
+		return new File("${datasetPath}${datasetFile}")
+	}
 }

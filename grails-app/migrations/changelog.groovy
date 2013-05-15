@@ -139,5 +139,7 @@ databaseChangeLog = {
 	include file: '20130513-SL-ChangeMetadata.groovy'
 
 	include file: '20130513-SL-ChangeMetadataResearchCodes.groovy'
+
+	include file: '20130515-add-metadata-save-permission-to-userRoles.groovy'
 }
 
