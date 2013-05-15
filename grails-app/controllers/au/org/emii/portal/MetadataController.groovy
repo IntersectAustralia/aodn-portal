@@ -433,9 +433,9 @@ class MetadataController {
 			if (index > 2) { // Ignore header line and units line, start getting values
 				String[] values = line.split(',')
 				if(updated) {
-					result.append(",")
+					result.append(" ")
 				}
-				result.append(values[2] + ", " + values[3])
+				result.append(values[2] + "," + values[3])
 				updated = true
 			}
 		}
