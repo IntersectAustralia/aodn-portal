@@ -34,23 +34,6 @@
             emptyText: 'Enter name of user here'
          });
 		new Ext.ux.form.SuperBoxSelect({
-			transform: 'studentDataOwner',
-            allowBlank: true,
-			msgTarget: 'title',
-            id:'studentDataOwnerSelector',
-            fieldLabel: 'Student Owner',
-            resizable: true,
-            name: 'studentDataOwner',
-            width:250,
-            displayField: 'text',
-            valueField: 'value',
-            classField: 'cls',
-            styleField: 'style',
-            extraItemStyle: 'border-width:2px',
-            stackItems: true,
-            emptyText: 'Enter name of the student data owner'
-         });
-		new Ext.ux.form.SuperBoxSelect({
 			transform: 'collectors',
             allowBlank: false,
 			msgTarget: 'title',
@@ -67,75 +50,20 @@
             stackItems: true,
             emptyText: 'Enter name of the collector here'
          });
-		new Ext.ux.form.SuperBoxSelect({
-			transform: 'principalInvestigator',
-            allowBlank: false,
-			msgTarget: 'title',
-            id:'principalInvestigatorSelector',
-            fieldLabel: 'Principal Investigator',
-            resizable: true,
-            name: 'principalInvestigator',
-            width:300,
-            displayField: 'text',
-            valueField: 'value',
-            classField: 'cls',
-            styleField: 'style',
-            extraItemStyle: 'border-width:2px',
-            stackItems: true,
-            emptyText: 'Enter name of the principal investigator here'
-         });
-        /*
-		new Ext.ux.form.SuperBoxSelect({
-			transform: 'extpublications',
-            allowBlank: true,
-			msgTarget: 'title',
-			allowAddNewData: true,
-			addNewDataOnBlur : true,
-            id:'publicationsSelector',
-            fieldLabel: 'Publications',
-            resizable: true,
-            name: 'publications',
-            width:300,
-            displayField: 'text',
-            valueField: 'value',
-            classField: 'cls',
-            styleField: 'style',
-            extraItemStyle: 'border-width:2px',
-            stackItems: true,
-            emptyText: 'Enter publication here',
-            listeners: {
-                beforeadditem: function(bs,v){
-                    console.log('beforeadditem:', v);
-                    //return false;
-                },
-                additem: function(bs,v){
-                    console.log('additem:', v);
-                },
-                newitem: function(bs,v,f){
-					//console.log(f);
-                	console.log("-bs " + bs);
-                    console.log("-v  " + v);
-                    console.log("-f  " + f);
-                    
-                    v = v + '';
-                    var newObj = {
-                       value: v, // THE VALUE OF THE NEW ELEMENT
-                       id: f // THE ID OF THE NEW CREATED ELEMENT
-                    };
-                    bs.addItem(newObj);
-                }
-            }
-         }); */
 		licenceList = ${au.org.emii.portal.Metadata.licenceList().encodeAsJSON()};
 		$('.embargoParams').hide();
 		$('.studentDataOwner').hide();
+		$('.principalInvestigator').hide();
 		$('.principalInvestigator').hide();
 		initLicenceHint();
 	});
 
 	function initLicenceHint() {
-		var index = $('#licenceSelector')[0].value || 0;
-		$('#licenceHint').html(licenceList[index].text + "<br><a href='" + licenceList[index].url + "'>" + licenceList[index].url + "</a>");
+		var index = $('#licenceSelector').val();
+
+		if (index) {
+			$('#licenceHint').html(licenceList[index].text + "<br><a href='" + licenceList[index].url + "'>" + licenceList[index].url + "</a>");
+		}
 	}
 
 	function toggleEmbargoParams(cb) {
@@ -143,6 +71,8 @@
 			$('.embargoParams').show();
 		}
 		else {
+			//$('#embargoExpiryDate').val('');
+			Ext.getCmp('grantedUsersSelector').reset();
 			$('.embargoParams').hide();
 		}
 	}
@@ -152,6 +82,7 @@
 			$('.studentDataOwner').show();
 		}
 		else {
+			$('#studentDataOwner').val('');
 			$('.studentDataOwner').hide();
 		}
 	}
@@ -166,11 +97,18 @@
 
 		if (index == 0) {
 			$('.principalInvestigator').hide();
+			$('.manager').hide();
 			$('.collectors').show();
+		}
+		else if (index == 1) {
+			$('.collectors').hide();
+			$('.manager').hide();
+			$('.principalInvestigator').show();
 		}
 		else {
 			$('.collectors').hide();
-			$('.principalInvestigator').show();
+			$('.principalInvestigator').hide();
+			$('.manager').show();
 		}
 	}
 
@@ -199,31 +137,6 @@
 		});
 	}
 
-	function extAddPublication() {
-		var publicationsSelector = Ext.getCmp('publicationsSelector');
-		var data = {
-			publications: publicationsSelector.getValue(),
-			identifierType: $('#identifierType')[0].value,
-			identifier: $('#identifier')[0].value,
-			title: $('#title')[0].value,
-			notes: $('#notes')[0].value
-		};
-		
-		Ext.Ajax.request ({
-			url: "${createLink(controller:'publication', action:'extAdd')}",
-			params: data,
-			success: function(response) {
-				var o = Ext.decode(response.responseText);
-				console.log(o.publication.id);
-				//Ext.getCmp('publicationsSelector').addItem({id: o.publication.id, title: o.publication.title});
-				publicationsSelector.setValueEx([{id:o.publication.id, title:o.publication.title}]);
-				//$('.publications').hide().show();
-			},
-			error: function(result) {
-			}
-		});
-	}
-	
 </script>
 
 <g:hiddenField name="id" value="${metadataInstance.id}" />
@@ -296,11 +209,8 @@
 	<td valign="top" class="name"><label for="dataType"><g:message
 				code="config.dataType.label"
 				default="Data type" /></label></td>
-	<td valign="top"
-		class="value ${hasErrors(bean: metadataInstance, field: 'dataType', 'errors')}">
-		<g:select name="dataType" optionValue="name"
-			from="${au.org.emii.portal.Metadata.dataTypeList()}" optionKey="name"
-			value="${metadataInstance?.dataType}" />
+	<td valign="top" class="value">
+			${metadataInstance?.dataType}
 	</td>
 </tr>
 
@@ -336,7 +246,7 @@
 				code="config.embargoExpiryDate.label"
 				default="Embargo expiry" /></label>
 		<g:datePicker name="embargoExpiryDate" precision="day" value="${metadataInstance?.embargoExpiryDate}"
-			noSelection="['':'--']" default="none" />
+			id="embargoExpiryDate" noSelection="['':'--']" default="none" />
 	</td>
 </tr>
 
@@ -400,11 +310,11 @@
 	<td valign="top" class="name"></td>
 	<td valign="top"
 		class="value ${hasErrors(bean: metadataInstance, field: 'studentDataOwner', 'errors')}">
-		<g:select style="width: 250px;" name="studentDataOwner" id="studentDataOwner"
+		<g:select style="width: 250px;" name="studentDataOwner.id" id="studentDataOwner"
 			optionValue="fullName" optionKey="id"
 			from="${au.org.emii.portal.User.list()}"
 			value="${metadataInstance?.studentDataOwner}"
-			multiple="true" />
+			noSelection="${['': 'Select one...']}" /><br>
 		<font class="hint">
 			If this data is owned by a student please identify the student, it is important to seek formal permission
 			from the student before using this system to manage their data!<br><br>
@@ -419,7 +329,7 @@
 				default="Related parties" /></label></td>
 	<td valign="top" class="value">
 		<g:select name="relatedPartyType" optionValue="name" id="relatedPartyTypeSelector"
-			from="${au.org.emii.portal.Metadata.relatedPartyTypeList()}" optionKey="name"
+			from="${au.org.emii.portal.Metadata.relatedPartyTypeList()}" optionKey="id"
 			onChange="changeRelatedPartyType(this)" />
 	</td>
 </tr>
@@ -440,15 +350,25 @@
 	<td valign="top" class="name"></td>
 	<td valign="top"
 		class="value ${hasErrors(bean: metadataInstance, field: 'principalInvestigator', 'errors')}">
-		<g:select style="width: 300px;" name="principalInvestigator" id="principalInvestigator"
+		<g:select style="width: 300px;" name="principalInvestigator.id" id="principalInvestigator"
 			optionValue="fullName" optionKey="id"
 			from="${au.org.emii.portal.User.list()}"
-			value="${metadataInstance?.principalInvestigator}"
-			multiple="true" />
+			value="${metadataInstance?.principalInvestigator}" />
 	</td>
 </tr>
 
-<tr class="prop publications">
+<tr class="prop manager">
+	<td valign="top" class="name"></td>
+	<td valign="top"
+		class="value ${hasErrors(bean: metadataInstance, field: 'manager', 'errors')}">
+		<g:select style="width: 300px;" name="manager.id" id="manager"
+			optionValue="fullName" optionKey="id"
+			from="${au.org.emii.portal.User.list()}"
+			value="${metadataInstance?.manager}" />
+	</td>
+</tr>
+
+<tr class="prop">
 	<td valign="top" class="name"><label for="publications"><g:message
 				code="config.publications.label"
 				default="Related publications" /></label></td>
