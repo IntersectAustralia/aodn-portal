@@ -1,5 +1,7 @@
 package au.org.emii.portal
 
+import groovy.xml.MarkupBuilder
+
 import java.text.SimpleDateFormat
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
@@ -86,6 +88,12 @@ class MetadataController {
 		
         if (metadataInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
+
+			// create RIF-CS 1.4 compliant Party records
+			if ("Mediated".equals(metadataInstance.dataAccess) || "Public".equals(metadataInstance.dataAccess)) {
+				createCompliantPartyRecords(metadataInstance)
+			}
+
             redirect(controller: "home")
         }
         else {
@@ -93,7 +101,78 @@ class MetadataController {
         }
     }
 
-    def show = {
+	private void createCompliantPartyRecords(Metadata metadata) {
+		def relatedParties = new HashSet<User>()
+
+		if (metadata.collectors) {
+			relatedParties.addAll(metadata.collectors)
+		}
+
+		if (metadata.grantedUsers) {
+			relatedParties.addAll(metadata.grantedUsers)
+		}
+
+		if (metadata.principalInvestigator) {
+			relatedParties.addAll(metadata.principalInvestigator)
+		}
+
+		if (metadata.studentOwned && metadata.studentDataOwner) {
+			relatedParties.add(metadata.studentDataOwner)
+		}
+
+		for (User user : relatedParties) {
+			String path = "/aodn-portal/data/ptyRecords/"
+
+			File dir = new File(path)
+			if(!dir || !dir.exists()) {
+				dir.mkdir()
+			}
+
+			String fileName = "www.sydney.edu.au-shed-pty-" + user.id + ".xml"
+			File file = new File(path+fileName)
+			if (file==null || !file.exists()) {
+				createXmlRecord(user, path+fileName)
+			}
+		}
+	}
+
+	private void createXmlRecord(User user, String filePath) {
+		String id = "www.sydney.edu.au/shed/pty/" + user.id
+
+		def writer = new StringWriter()
+		def xml = new MarkupBuilder(writer)
+
+		xml.getMkp().xmlDeclaration(version:"1.0")
+		xml.registryObjects("xmlns":"http://ands.org.au/standards/rif-cs/registryObjects",
+				"xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance",
+				"xsi:schemaLocation":"http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd") {
+			registryObject(group:"The University of Sydney") {
+				key(id)
+				originatingSource("http://sho.sydney.edu.au")
+				party(type:"person") {
+					identifier(type:"AAF-token", user.openIdUrl)
+					name(type:"primary") {
+						namePart(type:"title","")
+						namePart(type:"given",user.givenName)
+						namePart(type:"family",user.familyName)
+					}
+					location() {
+						address() {
+							electronic(type:"email") {
+								value(user.emailAddress)
+							}
+						}
+					}
+				}
+			}
+		}
+
+		File file = new File(filePath)
+		file.createNewFile()
+		file.setWritable(true, false)
+		file.write(writer.toString())
+	}
+	def show = {
         def metadataInstance = Metadata.get(params.id)
         if (!metadataInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"

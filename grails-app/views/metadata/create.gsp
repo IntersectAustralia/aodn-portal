@@ -29,7 +29,7 @@
 					alt="DIISTRE logo" />
 			</div>
 			<div class="spacer floatLeft homePanelWidget" style="width: 370px">
-				${ cfg.footerContent }
+				%{--${ cfg.footerContent }--}%
 			</div>
 		</div>
 		<div class="clear footer">
