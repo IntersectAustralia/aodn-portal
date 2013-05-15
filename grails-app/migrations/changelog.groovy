@@ -126,7 +126,7 @@ databaseChangeLog = {
 
 	include file: '20130501-SL-Create-Metadata-Publication.groovy'
 
-	// add upload dataset permissions to User Roles.
+	// add upload dataset permissions to User Roles. [1]
 	include file: '20130506-add-dataset-upload-permission-to-userRoles.groovy'
 	include file: '20130507-add-metadata-create-permission-to-userRoles.groovy'
 
@@ -140,6 +140,10 @@ databaseChangeLog = {
 
 	include file: '20130513-SL-ChangeMetadataResearchCodes.groovy'
 
+	// add upload dataset permissions to User Roles. [2]
 	include file: '20130515-add-metadata-save-permission-to-userRoles.groovy'
+
+	// add upload dataset permissions to User Roles. [3]
+	include file: '20130515-insert-publication-add-extAdd-permissions-to-userRoles.groovy'
 }
 
