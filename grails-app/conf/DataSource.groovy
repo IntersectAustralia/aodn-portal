@@ -26,7 +26,6 @@ environments {
 
 	development {
 		dataSource {
-            //dbCreate = "update"
             driverClassName = "org.postgresql.Driver"
 		    url = "jdbc:postgresql://localhost:5432/aodn_portal"
             username = "postgres"
@@ -36,12 +35,8 @@ environments {
 	
     test {
         dataSource {
-			pooled = true
-			driverClassName = "org.h2.Driver"
-			username = "sa"
-			password = ""
-			dbCreate = "update"
-			url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+		dbCreate = "create-drop"
+		url = "jdbc:hsqldb:mem:testDb"
         }
     }
 
