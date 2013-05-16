@@ -117,7 +117,7 @@ environments {
             }
         }
 		
-	principalInvestigator.email = "seanl@intersect.org.au"
+	principalInvestigator.email = "seanx@intersect.org.au"
     }
 
     test {
@@ -155,7 +155,7 @@ environments {
 
 	    // URLs
 	grails.serverURL = "http://qa.dc2b.intersect.org.au"
-	spatialsearch.url = "http://staging.dc2b.intersect.org.au/spatialsearch/index"
+	spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
 	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 	wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
 	shibboleth.url = "https://qa.dc2b.intersect.org.au/Shibboleth.sso"
