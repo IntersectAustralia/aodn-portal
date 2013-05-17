@@ -18,7 +18,6 @@ class Metadata {
 		publications: Publication
 	]
 	User principalInvestigator
-	User manager
 	String dataAccess
 	Long licence
 	Boolean studentOwned
@@ -33,6 +32,7 @@ class Metadata {
     static constraints = {
 		embargoExpiryDate(nullable: true)
 		studentDataOwner(nullable: true)
+		principalInvestigator(nullable: true)
     }
 	
 	static dataTypeList() {
@@ -215,7 +215,7 @@ class Metadata {
 	}
 	
 	static relatedPartyTypeList() {
-		[[id: 0, name: 'Collector'], [id: 1, name: 'Principal investigator'], [id: 2, name: 'manager']]
+		[[id: 0, name: 'Collector'], [id: 1, name: 'Principal investigator']]
 	}
 	
 }

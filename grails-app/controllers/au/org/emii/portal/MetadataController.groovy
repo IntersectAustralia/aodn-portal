@@ -40,9 +40,7 @@ class MetadataController {
 				'0804 Data Format'
 				],
 			serviceKey: 'www.sydney.edu.au/sho/svc/1',
-			studentOwned: false,
-			principalInvestigator: User.findByEmailAddress(CH.config.principalInvestigator.email),
-			manager: User.findByEmailAddress(CH.config.principalInvestigator.email)
+			studentOwned: false
         )
 		
 		if (metadataInstance.save(flush: true)) {

@@ -54,7 +54,6 @@
 		$('.embargoParams').hide();
 		$('.studentDataOwner').hide();
 		$('.principalInvestigator').hide();
-		$('.principalInvestigator').hide();
 		initLicenceHint();
 	});
 
@@ -97,18 +96,11 @@
 
 		if (index == 0) {
 			$('.principalInvestigator').hide();
-			$('.manager').hide();
 			$('.collectors').show();
-		}
-		else if (index == 1) {
-			$('.collectors').hide();
-			$('.manager').hide();
-			$('.principalInvestigator').show();
 		}
 		else {
 			$('.collectors').hide();
-			$('.principalInvestigator').hide();
-			$('.manager').show();
+			$('.principalInvestigator').show();
 		}
 	}
 
@@ -353,18 +345,8 @@
 		<g:select style="width: 300px;" name="principalInvestigator.id" id="principalInvestigator"
 			optionValue="fullName" optionKey="id"
 			from="${au.org.emii.portal.User.list()}"
-			value="${metadataInstance?.principalInvestigator}" />
-	</td>
-</tr>
-
-<tr class="prop manager">
-	<td valign="top" class="name"></td>
-	<td valign="top"
-		class="value ${hasErrors(bean: metadataInstance, field: 'manager', 'errors')}">
-		<g:select style="width: 300px;" name="manager.id" id="manager"
-			optionValue="fullName" optionKey="id"
-			from="${au.org.emii.portal.User.list()}"
-			value="${metadataInstance?.manager}" />
+			value="${metadataInstance?.principalInvestigator}"
+			noSelection="['':'Select one...']" />
 	</td>
 </tr>
 
