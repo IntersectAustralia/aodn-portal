@@ -16,9 +16,9 @@
 				</table>
 			</div>
 			<div class="buttons">
-				<span class="button"><g:submitButton name="create"
-						class="save"
-						value="${message(code: 'default.button.create.label', default: 'Save')}" /></span>
+				<span class="button"><input type="button" name="save" class="save"
+						value="${message(code: 'default.button.save.label', default: 'Save')}"
+						onClick="validate(this.form);" /></span>
 			</div>
 		</g:form>
 

@@ -2,7 +2,7 @@
 	Ext.onReady(function() {
 		new Ext.ux.form.SuperBoxSelect({
 			transform: 'researchCodes',
-            allowBlank: true,
+            allowBlank: false,
 			msgTarget: 'title',
             id:'researchCodesSelector',
             fieldLabel: 'Research Codes',
@@ -70,7 +70,6 @@
 			$('.embargoParams').show();
 		}
 		else {
-			//$('#embargoExpiryDate').val('');
 			Ext.getCmp('grantedUsersSelector').reset();
 			$('.embargoParams').hide();
 		}
@@ -127,6 +126,20 @@
 			error: function(result) {
 			}
 		});
+	}
+
+	function validate(form) {
+		var researchCodes = Ext.getCmp('researchCodesSelector').getValue();
+		
+		if (researchCodes == '') {
+			alert("Validation error: Research code cannot be empty")
+		}
+		else if ($('#dataAccessSelector').val() == 'Public' && $('#licenceSelector').val() == 5) {
+			alert("Validation error: Public access data must have a Creative Commons 3.0 licence");
+		}
+		else {
+			$(form).submit();
+		}
 	}
 
 </script>
@@ -225,7 +238,7 @@
 				default="Embargo" /></label></td>
 	<td valign="top"
 		class="value ${hasErrors(bean: metadataInstance, field: 'embargo', 'errors')}">
-		<g:checkBox name="embargo" value="${metadataInstance?.embargo}" onChange="toggleEmbargoParams(this);" />
+		<g:checkBox name="embargo" value="${metadataInstance?.embargo}" onClick="toggleEmbargoParams(this);" />
 		Embargo the dataset
 	</td>
 </tr>
@@ -264,7 +277,7 @@
 				default="Data Access" /></label></td>
 	<td valign="top"
 		class="value ${hasErrors(bean: metadataInstance, field: 'dataAccess', 'errors')}">
-		<g:select name="dataAccess" optionValue="name"
+		<g:select name="dataAccess" optionValue="name" id="dataAccessSelector"
 			from="${au.org.emii.portal.Metadata.dataAccessList()}" optionKey="name"
 			value="${metadataInstance?.dataAccess}" />
 		<font class="hint">
@@ -293,7 +306,7 @@
 				default="Data Owner" /></label></td>
 	<td valign="top"
 		class="value ${hasErrors(bean: metadataInstance, field: 'studentOwned', 'errors')}">
-		<g:checkBox name="studentOwned" value="${metadataInstance?.studentOwned}" onChange="toggleStudentDataOwner(this);" />
+		<g:checkBox name="studentOwned" value="${metadataInstance?.studentOwned}" onClick="toggleStudentDataOwner(this);" />
 		This is student owned data
 	</td>
 </tr>
