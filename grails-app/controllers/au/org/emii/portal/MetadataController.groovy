@@ -175,7 +175,7 @@ class MetadataController {
 						rightsDescriptionMap.put("Private", "Access to this dataset is restricted. Contact the manager of this dataset to discuss the terms and conditions of access.")
 
 						accessRights(rightsDescriptionMap.get(metadata.dataAccess))
-						licence(type:Metadata.licenceList().get(metadata.licence.intValue()).type, rightsUri:Metadata.licenceList().get(metadata.licence.intValue()).url, Metadata.licenceList().get(metadata.licence.intValue()).name)
+						licence(type:Metadata.licenceList().get(metadata.licence.intValue()).type, rightsUri:Metadata.licenceList().get(metadata.licence.intValue()).url, Metadata.licenceList().get(metadata.licence.intValue()).text)
 					}
 
 					// Hard Code for USYD
