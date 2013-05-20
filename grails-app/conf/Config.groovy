@@ -116,8 +116,6 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
-		
-	principalInvestigator.email = "seanx@intersect.org.au"
     }
 
     test {
@@ -148,7 +146,6 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
-	principalInvestigator.email = "seanl@intersect.org.au"
     }
 
     qa {
@@ -169,7 +166,6 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
-	principalInvestigator.email = "ictintersect4@mail.usyd.edu.au"
     }
 }
 
