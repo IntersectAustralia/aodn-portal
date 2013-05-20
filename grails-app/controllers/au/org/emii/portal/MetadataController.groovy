@@ -222,7 +222,9 @@ class MetadataController {
 					def publications = metadata.publications
 					for (Publication publication : publications) {
 						relatedInfo(type:"publication") {
-							identifier(type:publication.identifierType,publication.identifier)
+							//TODO: ugly hack: the next line code should be removed when Publication class be changed to provide the right identifierType.
+							String identifierType = publication.identifierType.split(":")[0]
+							identifier(type:identifierType,publication.identifier)
 							title(publication.title)
 							notes(publication.notes)
 						}
@@ -231,6 +233,8 @@ class MetadataController {
 					//For all ANZSRC FoR Codes linked to he dataset
 					Set<String> codes = metadata.researchCodes
 					for (String code : codes) {
+						//TODO: ugly hack: the next line code should be removed when Metadata class be changed to provide the right research codes.
+						code = code.split(" ")[0]
 						subject(type:"anzsrc-for", code)
 					}
 				}
