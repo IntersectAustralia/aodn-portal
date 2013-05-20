@@ -97,16 +97,22 @@ class MetadataController {
         }
     }
 
-	private void createColletionDescriptionRecord(Metadata metadata) {
-		String path = "/aodn-portal/data/colRecords/"
+	private String getCollectionPath() {
+		return "/aodn-portal/data/colRecords/"
+	}
 
-		File dir = new File(path)
+	private String getCollectionFileName(Metadata metadata) {
+		return getCollectionPath() + "www.sydney.edu.au%2Fsho%2Fcol%2F" + metadata.id + ".xml"
+	}
+
+	private void createColletionDescriptionRecord(Metadata metadata) {
+		File dir = new File(getCollectionPath())
 		if(!dir || !dir.exists()) {
 			dir.mkdir()
 		}
 
-		String fileName = path + "www.sydney.edu.au%2Fsho%2Fcol-" + metadata.id + ".xml"
-		File file = new File(path+fileName)
+		String fileName = getCollectionFileName(metadata)
+		File file = new File(fileName)
 		if (file && file.exists()) {
 			file.delete()
 		}
@@ -134,11 +140,13 @@ class MetadataController {
 				def dateModified = dateFormat.format(metadata.lastUpdated)
 				collection(type:"dataset", dateAccessioned:dateAccessioned, dateModified:dateModified) {
 
-					identifier(type:"local", metadata.id)
-
 					name(type:"primary") {
 						namePart(type:"title","Sydney Harbor Environmental Data Facility " + metadata.dataType + " Data " + metadata.id)
 					}
+
+					identifier(type:"local", metadata.id)
+
+					description(type:"full", metadata.description)
 
 					location() {
 						address() {
@@ -161,6 +169,23 @@ class MetadataController {
 						spatial(type:"kmlPolyCoords",ploygonValues)
 					}
 
+					rights() {
+
+						Map<String, String> rightsDescriptionMap = new HashMap<String, String>()
+						rightsDescriptionMap.put("Public", "This work is Open Access. Download from http://www.sydney.edu.au/sho.")
+						rightsDescriptionMap.put("Mediated", "Contact the manager of this dataset to discuss the terms and conditions of access.")
+						rightsDescriptionMap.put("Private", "Access to this dataset is restricted. Contact the manager of this dataset to discuss the terms and conditions of access.")
+
+						accessRights(rightsDescriptionMap.get(metadata.dataAccess))
+						licence(type:Metadata.licenceList().get(metadata.licence.intValue()).type, rightsUri:Metadata.licenceList().get(metadata.licence.intValue()).url, Metadata.licenceList().get(metadata.licence.intValue()).name)
+					}
+
+					// Hard Code for USYD
+					relatedObject() {
+						key(type:"AU-ANL:PEAU","http://nla.gov.au/nla.collector-593941")
+						relation(type:"isManagerBy")
+					}
+
 					// Data Custodian
 					Collection<User> dataCustodians = User.findAllByRole(UserRole.findByName(UserRole.DATACUSTODIAN))
 					for (User dataCustodian : dataCustodians) {
@@ -170,20 +195,38 @@ class MetadataController {
 						}
 					}
 
-					// related Parties
-					Set<User> parties = getRelatedParties(metadata)
-					for (User party : parties) {
+					// Collector
+					Set<User> collectors = metadata.collectors
+					for (User collector : collectors) {
 						relatedObject() {
-							key("www.sydney.edu.au/sho/pty/" + party.id)
-							relation(type:"[parties.relation]")
+							key("www.sydney.edu.au/sho/pty/" + collector.id)
+							relation(type:"isCollectorOf")
 						}
 					}
 
-					// Owner
+					// principalInvestigator
+					if (metadata.principalInvestigator) {
+						relatedObject() {
+							key("www.sydney.edu.au/sho/pty/" + metadata.principalInvestigatorId)
+							relation(type:"isPrinicipalInvestigatorOf")
+						}
+					}
+
+					// Student Owner OR Manager of USYD
 					if (metadata.studentOwned && metadata.studentDataOwner) {
 						relatedObject() {
 							key("www.sydney.edu.au/sho/pty/" + metadata.studentDataOwner.id)
-							relation(type:"isOwnerOf")
+							relation(type:"isOwnerBy")
+						}
+					}
+
+					// Publications
+					def publications = metadata.publications
+					for (Publication publication : publications) {
+						relatedInfo(type:"publication") {
+							identifier(type:publication.identifierType,publication.identifier)
+							title(publication.title)
+							notes(publication.notes)
 						}
 					}
 
@@ -191,23 +234,6 @@ class MetadataController {
 					Set<String> codes = metadata.researchCodes
 					for (String code : codes) {
 						subject(type:"anzsrc-for", code)
-					}
-
-					description(type:"full", metadata.description)
-
-					rights() {
-						accessRights(metadata.dataAccess)
-						licence(rightsUri:Metadata.licenceList().get(metadata.licence.intValue()).url, Metadata.licenceList().get(metadata.licence.intValue()).name)
-					}
-
-					// Publications
-					def publications = metadata.publications
-					for (Publication publication : publications) {
-						relatedInfo(type:"publication") {
-							identifier(type:"[identifier type]",publication.identifier)
-							title(publication.title)
-							notes(publication.notes)
-						}
 					}
 				}
 			}
@@ -219,7 +245,15 @@ class MetadataController {
 		file.write(writer.toString())
 	}
 
-	private Set<User> getRelatedParties(Metadata metadata) {
+	private String getCompliantPartyPath() {
+		return "/aodn-portal/data/ptyRecords/"
+	}
+
+	private String getCompliantPartyFileName(User user) {
+		return getCompliantPartyPath() + "www.sydney.edu.au%2Fsho%2Fpty%2F" + user.id + ".xml"
+	}
+
+	private void createCompliantPartyRecords(Metadata metadata) {
 		def relatedParties = new HashSet<User>()
 
 		if (metadata.collectors) {
@@ -233,28 +267,20 @@ class MetadataController {
 		if (metadata.principalInvestigator) {
 			relatedParties.addAll(metadata.principalInvestigator)
 		}
-
-		return relatedParties
-	}
-
-	private void createCompliantPartyRecords(Metadata metadata) {
-		def relatedParties = getRelatedParties(metadata)
 		if (metadata.studentOwned && metadata.studentDataOwner) {
 			relatedParties.add(metadata.studentDataOwner)
 		}
 
 		for (User user : relatedParties) {
-			String path = "/aodn-portal/data/ptyRecords/"
-
-			File dir = new File(path)
+			File dir = new File(getCompliantPartyPath())
 			if(!dir || !dir.exists()) {
 				dir.mkdir()
 			}
 
-			String fileName = "www.sydney.edu.au%2Fsho%2Fpty-" + user.id + ".xml"
-			File file = new File(path+fileName)
+			String fileName = getCompliantPartyFileName(user)
+			File file = new File(fileName)
 			if (file==null || !file.exists()) {
-				createPtyRecordXml(user, path+fileName)
+				createPtyRecordXml(user, fileName)
 			}
 		}
 	}
