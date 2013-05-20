@@ -180,7 +180,7 @@ class MetadataController {
 
 					// Hard Code for USYD
 					relatedObject() {
-						key(type:"AU-ANL:PEAU","http://nla.gov.au/nla.collector-593941")
+						key("http://nla.gov.au/nla.collector-593941")
 						relation(type:"isManagerBy")
 					}
 
