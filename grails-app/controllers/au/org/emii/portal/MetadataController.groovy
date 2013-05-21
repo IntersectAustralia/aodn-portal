@@ -1,13 +1,13 @@
 package au.org.emii.portal
 
 import groovy.xml.MarkupBuilder
-
+import grails.converters.JSON
 import java.text.SimpleDateFormat
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 class MetadataController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [downloadDataset: "GET", downloadMetadata: "GET", search: "GET", save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
@@ -470,5 +470,57 @@ class MetadataController {
 		def datasetPath = "/aodn-portal/data/"
 		def datasetFile = session.getAttribute('datasetFile')
 		return new File("${datasetPath}${datasetFile}")
+	}
+
+	def search = {
+		def results = []
+		def datasetUrl = ""
+		def metadataUrl = ""
+		def links = []
+
+		Metadata.list().each { metadata ->
+			links = []
+
+			datasetUrl = createLink(action: "downloadDataset", params: [dataset: metadata.datasetPath, filename: "${metadata.datasetName}.csv"])
+			links << generateLink(datasetUrl, "${metadata.datasetName} - Dataset(CSV)")
+
+			log.debug(metadata.metadataPath)
+
+			if (metadata.metadataPath != null) {
+				metadataUrl = createLink(action: "downloadMetadata", params: [metadata: metadata.metadataPath, filename: "${metadata.datasetName}.txt"])
+				links << generateLink(metadataUrl, "${metadata.datasetName} - Metadata(TXT)")
+			}
+
+			results << [
+				'title': metadata.datasetName,
+				'abstract': metadata.dataType,
+                'uuid': '',
+                'links': links,
+                'source': '',
+                'canDownload': '',
+                'bbox': ''
+			]
+		}
+        render text: results as JSON, contentType: "text/html"
     }
+
+    def downloadDataset = {
+    	def datasetFile = new File("/aodn-portal/data/${params.dataset}")
+    	response.setContentType("application/octet-stream")
+        response.setHeader("Content-disposition", "attachment; filename=\"${params.filename}\"")
+        response.outputStream << datasetFile.newInputStream()
+        return
+    }
+
+    def downloadMetadata = {
+    	def metadataFile = new File("/aodn-portal/data/${params.metadata}")
+    	response.setContentType("application/octet-stream")
+        response.setHeader("Content-disposition", "attachment; filename=\"${params.filename}\"")
+        response.outputStream << metadataFile.newInputStream()
+        return
+    }
+
+    private generateLink(url, title) {
+		return [href: "${url}", name: "${title}", protocol: "WWW:LINK-1.0-http--downloaddata", title: "${title}", type: "text/html"]
+	}
 }

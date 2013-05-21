@@ -50,7 +50,14 @@ class DatasetController {
 
             if (proc.exitValue() == 0) {
 				session.setAttribute('datasetFile', datasetFile)
-				session.setAttribute('metadataFile', metadataFile)
+
+                if (!m.empty) {
+                    session.setAttribute('metadataFile', metadataFile)    
+                }
+                else {
+                    session.setAttribute('metadataFile', null)
+                }
+				
 				session.setAttribute('datasetType', params.int('dataset-type'))
 				
                 result = [

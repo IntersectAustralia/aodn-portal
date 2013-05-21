@@ -202,6 +202,12 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 
 				this.resultsGrid.hideMask();
 				// This makes sure that the paging toolbar updates on a zero result set
+				this.getTimeSeriesData();
+
+				this.resultsStore.each(function(record) {
+					console.log(record);
+				});
+
 				this.resultsStore.fireEvent('load', this.resultsStore, this.resultsStore.data.items, this.resultsStore.lastOptions);
 			}
 			else{
@@ -231,7 +237,7 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 		var query = GeoNetwork.util.SearchTools.buildQueryGET(queryParams, startRecord, GeoNetwork.util.SearchTools.sortBy, this.resultsStore.fast);
 
 		this.currentQuery = query;
-
+		
 		GeoNetwork.util.SearchTools.doQuery(query, this.catalogue, startRecord, Ext.createDelegate(onSuccess, this), Ext.createDelegate(onFailure,this), updateStore, this.resultsStore);
 
 		this.resultsStore.startRecord = startRecord - 1;
@@ -288,6 +294,24 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
     this.rightSearchPanel.setActiveTab(1);
     this.searchPanel.getLayout().setActiveItem(1);
     this.doLayout();
+	},
+	
+	// Do time series search
+	getTimeSeriesData: function() {
+        var testData = {
+                'title': 'Sonde survey',
+                'abstract': 'Sonde survey',
+                'uuid': '79523459280',
+                'links': [
+                          {href: "http://tds.intersect.org.au:8080/thredds/catalog/efdc/catalog.html", name: "", protocol: "WWW:LINK-1.0-http--downloaddata", title: "THREDDS Catalog", type: "text/html"},
+                          {href: "http://tds.intersect.org.au:8080/thredds/catalog/efdc/catalog.html?dataset=efdc", name: "", protocol: "WWW:LINK-1.0-http--downloaddata", title: "THREDDS Catalog", type: "text/html"}
+                          ],
+                'source': 'ad5afbc7-86f3-4e14-8d46-a45deb148b87',
+                'canDownload': '',
+                'bbox': ''
+            };
+        var r = new this.resultsStore.recordType(testData);
+        this.resultsStore.add(r);
 	}
 
 });
