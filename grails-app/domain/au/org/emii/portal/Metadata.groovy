@@ -24,6 +24,8 @@ class Metadata {
 	User studentDataOwner
 	Date dateCreated
 	Date lastUpdated
+	String datasetPath
+	String metadataPath
 	
 	static mapping = {
 		description type: "text"
@@ -33,6 +35,8 @@ class Metadata {
 		embargoExpiryDate(nullable: true)
 		studentDataOwner(nullable: true)
 		principalInvestigator(nullable: true)
+		datasetPath(nullable: true)
+		metadataPath(nullable: true)
     }
 	
 	static dataTypeList() {
