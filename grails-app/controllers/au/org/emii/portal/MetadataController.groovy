@@ -200,7 +200,7 @@ class MetadataController {
 					for (User collector : collectors) {
 						relatedObject() {
 							key("www.sydney.edu.au/sho/pty/" + collector.id)
-							relation(type:"isCollectorOf")
+							relation(type:"hasCollector")
 						}
 					}
 
