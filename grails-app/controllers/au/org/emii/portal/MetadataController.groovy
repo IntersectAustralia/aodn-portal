@@ -1,13 +1,13 @@
 package au.org.emii.portal
 
 import groovy.xml.MarkupBuilder
-
+import grails.converters.JSON
 import java.text.SimpleDateFormat
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 class MetadataController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [search: "GET", save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
@@ -40,7 +40,9 @@ class MetadataController {
 				'0804 Data Format'
 				],
 			serviceKey: 'www.sydney.edu.au/sho/svc/1',
-			studentOwned: false
+			studentOwned: false,
+			datasetPath: session.getAttribute('datasetFile'),
+			metadataPath: session.getAttribute('metadataFile')
         )
 		
 		if (metadataInstance.save(flush: true)) {
@@ -439,4 +441,9 @@ class MetadataController {
 		def datasetFile = session.getAttribute('datasetFile')
 		return new File("${datasetPath}${datasetFile}")
 	}
+
+	def search = {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        render text: Metadata.list() as JSON, contentType: "text/html"
+    }
 }
