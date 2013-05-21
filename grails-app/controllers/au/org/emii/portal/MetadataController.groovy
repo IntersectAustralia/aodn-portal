@@ -1,13 +1,13 @@
 package au.org.emii.portal
 
 import groovy.xml.MarkupBuilder
-import grails.converters.JSON
+
 import java.text.SimpleDateFormat
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 class MetadataController {
 
-    static allowedMethods = [downloadDataset: "GET", search: "GET", save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [downloadDataset: "GET", downloadMetadata: "GET", search: "GET", save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
@@ -398,13 +398,13 @@ class MetadataController {
 		def sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
 		def periodFrom = null
 		def tempTimestamp
-		
+
 		csvfile.eachLine { line, index ->
-		
+
 			if (index > 2) { // Ignore header line and units line, start getting values
 				String[] values = line.split(',')
 				tempTimestamp = sdf.parse("${values[0]} ${values[1]}")
-				
+
 				if (periodFrom) {
 					if (tempTimestamp < periodFrom) {
 						periodFrom = tempTimestamp
@@ -415,7 +415,7 @@ class MetadataController {
 				}
 			}
 		}
-		
+
 		return periodFrom
 	}
 
@@ -424,13 +424,13 @@ class MetadataController {
 		def sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
 		def periodTo = null
 		def tempTimestamp
-		
+
 		csvfile.eachLine { line, index ->
-		
+
 			if (index > 2) { // Ignore header line and units line, start getting values
 				String[] values = line.split(',')
 				tempTimestamp = sdf.parse("${values[0]} ${values[1]}")
-				
+
 				if (periodTo) {
 					if (tempTimestamp > periodTo) {
 						periodTo = tempTimestamp
@@ -441,7 +441,7 @@ class MetadataController {
 				}
 			}
 		}
-		
+
 		return periodTo
 	}
 
