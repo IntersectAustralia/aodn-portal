@@ -41,7 +41,9 @@ class MetadataController {
 				'0804 Data Format'
 				],
 			serviceKey: 'www.sydney.edu.au/sho/svc/1',
-			studentOwned: false
+			studentOwned: false,
+			datasetPath: session.getAttribute('datasetFile'),
+			metadataPath: session.getAttribute('metadataFile')
         )
 		
 		if (metadataInstance.save(flush: true)) {
