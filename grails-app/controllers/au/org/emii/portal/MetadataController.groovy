@@ -271,8 +271,14 @@ class MetadataController {
 		if (metadata.principalInvestigator) {
 			relatedParties.addAll(metadata.principalInvestigator)
 		}
+
 		if (metadata.studentOwned && metadata.studentDataOwner) {
 			relatedParties.add(metadata.studentDataOwner)
+		}
+
+		Collection<User> dataCustodians = User.findAllByRole(UserRole.findByName(UserRole.DATACUSTODIAN))
+		if (dataCustodians && !dataCustodians.empty) {
+			relatedParties.addAll(dataCustodians)
 		}
 
 		for (User user : relatedParties) {
