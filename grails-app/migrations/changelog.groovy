@@ -153,5 +153,7 @@ databaseChangeLog = {
 	include file: '20130517-SL-DropManagerFromMetadata.groovy'
 
 	include file: '20130521-SL-AddColumnsToMetadata.groovy'
+
+	include file: '20130523-SL-MetadataChangeDescriptionToText.groovy'
 }
 
