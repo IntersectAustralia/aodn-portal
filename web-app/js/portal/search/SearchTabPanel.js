@@ -205,7 +205,7 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 				this.getTimeSeriesData();
 
 				this.resultsStore.each(function(record) {
-					console.log(record);
+					//console.log(record);
 				});
 
 				this.resultsStore.fireEvent('load', this.resultsStore, this.resultsStore.data.items, this.resultsStore.lastOptions);
@@ -298,20 +298,22 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 	
 	// Do time series search
 	getTimeSeriesData: function() {
-        var testData = {
-                'title': 'Sonde survey',
-                'abstract': 'Sonde survey',
-                'uuid': '79523459280',
-                'links': [
-                          {href: "http://tds.intersect.org.au:8080/thredds/catalog/efdc/catalog.html", name: "", protocol: "WWW:LINK-1.0-http--downloaddata", title: "THREDDS Catalog", type: "text/html"},
-                          {href: "http://tds.intersect.org.au:8080/thredds/catalog/efdc/catalog.html?dataset=efdc", name: "", protocol: "WWW:LINK-1.0-http--downloaddata", title: "THREDDS Catalog", type: "text/html"}
-                          ],
-                'source': 'ad5afbc7-86f3-4e14-8d46-a45deb148b87',
-                'canDownload': '',
-                'bbox': ''
-            };
-        var r = new this.resultsStore.recordType(testData);
-        this.resultsStore.add(r);
+		var rs = this.resultsStore;
+
+		$.ajax({
+			async: false,
+			type: 'GET',
+			url: "metadata/search",
+			dataType: 'json',
+			success: function(result) {
+				$.each(result.records, function(record) {
+					var r = new rs.recordType(this);
+        			rs.add(r);
+				});
+        	},
+			error: function(result) {
+			}
+		});
 	}
 
 });
