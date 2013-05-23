@@ -483,8 +483,14 @@ class MetadataController {
 		def datasetUrl = ""
 		def metadataUrl = ""
 		def links = []
+		def sdf = new SimpleDateFormat("yyyy-MM-dd")
+		def c = Metadata.createCriteria()
+		def metadataInstanceList = c.list {
+			if (params.extFrom) ge("collectionPeriodFrom", sdf.parse(params.extFrom))
+			if (params.extTo) le("collectionPeriodTo", sdf.parse(params.extTo) + 1)
+		}
 
-		Metadata.list().each { metadata ->
+		metadataInstanceList.each { metadata ->
 			links = []
 
 			datasetUrl = createLink(action: "downloadDataset", params: [dataset: metadata.datasetPath, filename: "${metadata.datasetName}.csv"])
