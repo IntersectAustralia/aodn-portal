@@ -195,6 +195,7 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 	},
 
 	runSearch: function(filters, startRecord, updateStore) {
+		var queryParams = filters.slice(0);
 		this.resultsGrid.showMask();
 
 		var onSuccess = function(result, query) {
@@ -202,7 +203,7 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 
 				this.resultsGrid.hideMask();
 				// This makes sure that the paging toolbar updates on a zero result set
-				this.getTimeSeriesData();
+				this.getTimeSeriesData(queryParams);
 
 				this.resultsStore.each(function(record) {
 					//console.log(record);
@@ -227,8 +228,6 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 		if (updateStore) {
 			this.resultsStore.removeAll();
 		}
-
-		var queryParams = filters.slice(0);
 
 		// Add paging params
 		queryParams.push("from=" + startRecord);
@@ -297,13 +296,14 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 	},
 	
 	// Do time series search
-	getTimeSeriesData: function() {
+	getTimeSeriesData: function(queryParams) {
 		var rs = this.resultsStore;
+		var queryStr = queryParams.join('&');
 
 		$.ajax({
 			async: false,
 			type: 'GET',
-			url: "metadata/search",
+			url: "metadata/search?" + queryStr,
 			dataType: 'json',
 			success: function(result) {
 				$.each(result.records, function(record) {
