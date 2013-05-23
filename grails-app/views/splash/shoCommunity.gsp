@@ -11,15 +11,15 @@
     <div id="content">
       <div class="community">
         
-          <a href="http://twitter.com/Sydney_Uni" target="_blank"><img src="images/twitter.png"
+          <a href="http://twitter.com/SydHarOb" target="_blank"><img src="images/twitter.png"
                  title="Follow us on twitter" alt="Follow us on twitter"   /></a>
-          <a href="http://www.facebook.com/sydneyuni" target="_blank"><img src="images/facebookIcon.png"
+          <a href="http://www.facebook.com/sydneyharbourobservatory" target="_blank"><img src="images/facebookIcon.png"
                  title="Find us on Facebook" alt="Find us on Facebook"  height="27px"  /></a>
         
         
       </div>
 
-      <div class="fb-like-box" data-href="http://www.facebook.com/sydneyuni" data-width="340"  data-show-faces="true" data-header="false" data-border-color="white" data-stream="true" ></div>
+      <div class="fb-like-box" data-href="http://www.facebook.com/sydneyharbourobservatory" data-width="340"  data-show-faces="true" data-header="false" data-border-color="white" data-stream="true" ></div>
     </div>
 
 
