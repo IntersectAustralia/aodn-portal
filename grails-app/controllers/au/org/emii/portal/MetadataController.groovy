@@ -479,7 +479,8 @@ class MetadataController {
 	}
 
 	def search = {
-		def results = []
+		def result = [:]
+		def records = []
 		def datasetUrl = ""
 		def metadataUrl = ""
 		def links = []
@@ -497,7 +498,7 @@ class MetadataController {
 				links << generateLink(metadataUrl, "${metadata.datasetName} - Metadata(TXT)")
 			}
 
-			results << [
+			records << [
 				'title': metadata.datasetName,
 				'abstract': metadata.dataType,
                 'uuid': '',
@@ -507,7 +508,12 @@ class MetadataController {
                 'bbox': ''
 			]
 		}
-        render text: results as JSON, contentType: "text/html"
+
+		result = [
+				success: true,
+				records: records
+		]
+        render text: result as JSON, contentType: "text/html"
     }
 
     def downloadDataset = {
