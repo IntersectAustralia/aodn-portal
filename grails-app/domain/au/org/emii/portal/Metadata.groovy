@@ -15,7 +15,8 @@ class Metadata {
 		researchCodes: String,
 		grantedUsers: User,
 		collectors: User,
-		publications: Publication
+		publications: Publication,
+		points: Point
 	]
 	User principalInvestigator
 	String dataAccess

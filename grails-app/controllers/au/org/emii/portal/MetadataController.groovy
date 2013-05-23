@@ -58,6 +58,7 @@ class MetadataController {
 		metadataInstance.collectionPeriodTo = getPeriodTo()
 		metadataInstance.dataType = Metadata.dataTypeList()[session.getAttribute('datasetType')].name
 		metadataInstance.datasetName = "${metadataInstance.dataType} ${formatDate(format: 'yyyy-MM-dd', date: metadataInstance.collectionPeriodFrom)} to ${formatDate(format: 'yyyy-MM-dd', date: metadataInstance.collectionPeriodTo)} ${metadataInstance.id}"
+		metadataInstance.points = getPoints()
         return [metadataInstance: metadataInstance, cfg: Config.activeInstance()]
     }
 
@@ -489,6 +490,12 @@ class MetadataController {
 		def metadataInstanceList = c.list {
 			if (params.extFrom) ge("collectionPeriodFrom", sdf.parse(params.extFrom))
 			if (params.extTo) le("collectionPeriodTo", sdf.parse(params.extTo) + 1)
+			if (params.eastBL && params.northBL && params.southBL && params.westBL) {
+				points {
+					between("latitude", params.double('southBL'), params.double('northBL'))
+					between("longitude", params.double('westBL'), params.double('eastBL'))
+				}
+			}
 		}
 
 		metadataInstanceList.each { metadata ->
@@ -541,4 +548,20 @@ class MetadataController {
     private generateLink(url, title) {
 		return [href: "${url}", name: "${title}", protocol: "WWW:LINK-1.0-http--downloaddata", title: "${title}", type: "text/html"]
 	}
+
+	private getPoints() {
+		def csvfile = getCsvFile()
+		def pointList = []
+
+		csvfile.eachLine { line, index ->
+
+			if (index > 2) { // Ignore header line and units line, start getting values
+				String[] values = line.split(',')
+				pointList << new Point(latitude: values[2], longitude: values[3])
+			}
+		}
+
+		return pointList
+	}
+
 }
