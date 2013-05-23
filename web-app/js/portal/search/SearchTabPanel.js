@@ -309,6 +309,7 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 				$.each(result.records, function(record) {
 					var r = new rs.recordType(this);
         			rs.add(r);
+        			rs.totalLength++;
 				});
         	},
 			error: function(result) {
