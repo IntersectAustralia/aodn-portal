@@ -307,7 +307,7 @@ class MetadataController {
 				"xsi:schemaLocation":"http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd") {
 			registryObject(group:"The University of Sydney") {
 				key(id)
-				originatingSource("http://sho.sydney.edu.au")
+				originatingSource("http://www.sydney.edu.au/sho")
 				party(type:"person") {
 					identifier(type:"AAF-token", user.openIdUrl)
 					name(type:"primary") {
