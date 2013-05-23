@@ -169,7 +169,7 @@ environments {
     }
 }
 
-def defaultInstanceName = "AODN"
+def defaultInstanceName = "SHO"
 
 portal {
 	header {

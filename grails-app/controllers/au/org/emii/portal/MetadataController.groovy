@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 class MetadataController {
-
+	def metadataService
     static allowedMethods = [downloadDataset: "GET", downloadMetadata: "GET", search: "GET", save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -82,13 +82,8 @@ class MetadataController {
         if (metadataInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
 
-			// create RIF-CS 1.4 compliant Party records
-			if ("Mediated".equals(metadataInstance.dataAccess) || "Public".equals(metadataInstance.dataAccess)) {
-				createCompliantPartyRecords(metadataInstance)
-			}
-
-			// create collection description record
-			createColletionDescriptionRecord(metadataInstance)
+			// update collection and party records
+			metadataService.updateCollectionAndPartyRecords(metadataInstance)
 
             redirect(controller: "home")
         }
@@ -369,6 +364,10 @@ class MetadataController {
             metadataInstance.properties = params
             if (!metadataInstance.hasErrors() && metadataInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
+
+				// update collection and party records
+				metadataService.updateCollectionAndPartyRecords(metadataInstance)
+
                 redirect(action: "show", id: metadataInstance.id)
             }
             else {
