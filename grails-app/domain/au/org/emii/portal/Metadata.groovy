@@ -1,7 +1,7 @@
 package au.org.emii.portal
 
 class Metadata {
-	
+	def metadataService
 	String serviceKey
 	String key
 	String datasetName
@@ -221,5 +221,10 @@ class Metadata {
 	static relatedPartyTypeList() {
 		[[id: 0, name: 'Collector'], [id: 1, name: 'Principal investigator']]
 	}
-	
+
+	def afterUpdate() {
+		if (datasetPath && datasetPath.length() > 0) {
+			metadataService.updateCollectionAndPartyRecords(this)
+		}
+	}
 }

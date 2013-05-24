@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat
 
 class MetadataService {
 
-	static transactional = true
+	static transactional = false
 
 	static DATASETPATH = "/aodn-portal/data/"
 	static COLLECTIONPATH = DATASETPATH + "colRecords/"
