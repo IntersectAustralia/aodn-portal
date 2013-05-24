@@ -21,36 +21,24 @@
                 <table>
                     <thead>
                         <tr>
-                        
                             <g:sortableColumn property="id" title="${message(code: 'metadata.id.label', default: 'Id')}" />
-                        
-                            <g:sortableColumn property="collectionPeriodFrom" title="${message(code: 'metadata.collectionPeriodFrom.label', default: 'Collection Period From')}" />
-                        
-                            <g:sortableColumn property="collectionPeriodTo" title="${message(code: 'metadata.collectionPeriodTo.label', default: 'Collection Period To')}" />
-                        
-                            <g:sortableColumn property="dataAccess" title="${message(code: 'metadata.dataAccess.label', default: 'Data Access')}" />
-                        
-                            <th><g:message code="metadata.dataOwner.label" default="Data Owner" /></th>
-                        
+                            <g:sortableColumn property="datasetName" title="${message(code: 'metadata.datasetName.label', default: 'Dataset Name')}" />
                             <g:sortableColumn property="dataType" title="${message(code: 'metadata.dataType.label', default: 'Data Type')}" />
+                            <g:sortableColumn property="embargo" title="${message(code: 'metadata.embargo.label', default: 'Embargo?')}" />
+                            <g:sortableColumn property="dataAccess" title="${message(code: 'metadata.dataAccess.label', default: 'Dataset Access')}" />
+                            <g:sortableColumn property="studentOwned" title="${message(code: 'metadata.studentOwned.label', default: 'Owned By Student?')}" />
                         
                         </tr>
                     </thead>
                     <tbody>
                     <g:each in="${metadataInstanceList}" status="i" var="metadataInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                        
                             <td><g:link action="show" id="${metadataInstance.id}">${fieldValue(bean: metadataInstance, field: "id")}</g:link></td>
-                        
-                            <td><g:formatDate date="${metadataInstance.collectionPeriodFrom}" /></td>
-                        
-                            <td><g:formatDate date="${metadataInstance.collectionPeriodTo}" /></td>
-                        
-                            <td>${fieldValue(bean: metadataInstance, field: "dataAccess")}</td>
-                        
-                            <td>${fieldValue(bean: metadataInstance, field: "studentDataOwner")}</td>
-                        
+                            <td>${fieldValue(bean: metadataInstance, field: "datasetName")}</td>
                             <td>${fieldValue(bean: metadataInstance, field: "dataType")}</td>
+                            <td>${fieldValue(bean: metadataInstance, field: "embargo")}</td>
+                            <td>${fieldValue(bean: metadataInstance, field: "dataAccess")}</td>
+                            <td>${fieldValue(bean: metadataInstance, field: "studentOwned")}</td>
                         
                         </tr>
                     </g:each>
