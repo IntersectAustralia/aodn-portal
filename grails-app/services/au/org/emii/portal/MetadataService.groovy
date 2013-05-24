@@ -14,9 +14,6 @@ class MetadataService {
 	static COLLECTIONPATH = DATASETPATH + "colRecords/"
 	static COMPLIANTPARTYPATH = DATASETPATH + "ptyRecords/"
 
-	// a lock variable for write xml content to file.
-	final Boolean fileWriteLock = false
-
 	public void updateCollectionAndPartyRecords(Metadata metadata) {
 		updateColletionDescriptionRecord(metadata)
 		updateCompliantPartyRecords(metadata)
@@ -34,11 +31,9 @@ class MetadataService {
 
 		String fileName = getCollectionFileName(metadata)
 
-		synchronized (fileWriteLock) {
-			File file = new File(fileName)
-			if (file && file.exists()) {
-				file.delete()
-			}
+		File file = new File(fileName)
+		if (file && file.exists()) {
+			file.delete()
 		}
 
 		def writer = createColRecordXml(metadata)
@@ -207,14 +202,11 @@ class MetadataService {
 			String fileName = getCompliantPartyFileName(user)
 
 			def writer = new StringWriter()
-			synchronized (fileWriteLock) {
-				File file = new File(fileName)
-				if (file==null || !file.exists()) {
-					writer = createPtyRecordXml(user)
-				}
+			File file = new File(fileName)
+			if (file==null || !file.exists()) {
+				writer = createPtyRecordXml(user)
+				writeToFile(fileName, writer)
 			}
-
-			writeToFile(fileName, writer)
 		}
 	}
 
@@ -253,12 +245,10 @@ class MetadataService {
 	}
 
 	private void writeToFile(String fileName, StringWriter writer) {
-		synchronized (fileWriteLock) {
-			File file = new File(fileName)
-			file.createNewFile()
-			file.setWritable(true, false)
-			file.write(writer.toString())
-		}
+		File file = new File(fileName)
+		file.createNewFile()
+		file.setWritable(true, false)
+		file.write(writer.toString())
 	}
 
 	private String getLatitudeLongitudeValues(Metadata metadata) {
