@@ -33,6 +33,51 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="embargoExpiryDate"><g:message code="metadata.embargoExpiryDate.label" default="Embargo Expiry Date" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'embargoExpiryDate', 'errors')}">
+                                    <g:datePicker name="embargoExpiryDate" precision="day" value="${metadataInstance?.embargoExpiryDate}" default="none" noSelection="['': '']" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="studentDataOwner"><g:message code="metadata.studentDataOwner.label" default="Student Data Owner" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'studentDataOwner', 'errors')}">
+                                    <g:select name="studentDataOwner.id" from="${au.org.emii.portal.User.list()}" optionKey="id" value="${metadataInstance?.studentDataOwner?.id}" noSelection="['null': '']" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="principalInvestigator"><g:message code="metadata.principalInvestigator.label" default="Principal Investigator" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'principalInvestigator', 'errors')}">
+                                    <g:select name="principalInvestigator.id" from="${au.org.emii.portal.User.list()}" optionKey="id" value="${metadataInstance?.principalInvestigator?.id}" noSelection="['null': '']" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="datasetPath"><g:message code="metadata.datasetPath.label" default="Dataset Path" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'datasetPath', 'errors')}">
+                                    <g:textField name="datasetPath" value="${metadataInstance?.datasetPath}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="metadataPath"><g:message code="metadata.metadataPath.label" default="Metadata Path" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'metadataPath', 'errors')}">
+                                    <g:textField name="metadataPath" value="${metadataInstance?.metadataPath}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="collectionPeriodFrom"><g:message code="metadata.collectionPeriodFrom.label" default="Collection Period From" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'collectionPeriodFrom', 'errors')}">
@@ -64,15 +109,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'dataAccess', 'errors')}">
                                     <g:textField name="dataAccess" value="${metadataInstance?.dataAccess}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="dataOwner"><g:message code="metadata.dataOwner.label" default="Data Owner" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'dataOwner', 'errors')}">
-                                    <g:select name="dataOwner.id" from="${au.org.emii.portal.User.list()}" optionKey="id" value="${metadataInstance?.dataOwner?.id}"  />
                                 </td>
                             </tr>
                         
@@ -114,15 +150,6 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="embargoExpiryDate"><g:message code="metadata.embargoExpiryDate.label" default="Embargo Expiry Date" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'embargoExpiryDate', 'errors')}">
-                                    <g:datePicker name="embargoExpiryDate" precision="day" value="${metadataInstance?.embargoExpiryDate}"  />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                   <label for="grantedUsers"><g:message code="metadata.grantedUsers.label" default="Granted Users" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'grantedUsers', 'errors')}">
@@ -144,16 +171,16 @@
                                   <label for="licence"><g:message code="metadata.licence.label" default="Licence" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'licence', 'errors')}">
-                                    <g:textField name="licence" value="${metadataInstance?.licence}" />
+                                    <g:textField name="licence" value="${fieldValue(bean: metadataInstance, field: 'licence')}" />
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="principalInvestigators"><g:message code="metadata.principalInvestigators.label" default="Principal Investigators" /></label>
+                                  <label for="points"><g:message code="metadata.points.label" default="Points" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'principalInvestigators', 'errors')}">
-                                    <g:select name="principalInvestigators" from="${au.org.emii.portal.User.list()}" multiple="yes" optionKey="id" size="5" value="${metadataInstance?.principalInvestigators*.id}" />
+                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'points', 'errors')}">
+                                    <g:select name="points" from="${au.org.emii.portal.Point.list()}" multiple="yes" optionKey="id" size="5" value="${metadataInstance?.points*.id}" />
                                 </td>
                             </tr>
                         
@@ -162,23 +189,16 @@
                                   <label for="publications"><g:message code="metadata.publications.label" default="Publications" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'publications', 'errors')}">
-                                    
-<ul>
-<g:each in="${metadataInstance?.publications?}" var="p">
-    <li><g:link controller="publication" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="publication" action="create" params="['metadata.id': metadataInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'publication.label', default: 'Publication')])}</g:link>
-
+                                    <g:select name="publications" from="${au.org.emii.portal.Publication.list()}" multiple="yes" optionKey="id" size="5" value="${metadataInstance?.publications*.id}" />
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="researchCode"><g:message code="metadata.researchCode.label" default="Research Code" /></label>
+                                  <label for="researchCodes"><g:message code="metadata.researchCodes.label" default="Research Codes" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'researchCode', 'errors')}">
-                                    <g:textField name="researchCode" value="${metadataInstance?.researchCode}" />
+                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'researchCodes', 'errors')}">
+                                    
                                 </td>
                             </tr>
                         
@@ -188,6 +208,15 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'serviceKey', 'errors')}">
                                     <g:textField name="serviceKey" value="${metadataInstance?.serviceKey}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="studentOwned"><g:message code="metadata.studentOwned.label" default="Student Owned" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: metadataInstance, field: 'studentOwned', 'errors')}">
+                                    <g:checkBox name="studentOwned" value="${metadataInstance?.studentOwned}" />
                                 </td>
                             </tr>
                         

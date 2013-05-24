@@ -30,6 +30,41 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.embargoExpiryDate.label" default="Embargo Expiry Date" /></td>
+                            
+                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.embargoExpiryDate}" /></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.studentDataOwner.label" default="Student Data Owner" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="user" action="show" id="${metadataInstance?.studentDataOwner?.id}">${metadataInstance?.studentDataOwner?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.principalInvestigator.label" default="Principal Investigator" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="user" action="show" id="${metadataInstance?.principalInvestigator?.id}">${metadataInstance?.principalInvestigator?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.datasetPath.label" default="Dataset Path" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "datasetPath")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.metadataPath.label" default="Metadata Path" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "metadataPath")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="metadata.collectionPeriodFrom.label" default="Collection Period From" /></td>
                             
                             <td valign="top" class="value"><g:formatDate date="${metadataInstance?.collectionPeriodFrom}" /></td>
@@ -60,13 +95,6 @@
                             <td valign="top" class="name"><g:message code="metadata.dataAccess.label" default="Data Access" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "dataAccess")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.dataOwner.label" default="Data Owner" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="user" action="show" id="${metadataInstance?.dataOwner?.id}">${metadataInstance?.dataOwner?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -106,13 +134,6 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.embargoExpiryDate.label" default="Embargo Expiry Date" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.embargoExpiryDate}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="metadata.grantedUsers.label" default="Granted Users" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">
@@ -147,12 +168,12 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.principalInvestigators.label" default="Principal Investigators" /></td>
+                            <td valign="top" class="name"><g:message code="metadata.points.label" default="Points" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">
                                 <ul>
-                                <g:each in="${metadataInstance.principalInvestigators}" var="p">
-                                    <li><g:link controller="user" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
+                                <g:each in="${metadataInstance.points}" var="p">
+                                    <li><g:link controller="point" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
                                 </g:each>
                                 </ul>
                             </td>
@@ -173,9 +194,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.researchCode.label" default="Research Code" /></td>
+                            <td valign="top" class="name"><g:message code="metadata.researchCodes.label" default="Research Codes" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "researchCode")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "researchCodes")}</td>
                             
                         </tr>
                     
@@ -183,6 +204,13 @@
                             <td valign="top" class="name"><g:message code="metadata.serviceKey.label" default="Service Key" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "serviceKey")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.studentOwned.label" default="Student Owned" /></td>
+                            
+                            <td valign="top" class="value"><g:formatBoolean boolean="${metadataInstance?.studentOwned}" /></td>
                             
                         </tr>
                     
