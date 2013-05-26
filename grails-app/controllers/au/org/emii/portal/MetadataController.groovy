@@ -4,6 +4,7 @@ import groovy.xml.MarkupBuilder
 import grails.converters.JSON
 import java.text.SimpleDateFormat
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
+import java.util.UUID
 
 class MetadataController {
 	def metadataService
@@ -222,10 +223,22 @@ class MetadataController {
 		def metadataUrl = ""
 		def links = []
 		def sdf = new SimpleDateFormat("yyyy-MM-dd")
+		def dateFrom = new Date()
+		def dateTo = new Date()
+
+		if (params.extFrom) {
+			dateFrom = sdf.parse(params.extFrom)
+		}
+
+		if (params.extTo) {
+			dateTo = sdf.parse(params.extTo)
+		}
+
 		def c = Metadata.createCriteria()
 		def metadataInstanceList = c.list {
-			if (params.extFrom) ge("collectionPeriodFrom", sdf.parse(params.extFrom))
-			if (params.extTo) le("collectionPeriodTo", sdf.parse(params.extTo) + 1)
+			ge("collectionPeriodFrom", dateFrom)
+			le("collectionPeriodTo", dateTo + 1)
+
 			if (params.eastBL && params.northBL && params.southBL && params.westBL) {
 				points {
 					between("latitude", params.double('southBL'), params.double('northBL'))
@@ -240,8 +253,6 @@ class MetadataController {
 			datasetUrl = createLink(action: "downloadDataset", params: [dataset: metadata.datasetPath, filename: "${metadata.datasetName}.csv"])
 			links << generateLink(datasetUrl, "${metadata.datasetName} - Dataset(CSV)")
 
-			log.debug(metadata.metadataPath)
-
 			if (metadata.metadataPath != null) {
 				metadataUrl = createLink(action: "downloadMetadata", params: [metadata: metadata.metadataPath, filename: "${metadata.datasetName}.txt"])
 				links << generateLink(metadataUrl, "${metadata.datasetName} - Metadata(TXT)")
@@ -250,7 +261,7 @@ class MetadataController {
 			records << [
 				'title': metadata.datasetName,
 				'abstract': metadata.dataType,
-                'uuid': '',
+                'uuid': UUID.randomUUID(),
                 'links': links,
                 'source': '',
                 'canDownload': '',
