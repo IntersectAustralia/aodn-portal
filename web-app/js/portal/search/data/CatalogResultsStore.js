@@ -87,6 +87,9 @@ Portal.data.CatalogResultsStore = function(){
             name: 'source',
             convert: getSource
         }, {
+            name: 'canEdit',
+            defaultValue: false
+        },{
             name: 'canDownload',
             convert: getCanDownload
         }, {

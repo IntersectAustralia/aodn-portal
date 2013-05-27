@@ -204,10 +204,10 @@ Portal.search.SearchTabPanel = Ext.extend(Ext.Panel, {
 				this.resultsGrid.hideMask();
 				// This makes sure that the paging toolbar updates on a zero result set
 				this.getTimeSeriesData(queryParams);
-
-				//this.resultsStore.each(function(record) {
-				//	console.log(record);
-				//});
+				/*
+				this.resultsStore.each(function(record) {
+					console.log(record);
+				});*/
 
 				this.resultsStore.fireEvent('load', this.resultsStore, this.resultsStore.data.items, this.resultsStore.lastOptions);
 			}

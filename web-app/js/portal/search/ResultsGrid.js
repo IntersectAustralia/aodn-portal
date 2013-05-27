@@ -57,7 +57,7 @@ Portal.search.ResultsGrid = Ext.extend(Ext.grid.GridPanel, {
                   width: 150,
                   xtype: 'portal.common.actioncolumn',
                   items: [{
-                     iconCls: 'p-result-info',
+                     getClass: this.getDatasetInfoClass,
                      tooltip: OpenLayers.i18n('datasetInfo'),
                      width: 35,
                      height: 35,
@@ -421,7 +421,22 @@ Portal.search.ResultsGrid = Ext.extend(Ext.grid.GridPanel, {
 		});
 		
 		return result;
-	}
+	},
+
+  getDatasetInfoClass: function(v, metadata, rec, rowIndex, colIndex, store) {
+    if (rec.get('source') == 'Time Series') {
+      if (rec.get('canEdit')) {
+        return 'p-result-info';
+      }
+      else {
+        return 'p-result-disabled';  
+      }
+    }
+    else {
+      return 'p-result-info';
+    }
+    
+  },
 });
 
 Ext.reg('portal.search.resultsgrid', Portal.search.ResultsGrid);

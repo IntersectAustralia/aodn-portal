@@ -7,7 +7,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 class MetadataController {
 	def metadataService
-    static allowedMethods = [downloadDataset: "GET", downloadMetadata: "GET", search: "GET", save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [canEdit: "GET", downloadDataset: "GET", downloadMetadata: "GET", search: "GET", save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
@@ -258,6 +258,7 @@ class MetadataController {
                 'uuid': metadata.id,
                 'links': links,
                 'source': 'Time Series',
+                'canEdit': canEdit(metadata.id),
                 'canDownload': '',
                 'bbox': ''
 			]
@@ -286,7 +287,7 @@ class MetadataController {
         return
     }
 
-    private generateLink(url, title) {
+    private Map generateLink(url, title) {
 		return [href: "${url}", name: "${title}", protocol: "WWW:LINK-1.0-http--downloaddata", title: "${title}", type: "text/html"]
 	}
 
@@ -304,5 +305,35 @@ class MetadataController {
 
 		return pointList
 	}
+
+	private String canEdit(id) {
+		def metadataInstance = Metadata.get(id)
+		def currentUser = User.current()
+
+		if (userInRoles(currentUser, ["Administrator", "Data Custodian"]) ||
+			metadataInstance.collectors?.contains(currentUser) || 
+			metadataInstance.principalInvestigator == currentUser || 
+			metadataInstance.studentDataOwner == currentUser) {
+			return 'true'
+		}
+
+		return 'false'
+	}
+
+	private boolean userInRoles(user, roles) {
+		def targetRoles = []
+
+		if (user) {
+	       	targetRoles = UserRole.findAll("from UserRole as b where b.name in (:roleNames)", [roleNames: roles])
+
+	       	targetRoles.each() {
+	       		if (user.role.id == it.id) {
+	       			return true
+	       		}
+	       	}
+       }
+
+	   return false
+ 	}
 
 }
