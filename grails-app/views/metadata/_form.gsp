@@ -296,6 +296,7 @@
 			from="${au.org.emii.portal.Metadata.licenceList()}" optionKey="id"
 			value="${metadataInstance?.licence}"
 			onChange="changeLicenceHint(this)" />
+		<br/>
 		<font class="hint" id="licenceHint"></font>
 	</td>
 </tr>

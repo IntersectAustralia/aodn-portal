@@ -183,7 +183,14 @@ Portal.search.ResultsGrid = Ext.extend(Ext.grid.GridPanel, {
   
   onViewMetadata: function(grid, rowIndex, colIndex) {
     var rec = this.store.getAt(rowIndex);
-    var viewMetadataUrl = Portal.app.config.catalogUrl + '/srv/en/metadata.show\?uuid\='+rec.get('uuid');
+    var viewMetadataUrl;
+
+    if (rec.get('source') == "Time Series") {
+      viewMetadataUrl = 'metadata/edit/' + rec.get('uuid'); 
+    }
+    else {
+      viewMetadataUrl = Portal.app.config.catalogUrl + '/srv/en/metadata.show\?uuid\='+rec.get('uuid');
+    }
 
     Portal.common.BrowserWindow.open(viewMetadataUrl);
   },
