@@ -28,26 +28,32 @@
 
         <h3>Affiliated Institutions</h3>
 
-        <div class="spacer floatLeft homePanelWidget"  style="width:230px">
-            <img src="${createLinkTo(dir: 'images', file: 'sims_logo.png')}" />
+        <div class="spacer floatLeft homePanelWidget"  style="width:200px; height: 50px">
+            <img src="${createLinkTo(dir: 'images', file: 'sims_logo.png')}" style="width:50%; height:auto" />
+        </div>
 
-            <p>
-            <img src="${createLinkTo(dir: 'images', file: 'ands_logo.png')}" />
+        <div class="spacer floatLeft homePanelWidget"  style="width:200px; height: 50px">
+            <img src="${createLinkTo(dir: 'images', file: 'ands_logo.png')}" style="width:50%; height:auto;" />
+        </div>
 
-            <p>
-            <img src="${createLinkTo(dir: 'images', file: 'mq_logo.png')}" />
+        <div class="spacer floatLeft homePanelWidget"  style="width:200px; height: 50px">
+            <img src="${createLinkTo(dir: 'images', file: 'mq_logo.png')}" style="width:50%; height:auto" />
+        </div>
 
-            <p>
-            <img src="${createLinkTo(dir: 'images', file: 'nsw-public-works.png')}" />
+        <div class="spacer floatLeft homePanelWidget"  style="width:200px; height: 50px">
+            <img src="${createLinkTo(dir: 'images', file: 'nsw-public-works.png')}" style="width:50%; height:auto" />
+        </div>
 
-            <p>
-            <img src="${createLinkTo(dir: 'images', file: 'nsw-enviro.png')}" />
+        <div class="spacer floatLeft homePanelWidget"  style="width:200px; height: 50px">
+            <img src="${createLinkTo(dir: 'images', file: 'nsw-enviro.png')}" style="width:50%; height:auto" />
+        </div>
 
-            <p>
-            <img src="${createLinkTo(dir: 'images', file: 'DSI_Logo.png')}" />
+        <div class="spacer floatLeft homePanelWidget"  style="width:200px; height: 50px">
+            <img src="${createLinkTo(dir: 'images', file: 'DSI_Logo.png')}" style="width:50%; height:auto" />
+        </div>
 
-            <p>
-            <img src="${createLinkTo(dir: 'images', file: 'Intersect.png')}" />
+        <div class="spacer floatLeft homePanelWidget"  style="width:200px">
+            <img src="${createLinkTo(dir: 'images', file: 'Intersect.png')}" style="width:30%; height:auto" />
         </div>
 
         <div class="spacer floatLeft homePanelWidget"  style="width:370px">
