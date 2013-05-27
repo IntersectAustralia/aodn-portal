@@ -4,7 +4,6 @@ import groovy.xml.MarkupBuilder
 import grails.converters.JSON
 import java.text.SimpleDateFormat
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
-//import java.util.UUID
 
 class MetadataController {
 	def metadataService
