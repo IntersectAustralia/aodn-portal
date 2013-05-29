@@ -121,7 +121,7 @@ class MetadataController {
                 }
             }
 
-			validateParamsAndbindData(metadataInstance)
+			validateParamsAndBindData(metadataInstance)
             if (!metadataInstance.hasErrors() && metadataInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
                 redirect(action: "show", id: metadataInstance.id)
@@ -136,7 +136,7 @@ class MetadataController {
         }
     }
 
-	private void validateParamsAndbindData(Metadata metadata) {
+	private void validateParamsAndBindData(Metadata metadata) {
 		if (!params.embargo || params.grantedUsers == 'Enter name of user here') {
 			params.remove('grantedUsers')
 			params.remove('embargo')

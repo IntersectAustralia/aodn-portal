@@ -108,6 +108,16 @@
                 </li>
             </shiro:hasPermission>
 
+            <shiro:hasPermission permission="metadata:list">
+                <li class="controllerMenuItems"><g:link controller="metadata"  >Metadata</g:link>
+                    <shiro:hasPermission permission="metadata:create">
+                        <span class="inline">
+                            <g:link controller="metadata" action="create" class="" >create</g:link>
+                        </span>
+                    </shiro:hasPermission>
+                </li>
+            </shiro:hasPermission>
+
             <shiro:hasPermission permission="aodaacProductLink:list">
                 <li class="controllerMenuItems"><g:link controller="aodaacProductLink">AODAAC Product Links</g:link></li>
             </shiro:hasPermission>
