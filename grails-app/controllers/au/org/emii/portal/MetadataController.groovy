@@ -1,12 +1,9 @@
 package au.org.emii.portal
 
-import groovy.xml.MarkupBuilder
 import grails.converters.JSON
 import java.text.SimpleDateFormat
-import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 class MetadataController {
-	def metadataService
     static allowedMethods = [canEdit: "GET", downloadDataset: "GET", downloadMetadata: "GET", search: "GET", save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -107,7 +104,7 @@ class MetadataController {
             redirect(action: "list")
         }
         else {
-            return [metadataInstance: metadataInstance]
+            return [metadataInstance: metadataInstance, users:User.list()]
         }
     }
 
@@ -123,7 +120,8 @@ class MetadataController {
                     return
                 }
             }
-            metadataInstance.properties = params
+
+			validateParamsAndbindData(metadataInstance)
             if (!metadataInstance.hasErrors() && metadataInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'metadata.label', default: 'Metadata'), metadataInstance.id])}"
                 redirect(action: "show", id: metadataInstance.id)
@@ -138,7 +136,44 @@ class MetadataController {
         }
     }
 
-    def delete = {
+	private void validateParamsAndbindData(Metadata metadata) {
+		if (!params.embargo || params.grantedUsers == 'Enter name of user here') {
+			params.remove('grantedUsers')
+			params.remove('embargo')
+			metadata.grantedUsers.clear()
+			metadata.embargo = false
+		}
+
+		if (params.collectors == 'Enter name of the collector here') {
+			params.remove('collectors')
+			metadata.collectors.clear()
+		}
+
+		if (params.publications == 'Enter publication here') {
+			params.remove('publications')
+			metadata.publications.clear()
+		}
+
+		if (params.principalInvestigator.id == null || params.principalInvestigator.id == "") {
+			metadata.principalInvestigator = null
+		} else {
+			metadata.principalInvestigator = User.findById(params.principalInvestigator.id.toLong())
+		}
+		params.remove('principalInvestigator.id')
+
+		if (!params.studentOwned || params.studentDataOwner.id == null || params.studentDataOwner.id == "") {
+			metadata.studentDataOwner = null
+			metadata.studentOwned = false
+		} else {
+			metadata.studentDataOwner = User.findById(params.studentDataOwner.id.toLong())
+			metadata.studentOwned = true
+		}
+		params.remove('studentDataOwner.id')
+
+		metadata.properties = params
+	}
+
+	def delete = {
         def metadataInstance = Metadata.get(params.id)
         if (metadataInstance) {
             try {

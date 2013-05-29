@@ -7,6 +7,7 @@
         <g:set var="entityName" value="${message(code: 'metadata.label', default: 'Metadata')}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
+
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
@@ -15,9 +16,11 @@
         </div>
         <div class="body">
             <h1><g:message code="default.show.label" args="[entityName]" /></h1>
+
             <g:if test="${flash.message}">
-            <div class="message">${flash.message}</div>
+                <div class="message">${flash.message}</div>
             </g:if>
+
             <div class="dialog">
                 <table>
                     <tbody>
@@ -28,104 +31,139 @@
                             <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "id")}</td>
                             
                         </tr>
-                    
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.key.label" default="Key" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "key")}</td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.serviceKey.label" default="Service Key" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "serviceKey")}</td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.datasetName.label" default="Dataset Name" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "datasetName")}</td>
+
+                        </tr>
+
+                    <tr class="prop">
+                        <td valign="top" class="name"><g:message code="metadata.dateCreated.label" default="Date Created" /></td>
+
+                        <td valign="top" class="value"><g:formatDate date="${metadataInstance?.dateCreated}" /></td>
+
+                    </tr>
+
+                    <tr class="prop">
+                        <td valign="top" class="name"><g:message code="metadata.lastUpdated.label" default="Last Updated" /></td>
+
+                        <td valign="top" class="value"><g:formatDate date="${metadataInstance?.lastUpdated}" /></td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.dataType.label" default="Data Type" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "dataType")}</td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.description.label" default="Description" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "description")}</td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.datasetPath.label" default="Dataset Path" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "datasetPath")}</td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.metadataPath.label" default="Metadata Path" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "metadataPath")}</td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.dataAccess.label" default="Data Access" /></td>
+
+                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "dataAccess")}</td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.licence.label" default="Licence" /></td>
+
+                            <td valign="top" class="value">${Metadata.licenceList().get(metadataInstance.licence.intValue()).name}</td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.collectionPeriodFrom.label" default="Collection Period From" /></td>
+
+                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.collectionPeriodFrom}" /></td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.collectionPeriodTo.label" default="Collection Period To" /></td>
+
+                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.collectionPeriodTo}" /></td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.collectors.label" default="Collectors" /></td>
+
+                            <td valign="top" style="text-align: left;" class="value">
+                                <ul>
+                                    <g:each in="${metadataInstance.collectors}" var="c">
+                                        <li><g:link controller="user" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
+                                    </g:each>
+                                </ul>
+                            </td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.principalInvestigator.label" default="Principal Investigator" /></td>
+
+                            <td valign="top" class="value"><g:link controller="user" action="show" id="${metadataInstance?.principalInvestigator?.id}">${metadataInstance?.principalInvestigator?.encodeAsHTML()}</g:link></td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.studentOwned.label" default="Student Owned" /></td>
+
+                            <td valign="top" class="value"><g:formatBoolean boolean="${metadataInstance?.studentOwned}" /></td>
+
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.studentDataOwner.label" default="Student Data Owner" /></td>
+
+                            <td valign="top" class="value"><g:link controller="user" action="show" id="${metadataInstance?.studentDataOwner?.id}">${metadataInstance?.studentDataOwner?.encodeAsHTML()}</g:link></td>
+
+                        </tr>
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="metadata.embargoExpiryDate.label" default="Embargo Expiry Date" /></td>
                             
                             <td valign="top" class="value"><g:formatDate date="${metadataInstance?.embargoExpiryDate}" /></td>
                             
                         </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.studentDataOwner.label" default="Student Data Owner" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="user" action="show" id="${metadataInstance?.studentDataOwner?.id}">${metadataInstance?.studentDataOwner?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.principalInvestigator.label" default="Principal Investigator" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="user" action="show" id="${metadataInstance?.principalInvestigator?.id}">${metadataInstance?.principalInvestigator?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.datasetPath.label" default="Dataset Path" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "datasetPath")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.metadataPath.label" default="Metadata Path" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "metadataPath")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.collectionPeriodFrom.label" default="Collection Period From" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.collectionPeriodFrom}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.collectionPeriodTo.label" default="Collection Period To" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.collectionPeriodTo}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.collectors.label" default="Collectors" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${metadataInstance.collectors}" var="c">
-                                    <li><g:link controller="user" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.dataAccess.label" default="Data Access" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "dataAccess")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.dataType.label" default="Data Type" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "dataType")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.datasetName.label" default="Dataset Name" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "datasetName")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.dateCreated.label" default="Date Created" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.dateCreated}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.description.label" default="Description" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "description")}</td>
-                            
-                        </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="metadata.embargo.label" default="Embargo" /></td>
                             
@@ -145,41 +183,7 @@
                             </td>
                             
                         </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.key.label" default="Key" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "key")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.lastUpdated.label" default="Last Updated" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.lastUpdated}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.licence.label" default="Licence" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "licence")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.points.label" default="Points" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${metadataInstance.points}" var="p">
-                                    <li><g:link controller="point" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
-                            
-                        </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="metadata.publications.label" default="Publications" /></td>
                             
@@ -199,21 +203,20 @@
                             <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "researchCodes")}</td>
                             
                         </tr>
-                    
+
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.serviceKey.label" default="Service Key" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: metadataInstance, field: "serviceKey")}</td>
-                            
+                            <td valign="top" class="name"><g:message code="metadata.points.label" default="Points" /></td>
+
+                            <td valign="top" style="text-align: left;" class="value">
+                                <ul>
+                                    <g:each in="${metadataInstance.points}" var="p">
+                                        <li><g:link controller="point" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
+                                    </g:each>
+                                </ul>
+                            </td>
+
                         </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.studentOwned.label" default="Student Owned" /></td>
-                            
-                            <td valign="top" class="value"><g:formatBoolean boolean="${metadataInstance?.studentOwned}" /></td>
-                            
-                        </tr>
-                    
+
                     </tbody>
                 </table>
             </div>
