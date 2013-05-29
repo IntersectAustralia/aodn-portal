@@ -157,5 +157,7 @@ databaseChangeLog = {
 	include file: '20130523-SL-MetadataChangeDescriptionToText.groovy'
 
 	include file: '20130523-SL-CreateMetadataPointAssociation.groovy'
+
+	include file: '20130527-add-a-new-filed-active-to-user.groovy'
 }
 

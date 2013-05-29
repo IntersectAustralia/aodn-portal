@@ -90,11 +90,11 @@
 
             <shiro:hasPermission permission="user:list">
                 <li class="controllerMenuItems"><g:link controller="user" >Users</g:link>
-                    <shiro:hasPermission permission="user:create">
-                        <span class="inline">
-                            <g:link controller="user" action="create" class="" >create</g:link>
-                        </span>
-                    </shiro:hasPermission>
+                    %{--<shiro:hasPermission permission="user:create">--}%
+                        %{--<span class="inline">--}%
+                            %{--<g:link controller="user" action="create" class="" >create</g:link>--}%
+                        %{--</span>--}%
+                    %{--</shiro:hasPermission>--}%
                 </li>
             </shiro:hasPermission>
 

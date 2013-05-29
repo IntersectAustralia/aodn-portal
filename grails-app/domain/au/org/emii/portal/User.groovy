@@ -19,9 +19,16 @@ class User {
 	String familyName
 	Organization organization
 	UserRole role
+	boolean active
 
     // Relationships
     static hasMany = [ permissions: String ]
+
+	// defines cascading update-delete relation,
+	// save-delete a UserRole object will delete
+	// all the users beloginsTo that role as well,
+	// But non for the reverse.
+	static belongsTo = [role: UserRole]
 
     static constraints = {
 

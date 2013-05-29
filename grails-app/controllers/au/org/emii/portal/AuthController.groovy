@@ -86,11 +86,18 @@ class AuthController {
 				role = UserRole.findByName(UserRole.ADMINISTRATOR)
 			}
 
-			userInstance = new User(openIdUrl: aafToken, emailAddress: emailAddress, fullName: fullName,
+			userInstance = new User(openIdUrl: aafToken, emailAddress: emailAddress, fullName: fullName, active: true,
 									organization: organization, role: role, givenName: givenName, familyName: familyName)
 
             userInstance.save flush: true, failOnError: true
         }
+
+		if (!userInstance.active) {
+			log.info "User login failed. This user is not activated"
+			flash.message = "User login failed. This user is not activated"
+			redirect controller: "home"
+			return
+		}
 
         // Log the User in
         def authToken = new OpenIdAuthenticationToken( userInstance.id, userInstance.openIdUrl ) // Todo - DN: Remember me option
@@ -140,7 +147,7 @@ class AuthController {
 
             if ( !userInstance ) {
 
-                userInstance = new User( openIdUrl: verified.identifier )
+                userInstance = new User( openIdUrl: verified.identifier, active: true )
 
 	            // If there are no users to date make the first user an admin
 				if (User.count() < 1) {
@@ -150,6 +157,13 @@ class AuthController {
                     userInstance.role = UserRole.findByName(UserRole.RESEARCHER)
 				}
             }
+
+			if (!userInstance.active) {
+				log.info "User login failed. This user is not activated"
+				flash.message = "User login failed. This user is not activated"
+				redirect controller: "home"
+				return
+			}
 
             // Get values from attribute exchange
             def authResponse = verification.authResponse

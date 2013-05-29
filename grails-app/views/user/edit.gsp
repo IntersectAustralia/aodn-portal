@@ -44,7 +44,7 @@
                                     <label for="openIdUrl"><g:message code="user.AAF.label" default="AAF Token" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'openIdUrl', 'errors')}">
-                                    <g:textField name="openIdUrl" value="${userInstance?.openIdUrl}" />
+                                    <g:textField name="openIdUrl" value="${userInstance?.openIdUrl}" disabled="true" />
                                 </td>
                             </tr>
 
@@ -113,9 +113,15 @@
                         <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
                     </user:loggedInUserInRole>
 
-                    <user:loggedInUserInRole role="Administrator">
-                        <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
-                    </user:loggedInUserInRole>
+                    %{--<user:loggedInUserInRole role="Administrator">--}%
+
+                        %{--<g:if test="${userInstance?.active}">--}%
+                            %{--<span class="button"><g:actionSubmit class="delete" action="activateAndDeactivate" value="Deactivate" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                            %{--<span class="button"><g:actionSubmit class="save" action="activateAndDeactivate" value="Activate" /></span>--}%
+                        %{--</g:else>--}%
+                    %{--</user:loggedInUserInRole>--}%
                 </div>
             </g:form>
         </div>

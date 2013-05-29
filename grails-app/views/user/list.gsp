@@ -89,6 +89,8 @@
                             <g:sortableColumn property="fullName" title="${message(code: 'user.fullName.label', default: 'Name')}" />
 
                             <g:sortableColumn property="role" title="${message(code: 'user.role.label', default: 'Role')}" />
+
+                            <g:sortableColumn property="active" title="${message(code: 'user.active.label', default: 'IsActive')}" />
                         </tr>
                     </thead>
                     <tbody>
@@ -105,9 +107,9 @@
 
                                 <td>${fieldValue(bean: userInstance, field: "fullName")}</td>
 
-                                %{--<td>${fieldValue(bean: userInstance, field: "permissions")}</td>--}%
-
                                 <td>${fieldValue(bean: userInstance, field: "role")}</td>
+
+                                <td>${fieldValue(bean: userInstance, field: "active")}</td>
                             </tr>
                         </g:each>
                     </tbody>

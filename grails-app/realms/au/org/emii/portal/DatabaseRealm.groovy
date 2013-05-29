@@ -44,6 +44,12 @@ class DatabaseRealm {
 			return false
 		}
 
+		if (!user.active) {
+
+			log.error "Called isPermitted() but User for principal: '$principal' is not activated"
+			return false
+		}
+
 		def permissions = user.permissions
 
 		// Try each of the permissions found and see whether any of

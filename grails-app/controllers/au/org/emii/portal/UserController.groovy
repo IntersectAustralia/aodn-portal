@@ -9,6 +9,7 @@ package au.org.emii.portal
 
 import grails.converters.JSON
 import org.apache.commons.collections.ListUtils
+import org.hibernate.criterion.DetachedCriteria
 
 class UserController {
 
@@ -128,18 +129,29 @@ class UserController {
         }
     }
 
-    def delete = {
+    def activateAndDeactivate = {
         def userInstance = User.get(params.id)
         if (userInstance) {
-			if (!validateUpdatePermission(userInstance)) return
+			if (!validateActivationPermission(userInstance, !userInstance.active)) return
+
+			userInstance.active = !userInstance.active
 
             try {
-                userInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
+                userInstance.save(flush: true)
+
+				if (userInstance.active) {
+					flash.message = "${message(code: 'default.activated.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
+				} else {
+					flash.message = "${message(code: 'default.deactivated.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
+				}
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
+                if (userInstance.active) {
+					flash.message = "${message(code: 'default.not.activated.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
+				} else {
+					flash.message = "${message(code: 'default.not.deactivated.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
+				}
                 redirect(action: "show", id: params.id)
             }
         }
@@ -259,5 +271,21 @@ class UserController {
 	private boolean isSelfUpdate( User userInstance) {
 		User currentUser = User.current()
 		return currentUser?.id == userInstance?.id
+	}
+
+	private boolean validateActivationPermission(User userInstance, boolean activate) {
+		User currentUser = User.current()
+		if (UserRole.ADMINISTRATOR.equalsIgnoreCase( currentUser?.role?.name ) && !isSelfUpdate(userInstance)) {
+			return true
+		} else {
+			if (activate) {
+				flash.message = "${message(code: 'default.activated.not.permitted.message', args: [params.id])}"
+			} else {
+				flash.message = "${message(code: 'default.deactivated.not.permitted.message', args: [params.id])}"
+			}
+
+			redirect(action: "show", id: userInstance.id)
+			return false
+		}
 	}
 }
