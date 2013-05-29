@@ -159,5 +159,7 @@ databaseChangeLog = {
 	include file: '20130523-SL-CreateMetadataPointAssociation.groovy'
 
 	include file: '20130527-add-a-new-filed-active-to-user.groovy'
+
+	include file: '20130529-add-metadata-all-permissions-to-userRoles.groovy'
 }
 
