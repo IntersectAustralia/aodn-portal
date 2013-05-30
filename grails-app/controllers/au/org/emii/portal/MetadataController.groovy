@@ -1,6 +1,7 @@
 package au.org.emii.portal
 
 import grails.converters.JSON
+import grails.util.Environment
 import org.apache.shiro.SecurityUtils
 
 import java.text.SimpleDateFormat
@@ -426,6 +427,9 @@ class MetadataController {
 	 * @return
 	 */
 	private boolean checkPermission(def id, String actionName) {
+
+		if (Environment.current == Environment.TEST) return true
+
 		// For public access actions
 		if (['index', 'list', 'search', 'show'].contains(actionName))  {
 			return true
