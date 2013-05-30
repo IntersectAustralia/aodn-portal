@@ -225,7 +225,15 @@ class Metadata {
 
 	def afterUpdate() {
 		if (datasetPath && datasetPath.length() > 0) {
+			metadataPath = datasetPath.replace(".csv", ".ifo")
 			metadataService.updateCollectionAndPartyRecords(this)
+		}
+	}
+
+	def afterDelete() {
+		if (datasetPath && datasetPath.length() > 0) {
+			metadataService.deleteCollectionAndPartyRecords(this)
+			metadataService.deleteCsvAndIfoFiles(this)
 		}
 	}
 }

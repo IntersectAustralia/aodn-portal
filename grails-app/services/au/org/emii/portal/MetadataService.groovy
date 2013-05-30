@@ -1,10 +1,6 @@
 package au.org.emii.portal
 
 import groovy.xml.MarkupBuilder
-import org.springframework.web.context.request.RequestContextHolder
-
-import javax.servlet.http.HttpSession
-import java.text.SimpleDateFormat
 
 class MetadataService {
 
@@ -15,15 +11,36 @@ class MetadataService {
 	static COMPLIANTPARTYPATH = DATASETPATH + "ptyRecords/"
 
 	public void updateCollectionAndPartyRecords(Metadata metadata) {
-		updateColletionDescriptionRecord(metadata)
+		updateColletionDescriptionRecord(metadata, true)
 		updateCompliantPartyRecords(metadata)
+	}
+
+	public void deleteCollectionAndPartyRecords(Metadata metadata) {
+		// update collection records only, party record will last forever.
+		updateColletionDescriptionRecord(metadata, false)
+	}
+
+	public void deleteCsvAndIfoFiles(Metadata metadata) {
+		String csvFileName = DATASETPATH + metadata.datasetPath
+
+		File csvfile = new File(csvFileName)
+		if (csvfile && csvfile.exists()) {
+			csvfile.delete()
+		}
+
+		String ifoFileName = DATASETPATH + metadata.metadataPath
+
+		File ifofile = new File(ifoFileName)
+		if (ifofile && ifofile.exists()) {
+			ifofile.delete()
+		}
 	}
 
 	private String getCollectionFileName(Metadata metadata) {
 		return COLLECTIONPATH + "www.sydney.edu.au%2Fsho%2Fcol%2F" + metadata.id + ".xml"
 	}
 
-	private void updateColletionDescriptionRecord(Metadata metadata) {
+	private void updateColletionDescriptionRecord(Metadata metadata, boolean isUpdate) {
 		File dir = new File(COLLECTIONPATH)
 		if(!dir || !dir.exists()) {
 			dir.mkdir()
@@ -36,8 +53,10 @@ class MetadataService {
 			file.delete()
 		}
 
-		def writer = createColRecordXml(metadata)
-		writeToFile(fileName, writer)
+		if (isUpdate) {
+			def writer = createColRecordXml(metadata)
+			writeToFile(fileName, writer)
+		}
 	}
 
 	private StringWriter createColRecordXml(Metadata metadata) {

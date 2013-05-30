@@ -1,21 +1,33 @@
 package au.org.emii.portal
 
 import grails.converters.JSON
+import org.apache.shiro.SecurityUtils
+
 import java.text.SimpleDateFormat
 
 class MetadataController {
     static allowedMethods = [canEdit: "GET", downloadDataset: "GET", downloadMetadata: "GET", search: "GET", save: "POST", update: "POST", delete: "POST"]
 
     def index = {
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
         redirect(action: "list", params: params)
     }
 
     def list = {
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         [metadataInstanceList: Metadata.list(params), metadataInstanceTotal: Metadata.count()]
     }
 
     def create = {
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
+
 		def grailsApplication
         
 		// A "default" metadata, which is used to get id for key and populate default value to DB
@@ -60,7 +72,15 @@ class MetadataController {
     }
 
     def save = {
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
+
         def metadataInstance = Metadata.get(params.id)
+
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
 		
 		if (params.grantedUsers == 'Enter name of user here') {
 			params.remove('grantedUsers')
@@ -87,6 +107,10 @@ class MetadataController {
     }
 
 	def show = {
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
+
         def metadataInstance = Metadata.get(params.id)
         if (!metadataInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
@@ -98,6 +122,10 @@ class MetadataController {
     }
 
     def edit = {
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
+
         def metadataInstance = Metadata.get(params.id)
         if (!metadataInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
@@ -109,6 +137,10 @@ class MetadataController {
     }
 
     def update = {
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
+
         def metadataInstance = Metadata.get(params.id)
         if (metadataInstance) {
             if (params.version) {
@@ -140,8 +172,10 @@ class MetadataController {
 		if (!params.embargo || params.grantedUsers == 'Enter name of user here') {
 			params.remove('grantedUsers')
 			params.remove('embargo')
+			params.remove('embargoExpiryDate')
 			metadata.grantedUsers.clear()
 			metadata.embargo = false
+			metadata.embargoExpiryDate = null
 		}
 
 		if (params.collectors == 'Enter name of the collector here') {
@@ -174,6 +208,10 @@ class MetadataController {
 	}
 
 	def delete = {
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
+
         def metadataInstance = Metadata.get(params.id)
         if (metadataInstance) {
             try {
@@ -251,6 +289,10 @@ class MetadataController {
 	}
 
 	def search = {
+		if (!checkPermission(params.id, actionName)) {
+			return
+		}
+
 		def result = [:]
 		def records = []
 		def datasetUrl = ""
@@ -265,8 +307,11 @@ class MetadataController {
 
 		def c = Metadata.createCriteria()
 		def metadataInstanceList = c.list {
-			if (params.extFrom) ge("collectionPeriodFrom", sdf.parse(params.extFrom))
-			le("collectionPeriodTo", dateTo + 1)
+			if (params.extFrom) {
+				ge("collectionPeriodFrom", sdf.parse(params.extFrom))
+			}
+
+			le("collectionPeriodTo", dateTo)
 
 			if (params.eastBL && params.northBL && params.southBL && params.westBL) {
 				points {
@@ -307,6 +352,12 @@ class MetadataController {
     }
 
     def downloadDataset = {
+		Metadata metadata = Metadata.findByDatasetPath(params.dataset)
+
+		if (!checkPermission(metadata.id, actionName)) {
+			return
+		}
+
     	def datasetFile = new File("/aodn-portal/data/${params.dataset}")
     	response.setContentType("application/octet-stream")
         response.setHeader("Content-disposition", "attachment; filename=\"${params.filename}\"")
@@ -315,6 +366,12 @@ class MetadataController {
     }
 
     def downloadMetadata = {
+		Metadata metadata = Metadata.findByMetadataPath(params.metadata)
+
+		if (!checkPermission(metadata.id, actionName)) {
+			return
+		}
+
     	def metadataFile = new File("/aodn-portal/data/${params.metadata}")
     	response.setContentType("application/octet-stream")
         response.setHeader("Content-disposition", "attachment; filename=\"${params.filename}\"")
@@ -355,14 +412,68 @@ class MetadataController {
 		return 'false'
 	}
 
-	private boolean userInRoles(user, roles) {
-		def targetRoles = []
+	/**
+	 *  Admin: All
+	 *	Data Custodian: All
+	 *	Researcher with upload: All except delete
+	 *	collectors: All except create & delete
+	 *	 principal investigator: All except create & delete
+	 *	student owner: All except create & delete
+	 *	granted users: read (show, list, search & index) + download
+	 *	all others: read (show, list, search & index)
+	 * @param id metadata id
+	 * @param actionName actionName name
+	 * @return
+	 */
+	private boolean checkPermission(def id, String actionName) {
+		// For public access actions
+		if (['index', 'list', 'search', 'show'].contains(actionName))  {
+			return true
+		}
 
-		if (user) {
-	       	targetRoles = UserRole.findAll("from UserRole as b where b.name in (:roleNames)", [roleNames: roles])
+		// For non public access actions.
+		def passed = true
+		def metadataInstance = Metadata.get(id)
 
-	       	targetRoles.each() {
-	       		if (user.role.id == it.id) {
+		if( metadataInstance && ['downloadDataset', 'downloadMetadata'].contains(actionName)
+				&& metadataInstance.dataAccess == Metadata.dataAccessList().get(0).name) {
+			return true
+		}
+
+		def currentUser = User.current()
+
+		if (currentUser) {
+			if (userInRoles(currentUser, [UserRole.ADMINISTRATOR, UserRole.DATACUSTODIAN])) {
+				passed = true
+			} else if (userInRoles(currentUser, [UserRole.RESEARCHERWITHUPLOAD])) {
+				passed = ['create', 'downloadDataset', 'downloadMetadata', 'edit', 'save', 'update'].contains(actionName)
+			} else if ( metadataInstance?.collectors?.contains(currentUser) ||
+					metadataInstance?.principalInvestigator == currentUser ||
+					metadataInstance?.studentDataOwner == currentUser) {
+				passed = ['downloadDataset', 'downloadMetadata', 'edit', 'save', 'update'].contains(actionName)
+			} else if (metadataInstance?.embargo && metadataInstance?.embargoExpiryDate?.after(new Date()) && metadataInstance?.grantedUsers?.contains(currentUser))  {
+				passed = ['downloadDataset', 'downloadMetadata'].contains(actionName)
+			} else {
+				passed = false
+			}
+
+			if (!passed) {
+				flash.message = "${message(code: 'default.request.denied', args: [actionName])}"
+				redirect(action: "show", id: id)
+			}
+		} else {
+			flash.message = "${message(code: 'default.login.required')}"
+			redirect controller: "home"
+			passed = false
+		}
+
+		passed
+	}
+
+	private boolean userInRoles(User user, List<String> roles) {
+		if (user && user.active) {
+	       	for (String role : roles){
+	       		if (role == user.role.name) {
 	       			return true
 	       		}
 	       	}

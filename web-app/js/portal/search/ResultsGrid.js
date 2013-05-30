@@ -186,13 +186,13 @@ Portal.search.ResultsGrid = Ext.extend(Ext.grid.GridPanel, {
     var viewMetadataUrl;
 
     if (rec.get('source') == "Time Series") {
-      viewMetadataUrl = 'metadata/edit/' + rec.get('uuid'); 
+        viewMetadataUrl = 'metadata/show/' + rec.get('uuid');
+        window.open(viewMetadataUrl,"_self");
     }
     else {
-      viewMetadataUrl = Portal.app.config.catalogUrl + '/srv/en/metadata.show\?uuid\='+rec.get('uuid');
+        viewMetadataUrl = Portal.app.config.catalogUrl + '/srv/en/metadata.show\?uuid\='+rec.get('uuid');
+        Portal.common.BrowserWindow.open(viewMetadataUrl);
     }
-
-    Portal.common.BrowserWindow.open(viewMetadataUrl);
   },
   
   getMapAddClass: function(v, metadata, rec, rowIndex, colIndex, store) {

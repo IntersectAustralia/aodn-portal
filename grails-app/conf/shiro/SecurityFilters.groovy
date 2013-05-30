@@ -64,6 +64,17 @@ class SecurityFilters {
             }
         }
 
+		// Allow all actions except create. All the other action permission checking will be done in Controller.
+		metadataAccess(controller: "metadata", action: "downloadDataset|downloadMetadata|edit|index|list|save|search|show|update|delete") {
+			before = {
+
+				logRequest("metadata", controllerName, actionName)
+
+				// Allow all access
+				request.accessAllowed = true
+			}
+		}
+
         splashAccess(controller: "splash", action: "index|links|community") {
             before = {
 

@@ -53,17 +53,17 @@
 
                         </tr>
 
-                    <tr class="prop">
-                        <td valign="top" class="name"><g:message code="metadata.dateCreated.label" default="Date Created" /></td>
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.dateCreated.label" default="Date Created" /></td>
 
-                        <td valign="top" class="value"><g:formatDate date="${metadataInstance?.dateCreated}" /></td>
+                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.dateCreated}" /></td>
 
-                    </tr>
+                        </tr>
 
-                    <tr class="prop">
-                        <td valign="top" class="name"><g:message code="metadata.lastUpdated.label" default="Last Updated" /></td>
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.lastUpdated.label" default="Last Updated" /></td>
 
-                        <td valign="top" class="value"><g:formatDate date="${metadataInstance?.lastUpdated}" /></td>
+                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.lastUpdated}" /></td>
 
                         </tr>
 
@@ -158,17 +158,21 @@
                         </tr>
 
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="metadata.embargoExpiryDate.label" default="Embargo Expiry Date" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${metadataInstance?.embargoExpiryDate}" /></td>
-                            
-                        </tr>
-
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="metadata.embargo.label" default="Embargo" /></td>
                             
                             <td valign="top" class="value"><g:formatBoolean boolean="${metadataInstance?.embargo}" /></td>
                             
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="metadata.embargoExpiryDate.label" default="Embargo Expiry Date" /></td>
+
+                            <td valign="top" class="value">
+                                <g:if test="${metadataInstance?.embargo}">
+                                    <g:formatDate date="${metadataInstance?.embargoExpiryDate}" />
+                                </g:if>
+                            </td>
+
                         </tr>
                     
                         <tr class="prop">

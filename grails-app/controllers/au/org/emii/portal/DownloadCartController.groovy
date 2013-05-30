@@ -27,6 +27,34 @@ class DownloadCartController {
 
         def newEntries = JSON.parse( params.newEntries as String )
 
+		// check download permission
+		for(JSON entry : newEntries) {
+			def passed = true
+
+			def metadataInstance = Metadata.get(entry.get('rec_uuid'))
+
+			if (metadataInstance && metadataInstance.dataAccess == Metadata.dataAccessList().get(0).name) {}
+			else {
+				def currentUser = User.current()
+				if (currentUser) {
+					if (!currentUser.active || !(currentUser.role.name == UserRole.ADMINISTRATOR ||
+							currentUser.role.name == UserRole.DATACUSTODIAN ||
+							currentUser.role.name == UserRole.RESEARCHERWITHUPLOAD ||
+							metadataInstance?.collectors?.contains(currentUser) ||
+							metadataInstance?.principalInvestigator == currentUser ||
+							metadataInstance?.studentDataOwner == currentUser ||
+							(metadataInstance?.embargo && metadataInstance?.embargoExpiryDate?.after(new Date()) && metadataInstance?.grantedUsers?.contains(currentUser)))) {
+
+						render text: "${message(code: 'default.request.denied', args: [""])}", status: 401
+						return
+					}
+				} else {
+					render text: "${message(code: 'default.login.required', args: [""])}", status: 403
+					return
+				}
+			}
+		}
+
         def cart = _getCart()
 
         cart.addAll newEntries.toArray()

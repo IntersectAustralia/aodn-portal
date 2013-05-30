@@ -323,7 +323,7 @@
     <td valign="top"
         class="value ${hasErrors(bean: metadataInstance, field: 'embargo', 'errors')}">
         <g:checkBox name="embargo" value="${metadataInstance?.embargo}" onClick="toggleEmbargoParams(this);"/>
-        Embargo the dataset
+        Embargo this dataset
     </td>
 </tr>
 

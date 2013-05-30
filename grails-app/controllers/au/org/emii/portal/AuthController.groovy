@@ -37,7 +37,7 @@ class AuthController {
 	 * The real login action is logon. And SP monitors /auth/logon url all the time.
 	 */
 	def login = {
-		flash.message = "You need to login first to do this request."
+		flash.message = "${message(code: 'default.login.required')}"
 		redirect controller: "home"
 	}
 
@@ -226,7 +226,7 @@ class AuthController {
     }
 
     def unauthorized = {
-		flash.message = "You do not have permission to do this request"
+		flash.message = "${message(code: 'default.request.denied', args: [""])}"
         redirect controller: "home"
     }
 
