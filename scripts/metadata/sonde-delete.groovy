@@ -144,6 +144,6 @@ private void removeFromFoi(String foiId, String[] attrs) {
 	def timestamp = "${attrs[DATE]} ${attrs[TIME]}"
 
 	for (phenomenon in WATER_TEMPERATURE..BP) {
-		sql.execute("DELETE FROM observation WHERE time_stamp='" + timestamp + "' and procedure_id='urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1' and feature_of_interest_id='" + foiId + "' and phenomenon_id='" + phenomena[phenomenon] + "' and offering_id='GAUGE_HEIGHT'")
+		sql.execute("DELETE FROM observation WHERE time_stamp=to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH:MI:SS') and procedure_id='urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1' and feature_of_interest_id='" + foiId + "' and phenomenon_id='" + phenomena[phenomenon] + "' and offering_id='GAUGE_HEIGHT'")
 	}
 }
