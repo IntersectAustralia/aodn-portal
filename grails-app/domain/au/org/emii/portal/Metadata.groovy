@@ -232,8 +232,7 @@ class Metadata {
 
 	def afterDelete() {
 		if (datasetPath && datasetPath.length() > 0) {
-			metadataService.deleteCollectionAndPartyRecords(this)
-			metadataService.deleteCsvAndIfoFiles(this)
+			metadataService.deleteDataSet(this)
 		}
 	}
 }

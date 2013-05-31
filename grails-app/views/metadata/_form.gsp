@@ -267,7 +267,7 @@
         class="value ${hasErrors(bean: metadataInstance, field: 'collectors', 'errors')}">
         <g:select style="width: 250px;" name="collectors" id="collectors"
                   optionValue="fullName" optionKey="id"
-                  from="${users}"
+                  from="${au.org.emii.portal.User.list()}"
                   value="${metadataInstance?.collectors}"
                   multiple="true"/>
     </td>
@@ -279,7 +279,7 @@
         class="value ${hasErrors(bean: metadataInstance, field: 'principalInvestigator', 'errors')}">
         <g:select style="width: 300px;" name="principalInvestigator.id" id="principalInvestigator"
                   optionValue="fullName" optionKey="id"
-                  from="${users}"
+                  from="${au.org.emii.portal.User.list()}"
                   value="${metadataInstance?.principalInvestigator?.id}"
                   noSelection="['': 'Select one...']"/>
     </td>
@@ -303,7 +303,7 @@
         class="value ${hasErrors(bean: metadataInstance, field: 'studentDataOwner', 'errors')}">
         <g:select style="width: 300px;" name="studentDataOwner.id" id="studentDataOwner"
                   optionValue="fullName" optionKey="id"
-                  from="${users}"
+                  from="${au.org.emii.portal.User.list()}"
                   value="${metadataInstance?.studentDataOwner?.id}"
                   noSelection="['': 'Select one...']"/>
 
@@ -345,7 +345,7 @@
         class="value ${hasErrors(bean: metadataInstance, field: 'grantedUsers', 'errors')}">
         <g:select style="width: 200px;" name="grantedUsers" id="grantedUsers"
                   optionValue="fullName" optionKey="id"
-                  from="${users}"
+                  from="${au.org.emii.portal.User.list()}"
                   value="${metadataInstance?.grantedUsers}"
                   multiple="true"/>
         <font class="hint">

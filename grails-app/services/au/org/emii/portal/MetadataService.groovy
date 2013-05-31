@@ -15,12 +15,50 @@ class MetadataService {
 		updateCompliantPartyRecords(metadata)
 	}
 
-	public void deleteCollectionAndPartyRecords(Metadata metadata) {
+	public void deleteDataSet(Metadata metadata) {
+		deleteSOSDBData(metadata)
+		deleteCollectionAndPartyRecords(metadata)
+		deleteCsvAndIfoFiles(metadata)
+	}
+
+	private void deleteSOSDBData(Metadata metadata) {
+		def database = 'sosdb' // 52north.org SOS server database name
+		def groovy = """/usr/bin/which groovy""".execute().text.trim()
+
+		def dataType = "sonde"
+		if("Sonde survey" == metadata.dataType) {
+			dataType = "sonde"
+		} else if ("Nutrient sample" == metadata.dataType) {
+			dataType = "nutrient"
+		} else if ("Carbon Dioxide survey" == metadata.dataType) {
+			dataType = "carbondioxide"
+		} else {
+			return
+		}
+
+		def scriptFileName = dataType + "-delete"
+		def datasetFile = metadata.datasetPath
+
+		def command = """${groovy} /aodn-portal/scripts/${scriptFileName}.groovy /aodn-portal/data/${datasetFile} ${database}"""
+		log.debug(command)
+
+		def proc
+
+		try {
+			proc = command.execute()                 // Call *execute* on the string
+			proc.waitFor()                           // Wait for the command to finish
+		}
+		catch(e) {
+			log.debug(e.message)
+		}
+	}
+
+	private void deleteCollectionAndPartyRecords(Metadata metadata) {
 		// update collection records only, party record will last forever.
 		updateColletionDescriptionRecord(metadata, false)
 	}
 
-	public void deleteCsvAndIfoFiles(Metadata metadata) {
+	private void deleteCsvAndIfoFiles(Metadata metadata) {
 		String csvFileName = DATASETPATH + metadata.datasetPath
 
 		File csvfile = new File(csvFileName)
