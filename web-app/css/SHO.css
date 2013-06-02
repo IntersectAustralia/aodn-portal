@@ -119,6 +119,8 @@ input, select, textarea {
 #logo {
     margin: 3px 5px;
     float: left;
+    width: 200px;
+    height: 94px;
 }
 
 .footer {
