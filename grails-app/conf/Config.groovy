@@ -19,7 +19,7 @@ import javax.naming.InitialContext
 // if(System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
-grails.config.locations = [FederationConfig]
+grails.config.locations = [AuthenticationMethod]
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
@@ -100,12 +100,9 @@ environments {
 		grails.resources.debug = true
 
         // URLs
-	grails.serverURL = "http://localhost:8080/$appName"
-	spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
-	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
-	openIdProvider.url = "https://openid.emii.org.au/login"
-
-        facetedSearch.enabled = false
+		grails.serverURL = "http://localhost:8080/$appName"
+		spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
+		wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 
         grails {
             mail {
@@ -116,6 +113,9 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
+
+		// can be either "OpenID" Or "AAF".
+//		authentication.method = "OpenID"
     }
 
     test {
@@ -131,13 +131,10 @@ environments {
     production {
 
 	    // URLs
-	grails.serverURL = "http://staging.dc2b.intersect.org.au"
-	spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
-	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
-	wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
-	shibboleth.url = "https://staging.dc2b.intersect.org.au/Shibboleth.sso"
-
-        facetedSearch.enabled = false
+		grails.serverURL = "http://staging.dc2b.intersect.org.au"
+		spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
+		wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
+		wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
 
         grails {
             mail {
@@ -146,16 +143,18 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
+
+		// can be either "OpenID" Or "AAF".
+//		authentication.method = "AAF"
     }
 
     qa {
 
-	    // URLs
-	grails.serverURL = "http://qa.dc2b.intersect.org.au"
-	spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
-	wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
-	wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
-	shibboleth.url = "https://qa.dc2b.intersect.org.au/Shibboleth.sso"
+		// URLs
+		grails.serverURL = "http://qa.dc2b.intersect.org.au"
+		spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
+		wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
+		wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
 
         facetedSearch.enabled = false
 
@@ -166,6 +165,9 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
+
+		// can be either "OpenID" Or "AAF".
+//		authentication.method = "AAF"
     }
 }
 
