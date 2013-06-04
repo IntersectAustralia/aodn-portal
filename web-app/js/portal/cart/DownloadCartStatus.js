@@ -145,7 +145,7 @@ function _handleFailureAndShow( resp ) {
     console.log( 'Server-side failure: \'' + resp.responseText + '\' (status: ' + resp.status + ')' );
 
     window.alert(resp.status + " : " + resp.responseText);
-    _updateCount("?");
+//    _updateCount("?");
     _showCartControl();
     _flashUI();
 }
@@ -155,7 +155,7 @@ function _handleFailureAndHide( resp ) {
     console.log( 'Server-side failure: \'' + resp.responseText + '\' (status: ' + resp.status + ')' );
 
     window.alert(resp.status + " : " + resp.responseText);
-    _updateCount( "?" );
+//    _updateCount( "?" );
     _hideCartControl();
     _flashUI();
 }
