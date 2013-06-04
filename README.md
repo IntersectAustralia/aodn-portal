@@ -78,7 +78,7 @@ Portal has a few collaborating applications that you may also want to deploy
 * [Geoserver](http://geoserver.org/)
 * [An OpenID provider](http://openid.net/)
 * [AAF Authentication Service Provider (SHO only)](http://shibboleth.net)
-* [JOAI - Data Provide/Harvestor](http://www.dlese.org/dds/services/joai_software.jsp)
+* [JOAI - Data Provider/Harvester](http://www.dlese.org/dds/services/joai_software.jsp)
 
 If you want to mimic the AODN portal searching capabilities then you should consider deploying an instance of
 [spatial search](https://github.com/aodn/spatial-search) note that spatial search has a dependency on a specific
