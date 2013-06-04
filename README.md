@@ -66,6 +66,10 @@ your configuration externally via an environment context variable named ```aodn.
 example [AODN config here](https://github.com/aodn/aodn-portal-config) and modify as required. The example should be
 descriptive enough to get you up and running however you can always shoot questions at us via our contact email.
 
+## Configuring Portal Authentication Method (OpenID Or AAF)
+To configure Portal Authentication Method, you can modify [AODN authentication config here](https://github.com/IntersectAustralia/aodn-portal/blob/master/grails-app/conf/AuthenticationMethod.groovy)
+and modify as required. The provided configuration hould be descriptive enough to get you up and running however you have to set up OR get a working AAF Service Provider to use AAF as authentication Method.
+
 ### Collaborating Applications
 
 Portal has a few collaborating applications that you may also want to deploy
