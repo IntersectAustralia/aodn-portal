@@ -9,6 +9,7 @@ You can view the portal in action at the following locations;
 * [AODN](http://portal.aodn.org.au) the main AODN portal
 * [IMOS](http://imos.aodn.org.au) the [Integrated Marine Observation Systems](http://www.imos.org.au) portal
 * [WAODN](http://wa.aodn.org.au) a Western Australia-focused portal
+* [SHO](http://www.sydney.edu.au/sho) a Sydney Harbour Observatory-focused portal which is managed by The University of Sydney
 
 ## Features
 
@@ -18,8 +19,15 @@ You can view the portal in action at the following locations;
 * Save and share data visualisations.
 * Subset and aggregate multiple datasets into a single file for download.
 * Filter data before download.
-* OpenID authentication.
+* OpenID authentication (except SHO).
 * Advanced spatial search that ensures results have features in the region of interest.  Not just a bounding box intersection.
+* AAF authentication (SHO only).
+* User Role permission setting.
+* Support activate and deactivate users.
+* Upload time-serious dataset and which is searchable and downloadable.
+* Create, list, update, delete metadata of uploaded dataset.
+* Create party record and collection record xml files for uploaded datasets which are harvestable.
+* Add User organisation.
 
 ## Quick Navigation
 
@@ -64,7 +72,9 @@ Portal has a few collaborating applications that you may also want to deploy
 
 * [GeoNetwork](http://geonetwork-opensource.org/)
 * [Geoserver](http://geoserver.org/)
-* [An OpenID provider](http://openid.net/)
+* [An OpenID provider (except SHO)](http://openid.net/)
+* [AAF Authentication Service Provider (SHO only)](http://shibboleth.net)
+* [JOAI - Data Provide/Harvestor](http://www.dlese.org/dds/services/joai_software.jsp)
 
 If you want to mimic the AODN portal searching capabilities then you should consider deploying an instance of
 [spatial search](https://github.com/aodn/spatial-search) note that spatial search has a dependency on a specific
