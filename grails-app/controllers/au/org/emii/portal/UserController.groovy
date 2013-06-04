@@ -13,7 +13,7 @@ import org.hibernate.criterion.DetachedCriteria
 
 class UserController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", activateAndDeactivate: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
