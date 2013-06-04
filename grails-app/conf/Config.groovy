@@ -113,9 +113,6 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
-
-		// can be either "OpenID" Or "AAF".
-//		authentication.method = "OpenID"
     }
 
     test {
@@ -143,9 +140,6 @@ environments {
                 props = ["mail.smtp.auth":"false"]
             }
         }
-
-		// can be either "OpenID" Or "AAF".
-//		authentication.method = "AAF"
     }
 
     qa {
@@ -166,8 +160,6 @@ environments {
             }
         }
 
-		// can be either "OpenID" Or "AAF".
-//		authentication.method = "AAF"
     }
 }
 
