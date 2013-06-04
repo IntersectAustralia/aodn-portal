@@ -349,7 +349,7 @@
                   value="${metadataInstance?.grantedUsers}"
                   multiple="true"/>
         <font class="hint">
-            Hint: for the embargo to never expire leave the embargo expiry empty<br/><br/>
+            Hint: For the embargo to never expire, leave the embargo expiry empty.<br/><br/>
             To grant access to this dataset, enter the users name in the text box above!
         </font>
     </td>
