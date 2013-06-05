@@ -33,8 +33,16 @@ class DownloadCartController {
 			for(JSON entry : newEntries) {
 				def passed = true
 
-				def metadataInstance = Metadata.get(entry.get('rec_uuid'))
+				def id
+                try {
+                    id = Long.getLong(entry.get('rec_uuid'))
+                }
+                catch (Exception e) {
+                    break
+                }
 
+				// Do download permission checking.
+				def metadataInstance = Metadata.get(id)
 				if (metadataInstance && metadataInstance.dataAccess == Metadata.dataAccessList().get(0).name) {}
 				else {
 					def currentUser = User.current()

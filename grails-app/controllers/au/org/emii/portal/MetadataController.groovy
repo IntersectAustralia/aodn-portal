@@ -355,6 +355,11 @@ class MetadataController {
     def downloadDataset = {
 		Metadata metadata = Metadata.findByDatasetPath(params.dataset)
 
+	    if (metadata == null) {
+		    render text: "No Dataset file was found, it may be deleted already!", status: 404
+		    return
+	    }
+
 		if (!checkPermission(metadata.id, actionName)) {
 			return
 		}
@@ -368,6 +373,11 @@ class MetadataController {
 
     def downloadMetadata = {
 		Metadata metadata = Metadata.findByMetadataPath(params.metadata)
+
+	    if (metadata == null) {
+		    render text: "No Metadata file was found, it may be deleted already!", status: 404
+		    return
+	    }
 
 		if (!checkPermission(metadata.id, actionName)) {
 			return
