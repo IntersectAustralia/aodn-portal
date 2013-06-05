@@ -19,15 +19,15 @@ You can view the portal in action at the following locations;
 * Save and share data visualisations.
 * Subset and aggregate multiple datasets into a single file for download.
 * Filter data before download.
-* OpenID authentication (except SHO).
-* Advanced spatial search that ensures results have features in the region of interest.  Not just a bounding box intersection.
+* OpenID authentication.
 * AAF authentication (SHO only).
 * User Role permission setting.
-* Support activate and deactivate users.
-* Upload time-serious dataset and which is searchable and downloadable.
-* Create, list, update, delete metadata of uploaded dataset.
-* Create party record and collection record xml files for uploaded datasets which are harvestable.
 * Add User organisation.
+* Advanced spatial search that ensures results have features in the region of interest.  Not just a bounding box intersection.
+* Support activate and deactivate users.
+* Upload time-serious datasets.
+* CRUD operations on metadata of datasets.
+* Create party record and collection record xml files for uploaded datasets which are harvestable.
 
 ## Quick Navigation
 
@@ -66,15 +66,19 @@ your configuration externally via an environment context variable named ```aodn.
 example [AODN config here](https://github.com/aodn/aodn-portal-config) and modify as required. The example should be
 descriptive enough to get you up and running however you can always shoot questions at us via our contact email.
 
+## Configuring Portal Authentication Method (OpenID Or AAF)
+To configure Portal Authentication Method, you can modify [AODN authentication config here](https://github.com/IntersectAustralia/aodn-portal/blob/master/grails-app/conf/AuthenticationMethod.groovy)
+and modify as required. The provided configuration hould be descriptive enough to get you up and running however you have to set up OR get a working AAF Service Provider to use AAF as authentication Method.
+
 ### Collaborating Applications
 
 Portal has a few collaborating applications that you may also want to deploy
 
 * [GeoNetwork](http://geonetwork-opensource.org/)
 * [Geoserver](http://geoserver.org/)
-* [An OpenID provider (except SHO)](http://openid.net/)
+* [An OpenID provider](http://openid.net/)
 * [AAF Authentication Service Provider (SHO only)](http://shibboleth.net)
-* [JOAI - Data Provide/Harvestor](http://www.dlese.org/dds/services/joai_software.jsp)
+* [JOAI - Data Provider/Harvester](http://www.dlese.org/dds/services/joai_software.jsp)
 
 If you want to mimic the AODN portal searching capabilities then you should consider deploying an instance of
 [spatial search](https://github.com/aodn/spatial-search) note that spatial search has a dependency on a specific

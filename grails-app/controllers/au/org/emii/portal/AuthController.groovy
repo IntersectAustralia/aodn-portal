@@ -42,15 +42,11 @@ class AuthController {
 	}
 
     def logon = {
-	switch (Environment.current) {
-    	    case Environment.DEVELOPMENT:
-                _authenticateWithOpenId(false)
-                break
-            case Environment.PRODUCTION:
-            case Environment.CUSTOM:
-                forward action: "verifyResponseAAF"
-                break
-        }
+		if("${grailsApplication.config.authentication.aaf}" == "${grailsApplication.config.authentication.method}") {
+			forward action: "verifyResponseAAF"
+		} else {
+			_authenticateWithOpenId(false)
+		}
     }
 
     def verifyResponseAAF = {
@@ -213,16 +209,11 @@ class AuthController {
     def logOut = {
        	SecurityUtils.subject?.logout()
 
-	switch (Environment.current) {
-    	    case Environment.DEVELOPMENT:
-        	// Log the user out of the application.
-		redirect(url: "${grailsApplication.config.openIdProvider.url}/logout")
-                break
-            case Environment.PRODUCTION:
-            case Environment.CUSTOM:
-		redirect(url: "${grailsApplication.config.shibboleth.url}/Logout")
-                break
-        }
+		if("${grailsApplication.config.authentication.aaf}" == "${grailsApplication.config.authentication.method}") {
+			redirect(url: "${grailsApplication.config.authentication.shibboleth.url}/Logout")
+		} else {
+			redirect(url: "${grailsApplication.config.authentication.openIdProvider.url}/logout")
+		}
     }
 
     def unauthorized = {
@@ -232,7 +223,7 @@ class AuthController {
 
 	def _authenticateWithOpenId(register) {
 
-		def openIdProviderUrl = grailsApplication.config.openIdProvider.url
+		def openIdProviderUrl = grailsApplication.config.authentication.openIdProvider.url
 		def portalUrl = grailsApplication.config.grails.serverURL
 
 		// Perform discovery on our OpenID provider
