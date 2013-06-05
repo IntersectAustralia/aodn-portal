@@ -1,51 +1,123 @@
-// Extract Carbon Dioxide Data from CSV file
+// Extract Nutrient Sample from CSV file
 // args[0]: CSV file path
 // args[1]: Database name(generated from grails environment)
 import static Constants.*
 import groovy.sql.Sql
 
-class Constants { 
-    // Carbon Dioxide Survey Data Schema
-    // Date,Time,Latitude,Longitude,Water temperature,Salinity,Plot,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
-    static final int              DATE = 0
-    static final int              TIME = 1
-    static final int          LATITUDE = 2
-    static final int         LONGITUDE = 3
-    static final int WATER_TEMPERATURE = 4
-    static final int          SALINITY = 5
-    static final int              PLOT = 6
-    static final int             RECNO = 7
-    static final int            MB_REF = 8
-    static final int          MBR_TEMP = 9
-    static final int            OXYGEN = 10
-    static final int           INPUT_D = 11
-    static final int           INPUT_E = 12
-    static final int           INPUT_F = 13
-    static final int           INPUT_G = 14
-    static final int           INPUT_H = 15
-    static final int              ATMP = 16
-    static final int        PROBE_TYPE = 17
+class Constants {
+    // Nutrient Survey Data Schema
+    // Date,Time,Latitude,Longitude,Water temperature,Sp Conductivity,Salinity,Secci Depth,Turbid+,PO4R,PO4R-P,TSS(Photo),Si,PO4,TP,Nitrite,Nitrate,NH4-N,TN,TSS (Grav),AFDW,Weathr Station Site,24 hr Rain,72 hr Rain,Tide,Cloud,Wind Direction,Wind Speed,eta,pH,Chlorophyll,Dosat,DO,Sampling Run comment,Code comment,VertLoc comment
+    static final int                 DATE = 0
+    static final int                 TIME = 1
+    static final int             LATITUDE = 2
+    static final int            LONGITUDE = 3
+    static final int    WATER_TEMPERATURE = 4
+    static final int      SP_CONDUCTIVITY = 5
+    static final int             SALINITY = 6
+    static final int          SECCI_DEPTH = 7
+    static final int        TURBIDITYPLUS = 8
+    static final int                 PO4R = 9
+    static final int               PO4R_P = 10
+    static final int            TSS_PHOTO = 11
+    static final int                   SI = 12
+    static final int                  PO4 = 13
+    static final int                   TP = 14
+    static final int              NITRITE = 15
+    static final int              NITRATE = 16
+    static final int                NH4_N = 17
+    static final int                   TN = 18
+    static final int             TSS_GRAV = 19
+    static final int                 AFDW = 20
+    static final int WEATHER_STATION_SITE = 21
+    static final int         RAINFALL_24H = 22
+    static final int         RAINFALL_72H = 23
+    static final int                 TIDE = 24
+    static final int                CLOUD = 25
+    static final int       WIND_DIRECTION = 26
+    static final int           WIND_SPEED = 27
+    static final int                  ETA = 28
+    static final int                   PH = 29
+    static final int          CHLOROPHYLL = 30
+    static final int                DOSAT = 31
+    static final int                   DO = 32
+    static final int SAMPLING_RUN_COMMENT = 33
+    static final int         CODE_COMMENT = 34
+    static final int      VERTLOC_COMMENT = 35
     }
 
 db = [url:"jdbc:postgresql://localhost:5432/${args[1]}", user:'aodn', password:'aodn', driver:'org.postgresql.Driver']
 sql = Sql.newInstance(db.url, db.user, db.password, db.driver)
 
-phenomena = [0, 0, 0, 0,
-             'urn:ogc:def:phenomenon:OGC:1.0.30:watertemperature',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:salinity',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:plot',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:recno',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:mbref',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:mbrtemp',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:oxygen',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:inputd',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:inpute',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:inputf',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:inputg',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:inputh',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:atmp',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:probetype'
-            ]
+phenomena = [
+    0, 0, 0, 0,
+    'urn:ogc:def:phenomenon:OGC:1.0.30:watertemperature',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:conductivity',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:salinity',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:depth',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:turbidity',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:phosphater',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:phosphaterp',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:totalsuspendedsolidsphoto',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:si',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:phosphate',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:tp',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:nitrite',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:nitrate',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:ammonium',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:totalnitrogen',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:totalsuspendedsolidsgrav',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:afdw',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:weatherstationsite',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:rainfall24h',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:rainfall72h',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:tide',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:cloud',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:winddirection',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:windspeed',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:eta',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:acidity',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:chlorophylla',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:dosat',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:do',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:sampleruncomment',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:codecomment',
+    'urn:ogc:def:phenomenon:OGC:1.0.30:vertloccomment'
+]
+phenomenaDataType = [
+    '', '', '', '',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'textType',
+    'numericType',
+    'numericType',
+    'textType',
+    'textType',
+    'textType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'numericType',
+    'textType',
+    'textType',
+    'textType'
+]
 
 def csvfile = new File(args[0])
 csvfile.eachLine { line, index ->
@@ -61,7 +133,7 @@ csvfile.eachLine { line, index ->
     if (index > 2) { // Ignore units line, start getting values
         String[] values = line.split(',')
         String foiId
-        
+
         try {
             foiId = getFoi(values)
         }
@@ -95,26 +167,44 @@ sql.close()
 System.exit(0) // quit normally
 
 private Boolean validateSchema(String[] attrs) {
-    // Date,Time,Latitude,Longitude,Water temperature,Salinity,Plot,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
+    // Date,Time,Latitude,Longitude,Water temperature,Sp Conductivity,Salinity,Secci Depth,Turbid+,PO4R,PO4R-P,TSS(Photo),Si,PO4,TP,Nitrite,Nitrate,NH4-N,TN,TSS (Grav),AFDW,Weather Station Site,24 hr Rain,72 hr Rain,Tide,Cloud,Wind Direction,Wind Speed,eta,pH,Chlorophyll,Dosat,DO,Sampling Run comment,Code comment,VertLoc comment
     assertion = true
     assertion = assertion && (attrs[DATE].equalsIgnoreCase('Date')) \
     && (attrs[TIME].equalsIgnoreCase('Time')) \
     && (attrs[LATITUDE].equalsIgnoreCase('Latitude')) \
     && (attrs[LONGITUDE].equalsIgnoreCase('Longitude')) \
     && (attrs[WATER_TEMPERATURE].equalsIgnoreCase('Water temperature')) \
+    && (attrs[SP_CONDUCTIVITY].equalsIgnoreCase('Sp Conductivity')) \
     && (attrs[SALINITY].equalsIgnoreCase('Salinity')) \
-    && (attrs[PLOT].equalsIgnoreCase('Plot')) \
-    && (attrs[RECNO].equalsIgnoreCase('RecNo')) \
-    && (attrs[MB_REF].equalsIgnoreCase('mb Ref')) \
-    && (attrs[MBR_TEMP].equalsIgnoreCase('mbR Temp')) \
-    && (attrs[OXYGEN].equalsIgnoreCase('Oxygen')) \
-    && (attrs[INPUT_D].equalsIgnoreCase('Input D')) \
-    && (attrs[INPUT_E].equalsIgnoreCase('Input E')) \
-    && (attrs[INPUT_F].equalsIgnoreCase('Input F')) \
-    && (attrs[INPUT_G].equalsIgnoreCase('Input G')) \
-    && (attrs[INPUT_H].equalsIgnoreCase('Input H')) \
-    && (attrs[ATMP].equalsIgnoreCase('ATMP')) \
-    && (attrs[PROBE_TYPE].equalsIgnoreCase('Probe Type'))
+    && (attrs[SECCI_DEPTH].equalsIgnoreCase('Secci Depth')) \
+    && (attrs[TURBIDITYPLUS].equalsIgnoreCase('Turbid+')) \
+    && (attrs[PO4R].equalsIgnoreCase('PO4R')) \
+    && (attrs[PO4R_P].equalsIgnoreCase('PO4R-P')) \
+    && (attrs[TSS_PHOTO].equalsIgnoreCase('TSS(Photo)')) \
+    && (attrs[SI].equalsIgnoreCase('Si')) \
+    && (attrs[PO4].equalsIgnoreCase('PO4')) \
+    && (attrs[TP].equalsIgnoreCase('TP')) \
+    && (attrs[NITRITE].equalsIgnoreCase('Nitrite')) \
+    && (attrs[NITRATE].equalsIgnoreCase('Nitrate')) \
+    && (attrs[NH4_N].equalsIgnoreCase('NH4-N')) \
+    && (attrs[TN].equalsIgnoreCase('TN')) \
+    && (attrs[TSS_GRAV].equalsIgnoreCase('TSS (Grav)')) \
+    && (attrs[AFDW].equalsIgnoreCase('AFDW')) \
+    && (attrs[WEATHER_STATION_SITE].equalsIgnoreCase('Weather Station Site')) \
+    && (attrs[RAINFALL_24H].equalsIgnoreCase('24 hr Rain')) \
+    && (attrs[RAINFALL_72H].equalsIgnoreCase('72 hr Rain')) \
+    && (attrs[TIDE].equalsIgnoreCase('Tide')) \
+    && (attrs[CLOUD].equalsIgnoreCase('Cloud')) \
+    && (attrs[WIND_DIRECTION].equalsIgnoreCase('Wind Direction')) \
+    && (attrs[WIND_SPEED].equalsIgnoreCase('Wind Speed')) \
+    && (attrs[ETA].equalsIgnoreCase('eta')) \
+    && (attrs[PH].equalsIgnoreCase('pH')) \
+    && (attrs[CHLOROPHYLL].equalsIgnoreCase('Chlorophyll')) \
+    && (attrs[DOSAT].equalsIgnoreCase('Dosat')) \
+    && (attrs[DO].equalsIgnoreCase('DO')) \
+    && (attrs[SAMPLING_RUN_COMMENT].equalsIgnoreCase('Sampling Run comment')) \
+    && (attrs[CODE_COMMENT].equalsIgnoreCase('Code comment')) \
+    && (attrs[VERTLOC_COMMENT].equalsIgnoreCase('VertLoc comment'))
 }
 
 private String getFoi(String[] attrs) {
@@ -143,13 +233,18 @@ private void addFoi(String foiId, String[] attrs) {
 }
 
 private void addToFoi(String foiId, String[] attrs) {
-    // INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id,phenomenon_id,offering_id,numeric_value) values ('2013-04-20 01:16', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', 'foi_1001','urn:ogc:def:phenomenon:OGC:1.0.30:waterlevel','GAUGE_HEIGHT','50.0'); 
+    // INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id,phenomenon_id,offering_id,numeric_value) values ('2013-04-20 01:16', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', 'foi_1001','urn:ogc:def:phenomenon:OGC:1.0.30:waterlevel','GAUGE_HEIGHT','50.0');
     // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'mm', '1','category', 'accuracy');
     // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'percent', '10','quantity', 'completeness');
 
     def timestamp = "${attrs[DATE]} ${attrs[TIME]}"
 
-    for (phenomenon in WATER_TEMPERATURE..PROBE_TYPE) {
-        sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, numeric_value) VALUES (to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH:MI:SS'), 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: 0) + "')")
-    } 
+    for (phenomenon in WATER_TEMPERATURE..VERTLOC_COMMENT) {
+        if (phenomenaDataType[phenomenon] == 'numericType') {
+            sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, numeric_value) VALUES (to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH:MI:SS'), 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: 0) + "')")
+        }
+        else if (phenomenaDataType[phenomenon] == 'textType') {
+            sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, text_value) VALUES (to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH:MI:SS'), 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: '') + "')")
+        }
+    }
 }
