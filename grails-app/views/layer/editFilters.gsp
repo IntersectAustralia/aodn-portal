@@ -38,7 +38,7 @@
     <body>
         <div class="nav">
         	<span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-          <div id="logo"></div>
+          %{--<div id="logo"></div>--}%
         </div>
 
         <div class="body">

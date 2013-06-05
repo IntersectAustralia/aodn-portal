@@ -18,7 +18,7 @@
     </head>
     <body>
         <div class="nav">
-          <div id="logo"></div>
+          %{--<div id="logo"></div>--}%
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
             <span class="menuButton"><a class="refresh" href="${createLink(uri: '/server/refreshList')}">Refresh</a></span>
         </div>
