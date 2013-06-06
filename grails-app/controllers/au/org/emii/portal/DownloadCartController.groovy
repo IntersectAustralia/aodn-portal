@@ -35,7 +35,7 @@ class DownloadCartController {
 
 				def id
                 try {
-                    id = Long.getLong(entry.get('rec_uuid'))
+                    id = Long.valueOf(entry.get('rec_uuid').toString())
                 }
                 catch (Exception e) {
                     break
