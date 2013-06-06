@@ -307,7 +307,7 @@ class MetadataController {
 		}
 
 		def c = Metadata.createCriteria()
-		def metadataInstanceList = c.list {
+		def metadataInstanceList = c.listDistinct {
 			if (params.extFrom) {
 				ge("collectionPeriodFrom", sdf.parse(params.extFrom))
 			}
