@@ -20,14 +20,20 @@ You can view the portal in action at the following locations;
 * Subset and aggregate multiple datasets into a single file for download.
 * Filter data before download.
 * OpenID authentication.
-* AAF authentication (SHO only).
-* User Role permission setting.
-* Add User organisation.
 * Advanced spatial search that ensures results have features in the region of interest.  Not just a bounding box intersection.
+
+#### New Features added in SHO
+* AAF authentication (SHO only).
+* Support Users from different organisations.
 * Support activate and deactivate users.
-* Upload time-serious datasets.
-* CRUD operations on metadata of datasets.
-* Create party record and collection record xml files for uploaded datasets which are harvestable.
+* Enable users to manage access to specific data sets
+* Enable users to describe research data collections.
+* Ingest data feeds from different data providers.
+* Support CRUD operations on metadata of datasets.
+* Create metadata party record and collection record xml files for uploaded datasets, and make them available for harvesting via OAI-PMH.
+* Enable users to query the systems research data collections.
+* Enable users to download research data sets.
+* Enable the collection, description and storage of manually collected field data.
 
 ## Quick Navigation
 
