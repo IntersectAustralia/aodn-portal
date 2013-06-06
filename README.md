@@ -22,7 +22,7 @@ You can view the portal in action at the following locations;
 * OpenID authentication.
 * Advanced spatial search that ensures results have features in the region of interest.  Not just a bounding box intersection.
 
-### New Features added in SHO
+#### New Features added in SHO
 * AAF authentication (SHO only).
 * Support Users from different organisations.
 * Support activate and deactivate users.
