@@ -95,7 +95,7 @@ class DownloadCartController {
         def cart = _getCart()
 
         cart.each{
-            if (it.rec_uuid == uuid) {
+            if (String.valueOf(it.rec_uuid) == uuid) {
                 it.disableFlag = params.disableFlag.toBoolean()
             }
         }
