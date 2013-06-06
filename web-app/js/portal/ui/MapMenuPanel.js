@@ -100,7 +100,8 @@ Portal.ui.MapMenuPanel = Ext.extend(Ext.TabPanel, {
                             url: 'dataset/upload',
                             success: function(datasetsPanel, o) {
                                 msg("Success", o.result.message);
-                            	Ext.getCmp('mainHomePanel').load('metadata/create')
+                            	Ext.getCmp('mainHomePanel').load('metadata/create');
+								Ext.getCmp('mainTabPanel').setActiveTab(0);
                             },
 			    failure: function(datasetsPanel, o) {
 				msg("Failure", o.result.message);
