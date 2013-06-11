@@ -47,7 +47,7 @@ Firstly we welcome contributions so please feel free to fork the project, addres
 a pull request.
 
 * [Building From Source](#building-from-source)
-* [Can I Get A Pre-Built War?](#can-i-get-a-pre-built-war-)
+* [Can I Get A Pre-Built War?](#can-i-get-a-pre-built-war)
 
 #### Building From Source
 
