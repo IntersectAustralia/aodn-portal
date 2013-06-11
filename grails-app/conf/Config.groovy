@@ -104,11 +104,12 @@ environments {
 		spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
 		wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 
+	    facetedSearch.enabled = true
+
         grails {
             mail {
                 host = "localhost"
                 port = 25
-
                 username = "username"
                 props = ["mail.smtp.auth":"false"]
             }
@@ -132,7 +133,7 @@ environments {
 		spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
 		wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
 		wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
-
+	    facetedSearch.enabled = true
         grails {
             mail {
                 host = "localhost"

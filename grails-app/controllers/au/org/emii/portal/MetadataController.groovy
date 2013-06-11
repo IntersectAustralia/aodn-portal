@@ -325,11 +325,11 @@ class MetadataController {
 		metadataInstanceList.each { metadata ->
 			links = []
 
-			datasetUrl = createLink(action: "downloadDataset", params: [dataset: metadata.datasetPath, filename: "${metadata.datasetName}.csv"], absolute: true)
+			datasetUrl = createLink(action: "downloadDataset", params: [dataset: metadata.datasetPath, filename: "${metadata.datasetName}.csv"], absolute: true, base: "${grailsApplication.config.grails.serverURL}")
 			links << generateLink(datasetUrl, "${metadata.datasetName} - Dataset(CSV)")
 
 			if (metadata.metadataPath != null) {
-				metadataUrl = createLink(action: "downloadMetadata", params: [metadata: metadata.metadataPath, filename: "${metadata.datasetName}.txt"], absolute: true)
+				metadataUrl = createLink(action: "downloadMetadata", params: [metadata: metadata.metadataPath, filename: "${metadata.datasetName}.txt"], absolute: true, base: "${grailsApplication.config.grails.serverURL}")
 				links << generateLink(metadataUrl, "${metadata.datasetName} - Metadata(TXT)")
 			}
 
