@@ -9,7 +9,7 @@ You can view the portal in action at the following locations;
 * [AODN](http://portal.aodn.org.au) the main AODN portal
 * [IMOS](http://imos.aodn.org.au) the [Integrated Marine Observation Systems](http://www.imos.org.au) portal
 * [WAODN](http://wa.aodn.org.au) a Western Australia-focused portal
-* [SHO](http://www.sydney.edu.au/sho) a Sydney Harbour Observatory-focused portal which is managed by The University of Sydney
+* [SHO](http://sho.sydney.edu.au) a Sydney Harbour Observatory-focused portal which is managed by The University of Sydney
 
 ## Features
 
