@@ -92,7 +92,7 @@ minimum version of GeoNetwork. If you cannot deploy at least that version then y
 search for performance reasons and using GeoNetwork directly for spatial extent searching. Note that at time of writing
 this means that your results may not be as fine grained as available via spatial search.
 
-## Getting Started   (How Do I Drive This Thing?)
-
+## Getting Started 
+(How Do I Drive This Thing?)
 Read the [Getting Started guide](https://github.com/aodn/aodn-portal/wiki/Getting-Started) on the wiki
 
