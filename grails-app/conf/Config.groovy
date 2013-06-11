@@ -129,10 +129,10 @@ environments {
     production {
 
 	    // URLs
-		grails.serverURL = "http://staging.dc2b.intersect.org.au"
-		spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
-		wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
-		wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
+		grails.serverURL = "http://sho.sydney.edu.au"
+		spatialsearch.url = "http://sho.sydney.edu.au/geonetwork/srv/eng/q"
+		wmsScanner.url = "http://sho.sydney.edu.au/wmsscanner/"
+		wfsScanner.url = "http://sho.sydney.edu.au/wfsscanner/"
 	    facetedSearch.enabled = true
         grails {
             mail {
@@ -142,6 +142,22 @@ environments {
             }
         }
     }
+
+	staging {
+		// URLs
+		grails.serverURL = "http://staging.dc2b.intersect.org.au"
+		spatialsearch.url = "http://geo.intersect.org.au:8080/geonetwork/srv/eng/q"
+		wmsScanner.url = "http://staging.dc2b.intersect.org.au/wmsscanner/"
+		wfsScanner.url = "http://staging.dc2b.intersect.org.au/wfsscanner/"
+		facetedSearch.enabled = true
+		grails {
+			mail {
+				host = "localhost"
+				port = 25
+				props = ["mail.smtp.auth":"false"]
+			}
+		}
+	}
 
     qa {
 

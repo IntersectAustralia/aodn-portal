@@ -25,6 +25,11 @@ environments {
 		authentication.method = "AAF"
 	}
 
+	staging {
+		// can be either "OpenID" Or "AAF".
+		authentication.method = "AAF"
+	}
+
 	qa {
 		// can be either "OpenID" Or "AAF".
 		authentication.method = "AAF"
