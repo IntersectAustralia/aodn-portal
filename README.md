@@ -39,7 +39,7 @@ You can view the portal in action at the following locations;
 
 * [Get Portal](#getting-your-hands-on-portal)
 * [Configuration](#configuring-portal)
-* [How Do I Drive This Thing?](#getting-started-how-do-i-drive-this-thing-)
+* [How Do I Drive This Thing?](Getting Started (How Do I Drive This Thing?))
 
 ### Getting Your Hands on Portal
 
