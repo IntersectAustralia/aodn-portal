@@ -1009,3 +1009,13 @@ a.styledButton:hover {
 
 /* Bug #9 - show blank tiles on image load error. */
 .olImageLoadError { display: none; }
+
+a.logo {
+    margin: 3px 6px 0 0;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    zoom: 1;
+    vertical-align: top;
+    background: url(../images/intersect_logo.png) center;
+}

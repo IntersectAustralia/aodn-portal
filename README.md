@@ -9,7 +9,7 @@ You can view the portal in action at the following locations;
 * [AODN](http://portal.aodn.org.au) the main AODN portal
 * [IMOS](http://imos.aodn.org.au) the [Integrated Marine Observation Systems](http://www.imos.org.au) portal
 * [WAODN](http://wa.aodn.org.au) a Western Australia-focused portal
-* [SHO](http://www.sydney.edu.au/sho) a Sydney Harbour Observatory-focused portal which is managed by The University of Sydney
+* [SHO](http://sho.sydney.edu.au) a Sydney Harbour Observatory-focused portal which is managed by The University of Sydney
 
 ## Features
 
@@ -39,7 +39,7 @@ You can view the portal in action at the following locations;
 
 * [Get Portal](#getting-your-hands-on-portal)
 * [Configuration](#configuring-portal)
-* [How Do I Drive This Thing?](#getting-started-how-do-i-drive-this-thing-)
+* [How Do I Drive This Thing?](#getting-started)
 
 ### Getting Your Hands on Portal
 
@@ -47,7 +47,7 @@ Firstly we welcome contributions so please feel free to fork the project, addres
 a pull request.
 
 * [Building From Source](#building-from-source)
-* [Can I Get A Pre-Built War?](#can-i-get-a-pre-built-war-)
+* [Can I Get A Pre-Built War?](#can-i-get-a-pre-built-war)
 
 #### Building From Source
 
@@ -92,7 +92,7 @@ minimum version of GeoNetwork. If you cannot deploy at least that version then y
 search for performance reasons and using GeoNetwork directly for spatial extent searching. Note that at time of writing
 this means that your results may not be as fine grained as available via spatial search.
 
-## Getting Started (How Do I Drive This Thing?)
-
+## Getting Started 
+(How Do I Drive This Thing?)
 Read the [Getting Started guide](https://github.com/aodn/aodn-portal/wiki/Getting-Started) on the wiki
 

@@ -7,6 +7,16 @@
 
 --%>
 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-16667092-20', 'sydney.edu.au');
+  ga('send', 'pageview');
+
+</script>
 
 <div class="p-centre">
 	<div class="p-centre-item" style="width:520px">
@@ -58,6 +68,14 @@
 
         <div class="spacer floatLeft homePanelWidget"  style="width:370px">
             ${ cfg.footerContent }
+        </div>
+
+        <div class="spacer floatRight homePanelWidget"  style="width:370px">
+            <a class="logo" href="http://www.intersect.org.au/attribution-policy" target="_about"></a>
+            Developed by
+            <a href="http://www.intersect.org.au/attribution-policy" target="_about">
+                Intersect Australia
+            </a>
         </div>
     </div>
 </div>
