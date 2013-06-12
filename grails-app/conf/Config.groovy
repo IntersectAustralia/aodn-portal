@@ -143,6 +143,23 @@ environments {
         }
     }
 
+    uat {
+
+	    // URLs
+		grails.serverURL = "http://uat.sho.sydney.edu.au"
+		spatialsearch.url = "http://uat.sho.sydney.edu.au/geonetwork/srv/eng/q"
+		wmsScanner.url = "http://uat.sho.sydney.edu.au/wmsscanner/"
+		wfsScanner.url = "http://uat.sho.sydney.edu.au/wfsscanner/"
+	    facetedSearch.enabled = false
+        grails {
+            mail {
+                host = "localhost"
+                port = 25
+                props = ["mail.smtp.auth":"false"]
+            }
+        }
+    }
+
 	staging {
 		// URLs
 		grails.serverURL = "http://staging.dc2b.intersect.org.au"
