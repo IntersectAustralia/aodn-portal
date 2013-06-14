@@ -9,6 +9,10 @@
 class UrlMappings {
 
 	static mappings = {
+		"/rest/metadata"(controller:"metadata") {
+			action = [POST: "updateNetCDFMetadata"]
+		}
+
 		"/$controller/$action?/$id?"{
 			constraints {
 				// apply constraints here

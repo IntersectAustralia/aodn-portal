@@ -109,6 +109,12 @@
    max-width: 30px;
 }
 
+.p-result-info-netcdf {
+	background-image: url(../images/information-icon-netcdf.png);
+	background-repeat: no-repeat;
+	max-width: 30px;
+}
+
 .p-result-show-link {
    background-image: url(../images/link-icon.png);
    background-repeat: no-repeat;

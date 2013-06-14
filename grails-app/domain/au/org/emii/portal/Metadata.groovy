@@ -223,16 +223,45 @@ class Metadata {
 		[[id: 0, name: 'Collector'], [id: 1, name: 'Principal investigator']]
 	}
 
-	def afterUpdate() {
-		if (datasetPath && datasetPath.length() > 0) {
-			metadataPath = datasetPath.replace(".csv", ".ifo")
-			metadataService.updateCollectionAndPartyRecords(this)
+	boolean aNetCDFMetadata() {
+		return "Sydney Harbour Model" ==  dataType
+	}
+
+	static Metadata getNetCDFMetadataRecord() {
+		def metadataInstance = findByDataType("Sydney Harbour Model")
+
+		if (!metadataInstance) {
+			metadataInstance = new Metadata(
+					collectionPeriodFrom: new Date() + 10000,
+					collectionPeriodTo: new Date() - 10000,
+					dataAccess: 'Public',
+					dataType: 'Sydney Harbour Model',
+					datasetName: 'Thredds dataset',
+					description: 'Thredds NetCDF dataset',
+					embargo: false,
+					key: '123456',
+					licence: 0,
+					researchCodes: [],
+					serviceKey: 'www.sydney.edu.au/sho/svc/1',
+					studentOwned: false,
+			)
+
+			metadataInstance.save(flush: true)
+			metadataInstance.key = "www.sydney.edu.au/sho/col/${metadataInstance.id}"
 		}
+
+		return metadataInstance
+	}
+
+	def afterUpdate() {
+		if (!aNetCDFMetadata())  {
+			metadataPath = datasetPath.replace(".csv", ".ifo")
+		}
+		metadataService.updateCollectionAndPartyRecords(this)
+
 	}
 
 	def afterDelete() {
-		if (datasetPath && datasetPath.length() > 0) {
-			metadataService.deleteDataSet(this)
-		}
+		metadataService.deleteDataSet(this)
 	}
 }

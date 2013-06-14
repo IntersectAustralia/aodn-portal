@@ -65,7 +65,7 @@ class SecurityFilters {
         }
 
 		// Allow all actions except create. All the other action permission checking will be done in Controller.
-		metadataAccess(controller: "metadata", action: "downloadDataset|downloadMetadata|edit|index|list|save|search|show|update|delete") {
+		metadataAccess(controller: "metadata", action: "downloadDataset|downloadMetadata|edit|index|list|save|search|show|update|delete|updateNetCDFMetadata") {
 			before = {
 
 				logRequest("metadata", controllerName, actionName)

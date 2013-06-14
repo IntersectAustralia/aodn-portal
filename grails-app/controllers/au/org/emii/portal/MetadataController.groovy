@@ -215,15 +215,20 @@ class MetadataController {
 
         def metadataInstance = Metadata.get(params.id)
         if (metadataInstance) {
-            try {
-                metadataInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
+	        if (metadataInstance.aNetCDFMetadata()) {
+		        flash.message = "${message(code: 'default.not.deleted.message', args: ['NetCDF Metadata', params.id])}"
+		        redirect(action: "show", id: params.id)
+	        } else {
+		        try {
+			        metadataInstance.delete(flush: true)
+			        flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
+			        redirect(action: "list")
+		        }
+		        catch (org.springframework.dao.DataIntegrityViolationException e) {
+			        flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
+			        redirect(action: "show", id: params.id)
+		        }
+	        }
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'metadata.label', default: 'Metadata'), params.id])}"
@@ -323,26 +328,29 @@ class MetadataController {
 		}
 
 		metadataInstanceList.each { metadata ->
-			links = []
+			// filter netCDF metadata record, because it will be return from Thredds.
+			if (!metadata?.aNetCDFMetadata()) {
+				links = []
 
-			datasetUrl = createLink(action: "downloadDataset", params: [dataset: metadata.datasetPath, filename: "${metadata.datasetName}.csv"], absolute: true, base: "${grailsApplication.config.grails.serverURL}")
-			links << generateLink(datasetUrl, "${metadata.datasetName} - Dataset(CSV)")
+				datasetUrl = createLink(action: "downloadDataset", params: [dataset: metadata.datasetPath, filename: "${metadata.datasetName}.csv"], absolute: true, base: "${grailsApplication.config.grails.serverURL}")
+				links << generateLink(datasetUrl, "${metadata.datasetName} - Dataset(CSV)")
 
-			if (metadata.metadataPath != null) {
-				metadataUrl = createLink(action: "downloadMetadata", params: [metadata: metadata.metadataPath, filename: "${metadata.datasetName}.txt"], absolute: true, base: "${grailsApplication.config.grails.serverURL}")
-				links << generateLink(metadataUrl, "${metadata.datasetName} - Metadata(TXT)")
+				if (metadata.metadataPath != null) {
+					metadataUrl = createLink(action: "downloadMetadata", params: [metadata: metadata.metadataPath, filename: "${metadata.datasetName}.txt"], absolute: true, base: "${grailsApplication.config.grails.serverURL}")
+					links << generateLink(metadataUrl, "${metadata.datasetName} - Metadata(TXT)")
+				}
+
+				records << [
+						'title': metadata.datasetName,
+						'abstract': metadata.dataType,
+						'uuid': metadata.id,
+						'links': links,
+						'source': 'Time Series',
+						'canEdit': canEdit(metadata.id),
+						'canDownload': '',
+						'bbox': ''
+				]
 			}
-
-			records << [
-				'title': metadata.datasetName,
-				'abstract': metadata.dataType,
-                'uuid': metadata.id,
-                'links': links,
-                'source': 'Time Series',
-                'canEdit': canEdit(metadata.id),
-                'canDownload': '',
-                'bbox': ''
-			]
 		}
 
 		result = [
@@ -389,6 +397,37 @@ class MetadataController {
         response.outputStream << metadataFile.newInputStream()
         return
     }
+
+	def updateNetCDFMetadata = {
+		if (params.token && params.token =="3F2504E0-4F89-11D3-9A0C-0305E82C3301") {
+			try {
+				W3CDateFormat dateFormat = new W3CDateFormat(W3CDateFormat.Pattern.MILLISECOND)
+				def sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss")
+				String collectionFromDate = dateFormat.format(sdf.parse(params.collection_from_date))
+				String collectionToDate = dateFormat.format(sdf.parse(params.collection_to_date))
+
+				def metadataInstance = Metadata.getNetCDFMetadataRecord()
+				if (metadataInstance.collectionPeriodFrom > dateFormat.parse(collectionFromDate)) {
+					metadataInstance.collectionPeriodFrom = dateFormat.parse(collectionFromDate)
+				}
+
+				if (metadataInstance.collectionPeriodTo < dateFormat.parse(collectionToDate)) {
+					metadataInstance.collectionPeriodTo = dateFormat.parse(collectionToDate)
+				}
+
+				metadataInstance.save(flush: true)
+
+				render text: "Dataset updated!", status: 200
+			}
+			catch (Exception e) {
+				render text: e.getLocalizedMessage(), status: 500
+			}
+		} else {
+			render text: "Not authorised!", status: 401
+		}
+
+		return
+	}
 
     private Map generateLink(url, title) {
 		return [href: "${url}", name: "${title}", protocol: "WWW:LINK-1.0-http--downloaddata", title: "${title}", type: "text/html"]
@@ -439,6 +478,13 @@ class MetadataController {
 	private boolean checkPermission(def id, String actionName) {
 
 		if (Environment.current == Environment.TEST) return true
+
+		// get the right id for NetCDF dataset, this is a special case and there is only one metadata record for netcdf dataset.
+		if ("efdc" == id) {
+			Metadata netcdfMetadata = Metadata.getNetCDFMetadataRecord()
+			params.id = netcdfMetadata.id
+			id = params.id
+		}
 
 		// For public access actions
 		if (['index', 'list', 'search', 'show'].contains(actionName))  {

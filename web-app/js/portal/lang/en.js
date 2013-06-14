@@ -44,6 +44,7 @@ OpenLayers.Util.extend(OpenLayers.Lang.en, {
     descHeading: 'Description',
     actionsHeading: 'Actions',
     datasetInfo: 'Dataset information',
+	datasetInfoNetCDF: 'NetCDF Dataset information',
     showOnMinimap: "Show '${layerDesc}' on mini-map",
     addToMap: "Add '${layerDesc}' to map",
     layerSelectionWindowShowOnMinimap: "Show on mini-map",

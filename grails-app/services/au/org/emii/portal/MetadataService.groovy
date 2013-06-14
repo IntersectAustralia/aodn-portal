@@ -309,6 +309,11 @@ class MetadataService {
 	}
 
 	private String getLatitudeLongitudeValues(Metadata metadata) {
+		if (metadata?.aNetCDFMetadata()) {
+			// because there is only on lan/lat pair for netcdf metadata, so hard code at here.
+			return '-33.81262207031250,151.16793823242188'
+		}
+
 		def datasetFile = metadata.datasetPath
 		def csvfile = new File("${DATASETPATH}${datasetFile}")
 		StringBuffer result = new StringBuffer()

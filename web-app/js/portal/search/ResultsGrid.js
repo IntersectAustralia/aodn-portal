@@ -64,6 +64,13 @@ Portal.search.ResultsGrid = Ext.extend(Ext.grid.GridPanel, {
                      handler: this.onViewMetadata,
                      scope: this
                   },{
+					   getClass: this.getDatasetInfoNetCDFClass,
+					   tooltip: OpenLayers.i18n('datasetInfoNetCDF'),
+					   width: 35,
+					   height: 35,
+					   handler: this.onViewMetadataNetCDF,
+					   scope: this
+				   },{
                        getClass: this.getMapAddClass,
                        getTooltip: this.getAddMapTooltip,
                        width: 35,
@@ -185,16 +192,23 @@ Portal.search.ResultsGrid = Ext.extend(Ext.grid.GridPanel, {
     var rec = this.store.getAt(rowIndex);
     var viewMetadataUrl;
 
-    if (rec.get('source') == "Time Series") {
-        viewMetadataUrl = 'metadata/show/' + rec.get('uuid');
-        window.open(viewMetadataUrl,"_self");
-    }
-    else {
-        viewMetadataUrl = Portal.app.config.catalogUrl + '/srv/en/metadata.show\?uuid\='+rec.get('uuid');
-        Portal.common.BrowserWindow.open(viewMetadataUrl);
-    }
+	viewMetadataUrl = 'metadata/show/' + rec.get('uuid');
+	window.open(viewMetadataUrl,"_self");
   },
-  
+
+	onViewMetadataNetCDF: function(grid, rowIndex, colIndex) {
+		var rec = this.store.getAt(rowIndex);
+		var viewMetadataUrl;
+
+		if (rec.get('source') == "Time Series") {
+			window.alert("Error: This is not a NetCDF dataset!");
+		}
+		else {
+			viewMetadataUrl = Portal.app.config.catalogUrl + '/srv/en/metadata.show\?uuid\='+rec.get('uuid');
+			Portal.common.BrowserWindow.open(viewMetadataUrl);
+		}
+	},
+
   getMapAddClass: function(v, metadata, rec, rowIndex, colIndex, store) {
 	  if (this.getProtocolCount(rec.get('links'), Portal.app.config.metadataLayerProtocols) == 1) {
 		  return 'p-result-map-add';
@@ -437,6 +451,16 @@ Portal.search.ResultsGrid = Ext.extend(Ext.grid.GridPanel, {
     }
     
   },
+
+	getDatasetInfoNetCDFClass: function(v, metadata, rec, rowIndex, colIndex, store) {
+		if (rec.get('source') == 'Time Series') {
+			return 'p-result-disabled';
+		}
+		else {
+			return 'p-result-info-netcdf';
+		}
+
+	},
 });
 
 Ext.reg('portal.search.resultsgrid', Portal.search.ResultsGrid);

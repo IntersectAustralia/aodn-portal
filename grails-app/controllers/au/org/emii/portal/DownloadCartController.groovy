@@ -33,18 +33,16 @@ class DownloadCartController {
 			for(JSON entry : newEntries) {
 				def passed = true
 
-				def id
-                try {
-                    id = Long.valueOf(entry.get('rec_uuid').toString())
-                }
-                catch (Exception e) {
-                    break
-                }
+				def id = entry.get('rec_uuid').toString()
+				// get the right id for NetCDF dataset, this is a special case and there is only one metadata record for netcdf dataset.
+				if ("efdc" == id) {
+					Metadata netcdfMetadata = Metadata.getNetCDFMetadataRecord()
+					id = netcdfMetadata.id
+				}
 
 				// Do download permission checking.
-				def metadataInstance = Metadata.get(id)
-				if (metadataInstance && metadataInstance.dataAccess == Metadata.dataAccessList().get(0).name) {}
-				else {
+				def metadataInstance = Metadata.get(Long.valueOf(id))
+				if (!(metadataInstance && metadataInstance.dataAccess == Metadata.dataAccessList().get(0).name)) {
 					def currentUser = User.current()
 					if (currentUser) {
 						if (!currentUser.active || !(currentUser.role.name == UserRole.ADMINISTRATOR ||
