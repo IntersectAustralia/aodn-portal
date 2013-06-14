@@ -7,7 +7,7 @@ import org.apache.shiro.SecurityUtils
 import java.text.SimpleDateFormat
 
 class MetadataController {
-    static allowedMethods = [canEdit: "GET", downloadDataset: "GET", downloadMetadata: "GET", search: "GET", save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [canEdit: "GET", downloadDataset: "GET", downloadMetadata: "GET", search: "GET", save: "POST", update: "POST", delete: "POST", updateNetCDFMetadata: "POST"]
 
     def index = {
 		if (!checkPermission(params.id, actionName)) {
