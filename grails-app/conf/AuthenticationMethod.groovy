@@ -31,6 +31,16 @@ environments {
 		}
 	}
 
+	uat {
+		authentication {
+			// can be either "OpenID" Or "AAF".
+			authentication.method = "AAF"
+
+			// specify your url
+			authentication.shibboleth.url = "http://uat.sho.sydney.edu.au/Shibboleth.sso"
+		}
+	}
+
 	staging {
 		authentication {
 			// can be either "OpenID" Or "AAF".
