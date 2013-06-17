@@ -42,13 +42,25 @@ environments {
 
 	production {
 		dataSource {
-			jndiName = "java:comp/env/jdbc/aodnportal"
+			jndiName = "java:comp/env/jdbc/aodn_portal"
 		}
 	}
 
 	qa {
 		dataSource {
 			jndiName = "java:comp/env/jdbc/aodnportal-qa"
+		}
+	}
+
+	staging {
+		dataSource {
+			jndiName = "java:comp/env/jdbc/aodnportal"
+		}
+	}
+
+	uat {
+		dataSource {
+			jndiName = "java:comp/env/jdbc/aodn_portal"
 		}
 	}
 }
