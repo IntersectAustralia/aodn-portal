@@ -14,7 +14,7 @@ environments {
 			method = "OpenID"
 
 			// specify your url
-			authentication.openIdProvider.url = "https://openid.emii.org.au/login"
+			openIdProvider.url = "https://openid.emii.org.au/login"
 		}
 	}
 
@@ -24,40 +24,40 @@ environments {
 	production {
 		authentication {
 			// can be either "OpenID" Or "AAF".
-			authentication.method = "AAF"
+			method = "AAF"
 
 			// specify your url
-			authentication.shibboleth.url = "http://sho.sydney.edu.au/Shibboleth.sso"
+			shibboleth.url = "http://sho.sydney.edu.au/Shibboleth.sso"
 		}
 	}
 
 	uat {
 		authentication {
 			// can be either "OpenID" Or "AAF".
-			authentication.method = "AAF"
+			method = "AAF"
 
 			// specify your url
-			authentication.shibboleth.url = "http://uat.sho.sydney.edu.au/Shibboleth.sso"
+			shibboleth.url = "http://uat.sho.sydney.edu.au/Shibboleth.sso"
 		}
 	}
 
 	staging {
 		authentication {
 			// can be either "OpenID" Or "AAF".
-			authentication.method = "AAF"
+			method = "AAF"
 
 			// specify your url
-			authentication.shibboleth.url = "https://qa.dc2b.intersect.org.au/Shibboleth.sso"
+			shibboleth.url = "https://qa.dc2b.intersect.org.au/Shibboleth.sso"
 		}
 	}
 
 	qa {
 		authentication {
 			// can be either "OpenID" Or "AAF".
-			authentication.method = "AAF"
+			method = "AAF"
 
 			// specify your url
-			authentication.shibboleth.url = "https://qa.dc2b.intersect.org.au/Shibboleth.sso"
+			shibboleth.url = "https://qa.dc2b.intersect.org.au/Shibboleth.sso"
 		}
 	}
 }
