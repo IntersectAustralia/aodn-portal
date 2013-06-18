@@ -33,6 +33,7 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
+        mavenRepo "http://repo.grails.org/grails/plugins-releases"
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
@@ -52,6 +53,7 @@ grails.project.dependency.resolution = {
 		compile ":plugin-config:0.1.5"
 		compile ":quartz:0.4.2"
 		compile ":shiro:1.1.4"
+        compile ":clover:3.1.11"
 
 		build ":tomcat:1.3.7"
 	}
