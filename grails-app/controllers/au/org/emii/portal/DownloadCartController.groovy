@@ -33,9 +33,10 @@ class DownloadCartController {
 			for(JSON entry : newEntries) {
 				def passed = true
 
-				def id = entry.get('rec_uuid').toString()
+				String id = entry.get('rec_uuid').toString()
 				// get the right id for NetCDF dataset, this is a special case and there is only one metadata record for netcdf dataset.
-				if ("efdc" == id) {
+
+				if (!id.matches('''^[0-9]+$''')) {
 					Metadata netcdfMetadata = Metadata.getNetCDFMetadataRecord()
 					id = netcdfMetadata.id
 				}
