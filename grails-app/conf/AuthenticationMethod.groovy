@@ -27,7 +27,7 @@ environments {
 			method = "AAF"
 
 			// specify your url
-			shibboleth.url = "http://sho.sydney.edu.au/Shibboleth.sso"
+			shibboleth.url = "https://sho.sydney.edu.au/Shibboleth.sso"
 		}
 	}
 
@@ -37,7 +37,7 @@ environments {
 			method = "AAF"
 
 			// specify your url
-			shibboleth.url = "http://uat.sho.sydney.edu.au/Shibboleth.sso"
+			shibboleth.url = "https://uat.sho.sydney.edu.au/Shibboleth.sso"
 		}
 	}
 
@@ -47,7 +47,7 @@ environments {
 			method = "AAF"
 
 			// specify your url
-			shibboleth.url = "https://qa.dc2b.intersect.org.au/Shibboleth.sso"
+			shibboleth.url = "https://staging.dc2b.intersect.org.au/Shibboleth.sso"
 		}
 	}
 
