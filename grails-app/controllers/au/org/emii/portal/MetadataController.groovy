@@ -481,7 +481,7 @@ class MetadataController {
 		}
 
 		// get the right id for NetCDF dataset, this is a special case and there is only one metadata record for netcdf dataset.
-		if (!id.matches('''^[0-9]+$''')) {
+		if (!id.toString().matches('''^[0-9]+$''')) {
 			Metadata netcdfMetadata = Metadata.getNetCDFMetadataRecord()
 			params.id = netcdfMetadata.id
 			id = params.id
