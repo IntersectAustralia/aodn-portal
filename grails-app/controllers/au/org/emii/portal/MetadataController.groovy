@@ -75,10 +75,6 @@ class MetadataController {
 
         def metadataInstance = Metadata.get(params.id)
 
-		if (!checkPermission(params.id, actionName)) {
-			return
-		}
-		
 		if (params.grantedUsers == 'Enter name of user here') {
 			params.remove('grantedUsers')
 		}
@@ -475,16 +471,16 @@ class MetadataController {
 
 		if (Environment.current == Environment.TEST) return true
 
-		// For public access actions
-		if (['index', 'list', 'search', 'show'].contains(actionName))  {
-			return true
-		}
-
 		// get the right id for NetCDF dataset, this is a special case and there is only one metadata record for netcdf dataset.
-		if (!id.toString().matches('''^[0-9]+$''')) {
+		if (id && !id.toString().matches('''^[0-9]+$''')) {
 			Metadata netcdfMetadata = Metadata.getNetCDFMetadataRecord()
 			params.id = netcdfMetadata.id
 			id = params.id
+		}
+
+		// For public access actions
+		if (['index', 'list', 'search', 'show'].contains(actionName))  {
+			return true
 		}
 
 		// For non public access actions.
