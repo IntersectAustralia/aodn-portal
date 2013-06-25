@@ -259,5 +259,10 @@ catch (e) {
 }
 
 log4j = {
+
+	appenders {
+        'null' name: "stacktrace"
+    }
+    
     debug  'grails.app'
 }
