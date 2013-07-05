@@ -48,7 +48,7 @@
                 </div>
             </g:hasErrors>
 
-            <g:form method="post" >
+            <g:form action="update" >
                 %{--<g:hiddenField name="id" value="${metadataInstance?.id}" />--}%
                 <g:hiddenField name="version" value="${metadataInstance?.version}" />
                 <div class="dialog">
@@ -59,9 +59,8 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
-                </div>
+					<span class="button"><input type="button" name="update" class="update" value="${message(code: 'default.button.update.label', default: 'Update')}" onClick="validate(this.form);" /></span>
+				</div>
             </g:form>
         </div>
     </body>
