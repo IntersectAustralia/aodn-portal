@@ -111,7 +111,7 @@ class MetadataService {
 				"xsi:schemaLocation":"http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd") {
 			registryObject(group:"The University of Sydney") {
 				key(id)
-				originatingSource("www.sydney.edu.au/sho")
+				originatingSource("http://sho.sydney.edu.au")
 
 				def dateAccessioned = dateFormat.format(metadata.dateCreated)
 				def dateModified = dateFormat.format(metadata.lastUpdated)
@@ -149,7 +149,7 @@ class MetadataService {
 					rights() {
 
 						Map<String, String> rightsDescriptionMap = new HashMap<String, String>()
-						rightsDescriptionMap.put("Public", "This work is Open Access. Download from http://www.sydney.edu.au/sho.")
+						rightsDescriptionMap.put("Public", "This work is Open Access. Download from http://sho.sydney.edu.au.")
 						rightsDescriptionMap.put("Mediated", "Contact the manager of this dataset to discuss the terms and conditions of access.")
 						rightsDescriptionMap.put("Private", "Access to this dataset is restricted. Contact the manager of this dataset to discuss the terms and conditions of access.")
 
@@ -279,7 +279,7 @@ class MetadataService {
 				"xsi:schemaLocation":"http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd") {
 			registryObject(group:"The University of Sydney") {
 				key(id)
-				originatingSource("www.sydney.edu.au/sho")
+				originatingSource("http://sho.sydney.edu.au")
 				party(type:"person") {
 					identifier(type:"AAF-token", user.openIdUrl)
 					name(type:"primary") {
