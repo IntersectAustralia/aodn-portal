@@ -118,7 +118,7 @@ class MetadataService {
 				collection(type:"dataset", dateAccessioned:dateAccessioned, dateModified:dateModified) {
 
 					name(type:"primary") {
-						namePart(type:"title","Sydney Harbor Environmental Data Facility " + metadata.dataType + " Data " + metadata.id)
+						namePart(type:"title","Sydney Harbour Environmental Data Facility " + metadata.dataType + " Data " + metadata.id)
 					}
 
 					identifier(type:"local", metadata.id)
