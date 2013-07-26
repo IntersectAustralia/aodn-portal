@@ -70,19 +70,17 @@ csvfile.eachLine { line, index ->
 			removeFromFoi(foiId, values)
 		}
 		catch(Exception e) {
-			System.err << "ERROR: Duplicate observation at line: ${index}"
+			System.err << "ERROR: Failed to remove observation at line: ${index}"
 			System.exit(-4) // Duplicate observation error number: -4
 		}
 
-//		if (findFoi(foiId)) {
-//			try {
-//				removeFoi(foiId, values)
-//			}
-//			catch(Exception e) {
-//				System.err << "ERROR: Duplicate feature of interest at line: ${index}"
-//				System.exit(-3) // Duplicate feature of interest error number: -3
-//			}
-//		}
+		if (findFoi(foiId)) {
+			try {
+				removeFoi(foiId, values)
+			}
+			catch(Exception e) {
+			}
+		}
 	}
 
 }
@@ -144,6 +142,6 @@ private void removeFromFoi(String foiId, String[] attrs) {
 	def timestamp = "${attrs[DATE]} ${attrs[TIME]}"
 
 	for (phenomenon in WATER_TEMPERATURE..BP) {
-		sql.execute("DELETE FROM observation WHERE time_stamp=to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH:MI:SS') and procedure_id='urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1' and feature_of_interest_id='" + foiId + "' and phenomenon_id='" + phenomena[phenomenon] + "' and offering_id='GAUGE_HEIGHT'")
+		sql.execute("DELETE FROM observation WHERE time_stamp=to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH24:MI:SS') and procedure_id='urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1' and feature_of_interest_id='" + foiId + "' and phenomenon_id='" + phenomena[phenomenon] + "' and offering_id='GAUGE_HEIGHT'")
 	}
 }
