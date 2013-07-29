@@ -106,7 +106,7 @@ Portal.ui.AnimationPanel = Ext.extend(Ext.Panel, {
         
         this.setPosition(1, 0); // override with CSS later
         
-        Ext.MsgBus.subscribe('removeLayer', function() {
+        Ext.MsgBus.subscribe('removeLastLayer', function() {
             this.setVisible(false);
         }, this);
 

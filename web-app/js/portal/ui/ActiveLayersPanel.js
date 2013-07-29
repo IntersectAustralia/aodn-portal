@@ -87,7 +87,7 @@ Portal.ui.ActiveLayersPanel = Ext.extend(Ext.tree.TreePanel, {
             else { // No Layers left on map
 
                 this.setActiveNode(null);
-
+				Ext.MsgBus.publish("removeLastLayer", null);
                 Ext.MsgBus.publish("selectedLayerChanged", null);
             }
         }, this);
