@@ -138,7 +138,7 @@ private Boolean validateSchema(String[] attrs) {
     && (attrs[LONGITUDE].equalsIgnoreCase('Longitude')) \
     && (attrs[WATER_TEMPERATURE].equalsIgnoreCase('Water temperature')) \
     && (attrs[SALINITY].equalsIgnoreCase('Salinity')) \
-    && (attrs[PLOT].equalsIgnoreCase('Plot')) \
+    && (attrs[PLOT].equalsIgnoreCase('Co2')) \
     && (attrs[RECNO].equalsIgnoreCase('RecNo')) \
     && (attrs[MB_REF].equalsIgnoreCase('mb Ref')) \
     && (attrs[MBR_TEMP].equalsIgnoreCase('mbR Temp')) \
