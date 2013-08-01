@@ -156,7 +156,15 @@ csvfile.eachLine { line, index ->
         }
 
         try {
-            addToFoi(foiId, values)
+			// validation against Time.
+			String time = "${values[TIME]}"
+			if (!time || "24:00".compareTo(time) < 0 ) {
+				recover(lines)
+				System.err << "ERROR: Invalid time value at line: ${index}"
+				System.exit(-5) // Invalid time value error number: -5
+			} else {
+				addToFoi(foiId, values)
+			}
         }
         catch(Exception e) {
 			recover(lines)
