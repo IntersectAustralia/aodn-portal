@@ -1,3 +1,10 @@
+This is a fork of the AODN Portal for use by the Sydney Harbour Observatory  which is managed by The University of Sydney.
+
+The SHO customisations were built by [Intersect Australia](http://www.intersect.org.au/) in collaboration with the University of Sydney. The software development was funded by the [Australian National Data Service (ANDS)](http://ands.org.au). ANDS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy Program and the Education Investment Fund (EIF) Super Science Initiative.
+
+This code is licensed under the GNU GPL v3 license - see LICENSE.txt
+
+
 AODN Open Geospatial Portal
 ===========================
 
