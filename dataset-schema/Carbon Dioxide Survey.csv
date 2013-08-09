@@ -1,3 +1,3 @@
-Date,Time,Latitude,Longitude,Water temperature,Salinity,Plot,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
-dd/mm/yyyy,hh:mm:ss,,,Celsius degree,PSU,,,,,percent,,,,,,,
+Date,Time,Latitude,Longitude,Water temperature,Salinity,CO2,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
+dd/mm/yyyy,hh:mm:ss,,,Celsius degree,PSU,ppm,,,,percent,,,,,,,
 16/01/2013,07:11:00,-33.8450,151.2595,0,0,0,1,22.5,28.7,0,0,0,0,0,0,1016,0
