@@ -199,6 +199,11 @@ INSERT INTO phenomenon VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:plot', 'Plot',
 INSERT INTO phen_off VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:plot','GAUGE_HEIGHT');
 INSERT INTO proc_phen VALUES ('urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1','urn:ogc:def:phenomenon:OGC:1.0.30:plot');
 
+-- CO2
+INSERT INTO phenomenon VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:co2', 'CO2', 'ppm','numericType');
+INSERT INTO phen_off VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:co2','GAUGE_HEIGHT');
+INSERT INTO proc_phen VALUES ('urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1','urn:ogc:def:phenomenon:OGC:1.0.30:co2');
+
 -- RecNo
 INSERT INTO phenomenon VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:recno', 'Rec No', '','numericType');
 INSERT INTO phen_off VALUES ('urn:ogc:def:phenomenon:OGC:1.0.30:recno','GAUGE_HEIGHT');

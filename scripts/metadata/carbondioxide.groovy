@@ -6,14 +6,14 @@ import groovy.sql.Sql
 
 class Constants { 
     // Carbon Dioxide Survey Data Schema
-    // Date,Time,Latitude,Longitude,Water temperature,Salinity,Plot,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
+    // Date,Time,Latitude,Longitude,Water temperature,Salinity,CO2,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
     static final int              DATE = 0
     static final int              TIME = 1
     static final int          LATITUDE = 2
     static final int         LONGITUDE = 3
     static final int WATER_TEMPERATURE = 4
     static final int          SALINITY = 5
-    static final int              PLOT = 6
+    static final int               CO2 = 6
     static final int             RECNO = 7
     static final int            MB_REF = 8
     static final int          MBR_TEMP = 9
@@ -33,7 +33,7 @@ sql = Sql.newInstance(db.url, db.user, db.password, db.driver)
 phenomena = [0, 0, 0, 0,
              'urn:ogc:def:phenomenon:OGC:1.0.30:watertemperature',
              'urn:ogc:def:phenomenon:OGC:1.0.30:salinity',
-             'urn:ogc:def:phenomenon:OGC:1.0.30:plot',
+             'urn:ogc:def:phenomenon:OGC:1.0.30:co2',
              'urn:ogc:def:phenomenon:OGC:1.0.30:recno',
              'urn:ogc:def:phenomenon:OGC:1.0.30:mbref',
              'urn:ogc:def:phenomenon:OGC:1.0.30:mbrtemp',
@@ -139,7 +139,7 @@ private void recover(Map<Integer, String[]> lines) {
 }
 
 private Boolean validateSchema(String[] attrs) {
-    // Date,Time,Latitude,Longitude,Water temperature,Salinity,Plot,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
+    // Date,Time,Latitude,Longitude,Water temperature,Salinity,CO2,RecNo,mb Ref,mbR Temp,Oxygen,Input D,Input E,Input F,Input G,Input H,ATMP,Probe Type
     assertion = true
     assertion = assertion && (attrs[DATE].equalsIgnoreCase('Date')) \
     && (attrs[TIME].equalsIgnoreCase('Time')) \
@@ -147,7 +147,7 @@ private Boolean validateSchema(String[] attrs) {
     && (attrs[LONGITUDE].equalsIgnoreCase('Longitude')) \
     && (attrs[WATER_TEMPERATURE].equalsIgnoreCase('Water temperature')) \
     && (attrs[SALINITY].equalsIgnoreCase('Salinity')) \
-    && (attrs[PLOT].equalsIgnoreCase('Co2')) \
+    && (attrs[CO2].equalsIgnoreCase('CO2')) \
     && (attrs[RECNO].equalsIgnoreCase('RecNo')) \
     && (attrs[MB_REF].equalsIgnoreCase('mb Ref')) \
     && (attrs[MBR_TEMP].equalsIgnoreCase('mbR Temp')) \
