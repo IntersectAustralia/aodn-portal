@@ -42,9 +42,9 @@ Portal.search.filter.newDefaultInactiveFilterStore = function()
     if ( !Portal.app.config.searchUsingBboxByDefault )
         filters.push( this._boundingBoxFilterConfig() );
 
-    filters.push( this._keywordFilterConfig() );
-    filters.push( this._parameterFilterConfig() );
-    filters.push( this._organisationFilterConfig() );
+//    filters.push( this._keywordFilterConfig() );
+//    filters.push( this._parameterFilterConfig() );
+//    filters.push( this._organisationFilterConfig() );
     filters.push( this._downloadsFilterConfig() );
     filters.push( this._exactMatchFilterConfig() );
 
