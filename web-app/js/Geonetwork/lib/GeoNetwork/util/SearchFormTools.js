@@ -345,8 +345,9 @@ GeoNetwork.util.SearchFormTools = {
         return new Ext.form.TextField({
             name: 'E_any',
             id: 'E_any',
-            fieldLabel: OpenLayers.i18n("fullTextSearch"),
-            hideLabel: false
+//            fieldLabel: OpenLayers.i18n("fullTextSearch"),
+            hideLabel: false,
+			disabled: true
         });
     },
     /** api:method[getTitleField]
