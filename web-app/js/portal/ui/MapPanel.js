@@ -169,12 +169,12 @@ Portal.ui.MapPanel = Ext.extend(Portal.common.MapPanel, {
     },
 
     _findFeatureInfo:function (event) {
-        this.featureInfoPopup = new Portal.ui.FeatureInfoPopup({
-            map: this.map,
-            appConfig: this.appConfig,
-            maximisedPosition: { x: this.getPanelX(), y: this.getPanelY() }
-        });
-        this.featureInfoPopup.findFeatures(event);
+//        this.featureInfoPopup = new Portal.ui.FeatureInfoPopup({
+//            map: this.map,
+//            appConfig: this.appConfig,
+//            maximisedPosition: { x: this.getPanelX(), y: this.getPanelY() }
+//        });
+//        this.featureInfoPopup.findFeatures(event);
     },
 
     initMap:function () {
