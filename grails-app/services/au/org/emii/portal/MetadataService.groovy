@@ -304,7 +304,7 @@ class MetadataService {
 	private void writeToFile(String fileName, StringWriter writer) {
 		File file = new File(fileName)
 		file.createNewFile()
-		file.setWritable(true, false)
+		file.setWritable(true, true)
 		file.write(writer.toString())
 	}
 
