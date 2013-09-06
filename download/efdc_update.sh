@@ -8,7 +8,7 @@ PORTAL_ROOT="$2"
 if [ -s $EFDC_DIR/$EFDC_FILE ]; then
 	echo "Update metadata for $EFDC_DIR/$EFDC_FILE"
 	TIMESTAMP=`date --date='yesterday' +'%d-%m-%Y+%T'`
-	curl --verbose --request POST -d "collection_from_date=$TIMESTAMP&collection_to_date=$TIMESTAMP&token=3F2504E0-4F89-11D3-9A0C-0305E82C3301" $PORTAL_ROOT/metadata/updateNetCDFMetadata
+	curl -k --verbose --request POST -d "collection_from_date=$TIMESTAMP&collection_to_date=$TIMESTAMP&token=3F2504E0-4F89-11D3-9A0C-0305E82C3301" $PORTAL_ROOT/metadata/updateNetCDFMetadata
 else
 	echo "No update needed"
 fi

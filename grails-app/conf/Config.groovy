@@ -146,10 +146,10 @@ environments {
     uat {
 
 	    // URLs
-		grails.serverURL = "http://uat.sho.sydney.edu.au"
-		spatialsearch.url = "http://uat.sho.sydney.edu.au/geonetwork/srv/eng/q"
-		wmsScanner.url = "http://uat.sho.sydney.edu.au/wmsscanner/"
-		wfsScanner.url = "http://uat.sho.sydney.edu.au/wfsscanner/"
+		grails.serverURL = "https://uat.sho.sydney.edu.au"
+		spatialsearch.url = "https://uat.sho.sydney.edu.au/geonetwork/srv/eng/q"
+		wmsScanner.url = "https://uat.sho.sydney.edu.au/wmsscanner/"
+		wfsScanner.url = "https://uat.sho.sydney.edu.au/wfsscanner/"
 	    facetedSearch.enabled = false
         grails {
             mail {
