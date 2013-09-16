@@ -56,6 +56,7 @@ csvfile.eachLine { line, index ->
     }
 
     if (index > 2) { // Ignore units line, start getting values
+        if (line.endsWith(',')) line += '0'
         String[] values = line.split(',')
         String foiId
         
