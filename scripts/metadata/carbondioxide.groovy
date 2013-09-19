@@ -78,9 +78,9 @@ csvfile.eachLine { line, index ->
                 addFoi(foiId, values)
             }
             catch(Exception e) {
-				recover(lines)
-                System.err << "ERROR: Duplicate feature of interest at line: ${index}"
-                System.exit(-3) // Duplicate feature of interest error number: -3
+//				recover(lines)
+//                System.err << "ERROR: Duplicate feature of interest at line: ${index}"
+//                System.exit(-3) // Duplicate feature of interest error number: -3
             }
         }
 
@@ -97,9 +97,9 @@ csvfile.eachLine { line, index ->
 			}
         }
         catch(Exception e) {
-			recover(lines)
-            System.err << "ERROR: Duplicate observation at line: ${index}"
-            System.exit(-4) // Duplicate observation error number: -4
+//			recover(lines)
+//            System.err << "ERROR: Duplicate observation at line: ${index}"
+//            System.exit(-4) // Duplicate observation error number: -4
         }
 
 		lines.put(index, values)
