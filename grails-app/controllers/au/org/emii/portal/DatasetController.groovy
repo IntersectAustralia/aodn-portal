@@ -35,19 +35,31 @@ class DatasetController {
 
             def database = 'sosdb' // 52north.org SOS server database name
 			def groovy = """/usr/bin/which groovy""".execute().text.trim()
-            def command = """${groovy} /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} ${database}"""
-            log.debug(command)
-			
+
+			def csvFilePath = "/aodn-portal/data/${datasetFile}"
+			def numOfRecords = getNumOfLines(csvFilePath) - 2
+
+			// call groovy script to insert at most 50 data records every time.
 			def proc
-			
-			try {
-				proc = command.execute()                 // Call *execute* on the string
-				proc.waitFor()                           // Wait for the command to finish
-			}
-			catch(e) {
-				log.debug(e.message)
+			for(int index = 0; index < numOfRecords; index + 50) {
+				def command = """${groovy} /aodn-portal/scripts/${datasetType}.groovy
+/aodn-portal/data/${datasetFile} ${database} ${index}"""
+				log.debug(command)
+
+				try {
+					proc = command.execute()                 // Call *execute* on the string
+					proc.waitFor()                           // Wait for the command to finish
+				}
+				catch(e) {
+					log.debug(e.message)
+				}
+
+				if (proc.exitValue() != 0) {
+					break
+				}
 			}
 
+			log.debug("process exit value: " + proc.exitValue())
             if (proc.exitValue() == 0) {
 				session.setAttribute('datasetFile', datasetFile)
 
@@ -82,4 +94,13 @@ class DatasetController {
         render text: result as JSON, contentType: "text/html"
     }
 
+
+	private int getNumOfLines(String filePath) {
+		int numOfLines = 0
+		def csvfile = new File(filePath)
+
+		csvfile.eachLine { numOfLines ++ }
+
+		return numOfLines
+	}
 }

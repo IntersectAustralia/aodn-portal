@@ -48,63 +48,67 @@ phenomena = [0, 0, 0, 0,
             ]
 
 def csvfile = new File(args[0])
+def startLineIndex = args[2]
+def endLineIndex = startLineIndex + 50
 def lines = [:]
 csvfile.eachLine { line, index ->
 
-    if (index == 1) { // header line
-        // Validate schema
-        if (validateSchema(line.split(',')) == false) {
-            System.err << "ERROR: schema validation error"
-            System.exit(-1) // Validation error number: -1
-        }
-    }
+	if(index >= startLineIndex && index < endLineIndex) {
 
-    if (index > 2) { // Ignore units line, start getting values
-        if (line.endsWith(',')) line += '0'
-        String[] values = line.split(',')
-        String foiId
-        
-        try {
-            foiId = getFoi(values)
-        }
-        catch(Exception e) {
-			recover(lines)
-            System.err << "ERROR: geom data error at line: ${index}"
-            System.exit(-2) // Geom data error number: -2
-        }
-
-        if (!findFoi(foiId)) {
-            try {
-                addFoi(foiId, values)
-            }
-            catch(Exception e) {
-//				recover(lines)
-//                System.err << "ERROR: Duplicate feature of interest at line: ${index}"
-//                System.exit(-3) // Duplicate feature of interest error number: -3
-            }
-        }
-
-        try {
-
-			// validation against Time.
-			String time = "${values[TIME]}"
-			if (!time || "24:00".compareTo(time) < 0 ) {
-				recover(lines)
-				System.err << "ERROR: Invalid time value at line: ${index}"
-				System.exit(-5) // Invalid time value error number: -5
-			} else {
-				addToFoi(foiId, values)
+		if (index == 1) { // header line
+			// Validate schema
+			if (validateSchema(line.split(',')) == false) {
+				System.err << "ERROR: schema validation error"
+				System.exit(-1) // Validation error number: -1
 			}
-        }
-        catch(Exception e) {
-//			recover(lines)
-//            System.err << "ERROR: Duplicate observation at line: ${index}"
-//            System.exit(-4) // Duplicate observation error number: -4
-        }
+		}
 
-		lines.put(index, values)
-    }
+		if (index > 2) { // Ignore units line, start getting values
+			if (line.endsWith(',')) line += '0'
+			String[] values = line.split(',')
+			String foiId
 
+			try {
+				foiId = getFoi(values)
+			}
+			catch(Exception e) {
+				//recover(lines)
+				//System.err << "ERROR: geom data error at line: ${index}"
+				//System.exit(-1) // Geom data error number: -2
+			}
+
+			if (!findFoi(foiId)) {
+				try {
+					addFoi(foiId, values)
+				}
+				catch(Exception e) {
+					//recover(lines)
+	                //System.err << "ERROR: Duplicate feature of interest at line: ${index}"
+	                //System.exit(-3) // Duplicate feature of interest error number: -3
+				}
+			}
+
+			try {
+
+				// validation against Time.
+				String time = "${values[TIME]}"
+				if (!time || "24:00".compareTo(time) < 0 ) {
+					recover(lines)
+					System.err << "ERROR: Invalid time value at line: ${index}"
+					System.exit(-1)
+				} else {
+					addToFoi(foiId, values)
+				}
+			}
+			catch(Exception e) {
+				//recover(lines)
+	            //System.err << "ERROR: Duplicate observation at line: ${index}"
+	            //System.exit(-4) // Duplicate observation error number: -4
+			}
+
+			lines.put(index, values)
+		}
+	}
 }
 
 sql.close()
