@@ -47,7 +47,7 @@ class DatasetController {
 				int startIndex = index
 				int endIndex = (numOfRecords - startIndex) >= 50 ? startIndex + 50 : numOfRecords
 
-				def command = """${groovy} /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} ${database} ${startIndex}"""
+				def command = """${groovy} /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} ${database} ${startIndex} ${endIndex}"""
 				log.debug(command)
 
 				try {
