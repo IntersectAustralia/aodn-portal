@@ -121,69 +121,88 @@ phenomenaDataType = [
 
 def lines = [:]
 def csvfile = new File(args[0])
-def startLineIndex = args[2]
-def endLineIndex = startLineIndex + 50
+int startLineIndex = Integer.parseInt(args[2])
+int endLineIndex = Integer.parseInt(args[3])
+int numOfFailedInsertRecords = 0
 csvfile.eachLine { line, index ->
 
-	if(index >= startLineIndex && index < endLineIndex) {
+	// use while loop to stimulate continue in groovy.
+	// Break when 1) any exception thrown, 2) finish process every line of given file.
+	while(true) {
 
-		if (index == 1) { // header line
-			// Validate schema
-			if (validateSchema(line.split(',')) == false) {
-				System.err << "ERROR: schema validation error"
-				System.exit(-1) // Validation error number: -1
-			}
-		}
+		if(index >= startLineIndex && index < endLineIndex) {
 
-		if (index > 2) { // Ignore units line, start getting values
-			if (line.endsWith(',')) line += '0'
-			String[] values = line.split(',')
-			String foiId
-
-			try {
-				foiId = getFoi(values)
-			}
-			catch(Exception e) {
-				recover(lines)
-				System.err << "ERROR: geom data error at line: ${index}"
-				System.exit(-1)
+			if (index == 1) { // header line
+				// Validate schema
+				if (validateSchema(line.split(',')) == false) {
+					sql.close()
+					System.err << "ERROR: schema validation error"
+					System.exit(-1) // Validation error number: -1
+				}
 			}
 
-			if (!findFoi(foiId)) {
+			if (index > 2) { // Ignore units line, start getting values
+				if (line.endsWith(',')) line += '0'
+				String[] values = line.split(',')
+				String foiId
+
 				try {
-					addFoi(foiId, values)
+					foiId = getFoi(values)
+				}
+				catch(Exception e) {
+					recover(lines)
+					sql.close()
+					System.err << "ERROR: geom data error at line: ${index}"
+					System.exit(-1)
+				}
+
+				if (!findFoi(foiId)) {
+					try {
+						addFoi(foiId, values)
+					}
+					catch(Exception e) {
+						//recover(lines)
+						//System.err << "ERROR: Duplicate feature of interest at line: ${index}"
+						//System.exit(-1) // Duplicate feature of interest error number: -3
+						numOfFailedInsertRecords ++
+						break
+					}
+				}
+
+				try {
+					// validation against Time.
+					String time = "${values[TIME]}"
+					if (!time || "24:00".compareTo(time) < 0 ) {
+						recover(lines)
+						sql.close()
+						System.err << "ERROR: Invalid time value at line: ${index}"
+						System.exit(-5) // Invalid time value error number: -5
+					} else {
+						addToFoi(foiId, values)
+					}
 				}
 				catch(Exception e) {
 					//recover(lines)
-					//System.err << "ERROR: Duplicate feature of interest at line: ${index}"
-					//System.exit(-1) // Duplicate feature of interest error number: -3
+					//System.err << "ERROR: Duplicate observation at line: ${index}"
+					//System.exit(-1) // Duplicate observation error number: -4
+					numOfFailedInsertRecords ++
+					break
 				}
-			}
 
-			try {
-				// validation against Time.
-				String time = "${values[TIME]}"
-				if (!time || "24:00".compareTo(time) < 0 ) {
-					recover(lines)
-					System.err << "ERROR: Invalid time value at line: ${index}"
-					System.exit(-5) // Invalid time value error number: -5
-				} else {
-					addToFoi(foiId, values)
-				}
+				lines.put(index, values)
 			}
-			catch(Exception e) {
-				//recover(lines)
-				//System.err << "ERROR: Duplicate observation at line: ${index}"
-				//System.exit(-1) // Duplicate observation error number: -4
-			}
-
-			lines.put(index, values)
 		}
+		break
 	}
 }
 
 sql.close()
-System.exit(0) // quit normally
+
+if(numOfFailedInsertRecords == endLineIndex - startLineIndex) {
+	System.exit(-1000) // quit exceptionally if non record is inserted
+} else {
+	System.exit(0) // quit normally
+}
 
 private void recover(Map<Integer, String[]> lines) {
 

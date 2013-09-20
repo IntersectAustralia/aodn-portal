@@ -40,10 +40,15 @@ class DatasetController {
 			def numOfRecords = getNumOfLines(csvFilePath) - 2
 
 			// call groovy script to insert at most 50 data records every time.
+			def hasInsertRecord = false
 			def proc
-			for(int index = 0; index < numOfRecords; index + 50) {
+			for(int index = 1; index <= numOfRecords; index = index + 50) {
+
+				int startIndex = index
+				int endIndex = (numOfRecords - startIndex) >= 50 ? startIndex + 50 : numOfRecords
+
 				def command = """${groovy} /aodn-portal/scripts/${datasetType}.groovy
-/aodn-portal/data/${datasetFile} ${database} ${index}"""
+/aodn-portal/data/${datasetFile} ${database} ${startIndex} ${endIndex}"""
 				log.debug(command)
 
 				try {
@@ -54,35 +59,45 @@ class DatasetController {
 					log.debug(e.message)
 				}
 
-				if (proc.exitValue() != 0) {
+				if (proc.exitValue() == -1) {
 					break
+				} else if (proc.exitValue() == 0) {
+					hasInsertRecord = true
 				}
 			}
 
 			log.debug("process exit value: " + proc.exitValue())
-            if (proc.exitValue() == 0) {
-				session.setAttribute('datasetFile', datasetFile)
+            if (proc.exitValue() == -1) {
+				result = [
+					success: false,
+					message: proc.err.text
+				]
+            } else {
+				if(hasInsertRecord) {
+					session.setAttribute('datasetFile', datasetFile)
 
-                if (!m.empty) {
-                    session.setAttribute('metadataFile', metadataFile)    
-                }
-                else {
-                    session.setAttribute('metadataFile', null)
-                }
-				
-				session.setAttribute('datasetType', params.int('dataset-type'))
-				
-                result = [
-                    success: true,
-                    message: "Success uploaded and processed ${f.getOriginalFilename()}"
-                ]
-            }
-            else {
-                result = [
-                    success: false,
-                    message: proc.err.text
-                ]
-            }
+					if (!m.empty) {
+						session.setAttribute('metadataFile', metadataFile)
+					}
+					else {
+						session.setAttribute('metadataFile', null)
+					}
+
+					session.setAttribute('datasetType', params.int('dataset-type'))
+
+					result = [
+							success: true,
+							message: "Success uploaded and processed ${f.getOriginalFilename()}"
+					]
+				}  else {
+					result = [
+							success: false,
+							message: "All records in this file are duplicated"
+					]
+				}
+
+			}
+
         }
         else {
             result = [
