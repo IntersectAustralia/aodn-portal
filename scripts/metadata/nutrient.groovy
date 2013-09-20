@@ -175,7 +175,7 @@ csvfile.eachLine { line, index ->
 						recover(lines)
 						sql.close()
 						System.err << "ERROR: Invalid time value at line: ${index}"
-						System.exit(-5) // Invalid time value error number: -5
+						System.exit(-1)
 					} else {
 						addToFoi(foiId, values)
 					}

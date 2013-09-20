@@ -37,7 +37,7 @@ class DatasetController {
 			def groovy = """/usr/bin/which groovy""".execute().text.trim()
 
 			def csvFilePath = "/aodn-portal/data/${datasetFile}"
-			def numOfRecords = getNumOfLines(csvFilePath) - 2
+			def numOfRecords = getNumOfLines(csvFilePath)
 
 			// call groovy script to insert at most 50 data records every time.
 			def hasInsertRecord = false
@@ -47,8 +47,7 @@ class DatasetController {
 				int startIndex = index
 				int endIndex = (numOfRecords - startIndex) >= 50 ? startIndex + 50 : numOfRecords
 
-				def command = """${groovy} /aodn-portal/scripts/${datasetType}.groovy
-/aodn-portal/data/${datasetFile} ${database} ${startIndex} ${endIndex}"""
+				def command = """${groovy} /aodn-portal/scripts/${datasetType}.groovy /aodn-portal/data/${datasetFile} ${database} ${startIndex}"""
 				log.debug(command)
 
 				try {
