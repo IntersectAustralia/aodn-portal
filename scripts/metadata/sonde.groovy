@@ -54,7 +54,7 @@ csvfile.eachLine { line, index ->
 	// Break when 1) any exception thrown, 2) finish process every line of given file.
 	while(true) {
 
-		if(index >= startLineIndex && index < endLineIndex) {
+		if(index >= startLineIndex && index <= endLineIndex) {
 
 			if (index == 1) { // header line
 				// Validate schema
