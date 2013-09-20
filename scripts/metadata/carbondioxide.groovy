@@ -50,7 +50,7 @@ phenomena = [0, 0, 0, 0,
 def csvfile = new File(args[0])
 int startLineIndex = Integer.parseInt(args[2])
 int endLineIndex = Integer.parseInt(args[3])
-int numOfFailedInsertRecords = 0
+def hasInsertRecord = false
 def lines = [:]
 csvfile.eachLine { line, index ->
 	// use while loop to stimulate continue in groovy.
@@ -91,7 +91,6 @@ csvfile.eachLine { line, index ->
 						//recover(lines)
 						//System.err << "ERROR: Duplicate feature of interest at line: ${index}"
 						//System.exit(-3) // Duplicate feature of interest error number: -3
-						numOfFailedInsertRecords ++
 						break
 					}
 				}
@@ -113,11 +112,11 @@ csvfile.eachLine { line, index ->
 					//recover(lines)
 					//System.err << "ERROR: Duplicate observation at line: ${index}"
 					//System.exit(-4) // Duplicate observation error number: -4
-					numOfFailedInsertRecords ++
 					break
 				}
 
 				lines.put(index, values)
+				hasInsertRecord = true
 			}
 		}
 
@@ -126,10 +125,10 @@ csvfile.eachLine { line, index ->
 }
 
 sql.close()
-if(numOfFailedInsertRecords == endLineIndex - startLineIndex) {
-	System.exit(-1000) // quit exceptionally if non record is inserted
-} else {
+if(hasInsertRecord) {
 	System.exit(0) // quit normally
+} else {
+	System.exit(-1000) // quit exceptionally if non record is inserted
 }
 
 private void recover(Map<Integer, String[]> lines) {

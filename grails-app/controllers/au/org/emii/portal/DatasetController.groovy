@@ -64,6 +64,8 @@ class DatasetController {
 				} else if (proc.exitValue() == 0) {
 					hasInsertRecord = true
 				}
+
+				log.debug("process exit value: " + proc.exitValue() + " and hasInsertRecord is: " + hasInsertRecord)
 			}
 
 			log.debug("process exit value: " + proc.exitValue())
