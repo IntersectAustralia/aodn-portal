@@ -47,7 +47,6 @@ def csvfile = new File(args[0])
 int startLineIndex = Integer.parseInt(args[2])
 int endLineIndex = Integer.parseInt(args[3])
 def hasInsertRecord = false
-def lines = [:]
 csvfile.eachLine { line, index ->
 
 	// use while loop to stimulate continue in groovy.
@@ -74,29 +73,19 @@ csvfile.eachLine { line, index ->
 					foiId = getFoi(values)
 				}
 				catch(Exception e) {
-					recover(lines)
 					sql.close()
 					System.err << "ERROR: geom data error at line: ${index}"
 					System.exit(-1) // Geom data error number: -2
 				}
 
-				if (!findFoi(foiId)) {
-					try {
+				try {
+					if (!findFoi(foiId)) {
 						addFoi(foiId, values)
 					}
-					catch(Exception e) {
-						//recover(lines)
-						//System.err << "ERROR: Duplicate feature of interest at line: ${index}"
-						//System.exit(-1) // Duplicate feature of interest error number: -3
-						break
-					}
-				}
 
-				try {
 					// validation against Time.
 					String time = "${values[TIME]}"
 					if (!time || "24:00".compareTo(time) < 0 ) {
-						recover(lines)
 						sql.close()
 						System.err << "ERROR: Invalid time value at line: ${index}"
 						System.exit(-1)
@@ -105,13 +94,10 @@ csvfile.eachLine { line, index ->
 					}
 				}
 				catch(Exception e) {
-					//recover(lines)
-					//System.err << "ERROR: Duplicate observation at line: ${index}"
-					//System.exit(-1) // Duplicate observation error number: -4
+					// ignore all duplicated exception (dc2b-148)
 					break
 				}
 
-				lines.put(index, values)
 				hasInsertRecord = true
 			}
 		}
@@ -127,36 +113,6 @@ if(hasInsertRecord) {
 	System.exit(0) // quit normally
 } else {
 	System.exit(-1000) // quit exceptionally if non record is inserted
-}
-
-
-private void recover(Map<Integer, String[]> lines) {
-
-	for (Integer index : lines.keySet()) {
-
-		String[] values = lines.get(index)
-		String foiId
-
-		try {
-			foiId = getFoi(values)
-		}
-		catch(Exception e) {
-		}
-
-		try {
-			removeFromFoi(foiId, values)
-		}
-		catch(Exception e) {
-		}
-
-		if (findFoi(foiId)) {
-			try {
-				removeFoi(foiId, values)
-			}
-			catch(Exception e) {
-			}
-		}
-	}
 }
 
 private Boolean validateSchema(String[] attrs) {
@@ -215,22 +171,4 @@ private void addToFoi(String foiId, String[] attrs) {
     for (phenomenon in WATER_TEMPERATURE..BP) {
         sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, numeric_value) VALUES (to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH24:MI:SS'), 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: 0) + "')")
     } 
-}
-
-private void removeFoi(String foiId, String[] attrs) {
-	sql.execute("DELETE FROM proc_foi WHERE procedure_id='urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1' and feature_of_interest_id='"+foiId+"'")
-	sql.execute("DELETE FROM foi_off WHERE feature_of_interest_id='"+foiId+"' and offering_id='GAUGE_HEIGHT' ")
-	sql.execute("DELETE FROM feature_of_interest WHERE feature_of_interest_id='"+foiId+"'")
-}
-
-private void removeFromFoi(String foiId, String[] attrs) {
-	// INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id,phenomenon_id,offering_id,numeric_value) values ('2013-04-20 01:16', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', 'foi_1001','urn:ogc:def:phenomenon:OGC:1.0.30:waterlevel','GAUGE_HEIGHT','50.0');
-	// INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'mm', '1','category', 'accuracy');
-	// INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'percent', '10','quantity', 'completeness');
-
-	def timestamp = "${attrs[DATE]} ${attrs[TIME]}"
-
-	for (phenomenon in WATER_TEMPERATURE..BP) {
-		sql.execute("DELETE FROM observation WHERE time_stamp=to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH24:MI:SS') and procedure_id='urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1' and feature_of_interest_id='" + foiId + "' and phenomenon_id='" + phenomena[phenomenon] + "' and offering_id='GAUGE_HEIGHT'")
-	}
 }

@@ -88,7 +88,7 @@ class DatasetController {
 
 					result = [
 							success: true,
-							message: "Success uploaded and processed ${f.getOriginalFilename()}"
+							message: "Successfully uploaded and processed ${f.getOriginalFilename()}"
 					]
 				}  else {
 					result = [
