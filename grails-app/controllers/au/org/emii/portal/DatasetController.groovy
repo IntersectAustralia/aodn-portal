@@ -58,7 +58,7 @@ class DatasetController {
 					log.debug(e.message)
 				}
 
-				if (proc.exitValue() == -1) {
+				if (proc.exitValue() == 1) {
 					break
 				} else if (proc.exitValue() == 0) {
 					hasInsertRecord = true
@@ -68,7 +68,7 @@ class DatasetController {
 			}
 
 			log.debug("process exit value: " + proc.exitValue())
-            if (proc.exitValue() == -1) {
+            if (proc.exitValue() == 1) {
 				result = [
 					success: false,
 					message: proc.err.text

@@ -63,7 +63,7 @@ csvfile.eachLine { line, index ->
 				if (validateSchema(line.split(',')) == false) {
 					sql.close()
 					System.err << "ERROR: schema validation error"
-					System.exit(-1) // Validation error number: -1
+					System.exit(1) // Validation error number
 				}
 			}
 
@@ -78,7 +78,7 @@ csvfile.eachLine { line, index ->
 				catch(Exception e) {
 					sql.close()
 					System.err << "ERROR: geom data error at line: ${index}"
-					System.exit(-1) // Geom data error number: -2
+					System.exit(1) // Geom data error number
 				}
 
 				try {
@@ -91,7 +91,7 @@ csvfile.eachLine { line, index ->
 					if (!time || "24:00".compareTo(time) < 0 ) {
 						sql.close()
 						System.err << "ERROR: Invalid time value at line: ${index}"
-						System.exit(-1)
+						System.exit(1)
 					} else {
 						addToFoi(foiId, values)
 					}
@@ -113,7 +113,7 @@ sql.close()
 if(hasInsertRecord) {
 	System.exit(0) // quit normally
 } else {
-	System.exit(-1000) // quit exceptionally if non record is inserted
+	System.exit(2) // set exit code to 2 if non record is inserted
 }
 
 private Boolean validateSchema(String[] attrs) {
