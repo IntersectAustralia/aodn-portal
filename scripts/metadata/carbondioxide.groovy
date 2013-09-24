@@ -93,7 +93,10 @@ csvfile.eachLine { line, index ->
 						System.err << "ERROR: Invalid time value at line: ${index}"
 						System.exit(1)
 					} else {
-						addToFoi(foiId, values)
+						def isDuplicated = addToFoi(foiId, values)
+						if(isDuplicated) {
+							break
+						}
 					}
 				}
 				catch(Exception e) {
@@ -164,14 +167,22 @@ private void addFoi(String foiId, String[] attrs) {
     sql.execute('INSERT INTO proc_foi VALUES (?, ?)', ['urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', foiId])
 }
 
-private void addToFoi(String foiId, String[] attrs) {
+private boolean addToFoi(String foiId, String[] attrs) {
     // INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id,phenomenon_id,offering_id,numeric_value) values ('2013-04-20 01:16', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', 'foi_1001','urn:ogc:def:phenomenon:OGC:1.0.30:waterlevel','GAUGE_HEIGHT','50.0'); 
     // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'mm', '1','category', 'accuracy');
     // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'percent', '10','quantity', 'completeness');
 
+	boolean isDuplicatedRecord = true
     def timestamp = "${attrs[DATE]} ${attrs[TIME]}"
 
     for (phenomenon in WATER_TEMPERATURE..PROBE_TYPE) {
-        sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, numeric_value) VALUES (to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH24:MI:SS'), 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: 0) + "')")
-    } 
+		try {
+        	sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, numeric_value) VALUES (to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH24:MI:SS'), 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: 0) + "')")
+    		isDuplicatedRecord = false
+		} catch (Exception e) {
+			// Do nothing.
+		}
+	}
+
+	return isDuplicatedRecord
 }
