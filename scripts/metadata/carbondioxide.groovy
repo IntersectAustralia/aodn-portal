@@ -172,17 +172,22 @@ private boolean addToFoi(String foiId, String[] attrs) {
     // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'mm', '1','category', 'accuracy');
     // INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'percent', '10','quantity', 'completeness');
 
+	// if all the colums of this record with a duplicated value, then it is a duplicated record.
 	boolean isDuplicatedRecord = true
     def timestamp = "${attrs[DATE]} ${attrs[TIME]}"
 
     for (phenomenon in WATER_TEMPERATURE..PROBE_TYPE) {
-		try {
+		if(isNewObservation(foiId, timestamp, phenomenon)) {
         	sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, numeric_value) VALUES (to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH24:MI:SS'), 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: 0) + "')")
     		isDuplicatedRecord = false
-		} catch (Exception e) {
-			// Do nothing.
 		}
 	}
 
 	return isDuplicatedRecord
+}
+
+private boolean isNewObservation(String foiId, def timestamp, int phenomenon) {
+	//"Select * FROM observation WHERE time_stamp=to_timestamp('01/01/1200 09:39:00', 'DD/MM/YYYY HH24:MI:SS')  and procedure_id='urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1' and feature_of_interest_id='0101000020E6100000E9FB5F6478E8624030C82B4A68EB40C0' and phenomenon_id='urn:ogc:def:phenomenon:OGC:1.0.30:bp' and offering_id='GAUGE_HEIGHT';"
+	sqlString = "SELECT * FROM observation WHERE time_stamp=to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH24:MI:SS') and procedure_id='urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1' and feature_of_interest_id='" + foiId + "' and phenomenon_id='" + phenomena[phenomenon] + "' and offering_id='GAUGE_HEIGHT'"
+	return sql.rows(sqlString).size() <= 0
 }
