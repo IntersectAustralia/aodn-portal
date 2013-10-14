@@ -143,21 +143,16 @@ csvfile.eachLine { line, index ->
 			System.exit(-2) // Geom data error number: -2
 		}
 
-		try {
-			removeFromFoi(foiId, values)
-		}
-		catch(Exception e) {
-			System.err << "ERROR: Failed to remove observation at line: ${index}"
-			System.exit(-4) // Duplicate observation error number: -4
+		if (findFoi(foiId)) {
+		  try {
+		    removeFromFoi(foiId, values)
+		  }
+		  catch(Exception e) {
+		    System.err << "ERROR: Failed to remove observation at line: ${index}"
+		    System.exit(-4) // Duplicate observation error number: -4
+		  }
 		}
 
-		if (findFoi(foiId)) {
-			try {
-				removeFoi(foiId, values)
-			}
-			catch(Exception e) {
-			}
-		}
 	}
 
 }
@@ -225,12 +220,6 @@ private Boolean findFoi(String foiId) {
 	return rows.size() > 0
 }
 
-//private void addFoi(String foiId, String[] attrs) {
-//	sql.execute("INSERT INTO feature_of_interest (feature_of_interest_id, feature_of_interest_name, feature_of_interest_description, geom, feature_type, schema_link) VALUES ('" + foiId + "', 'SHED', 'Sydney Harbour Environment Data', GeometryFromText('POINT(" + (attrs[LONGITUDE] ?: 0) + " " + (attrs[LATITUDE] ?: 0) + ")', 4326), 'sa:SamplingPoint', 'http://xyz.org/reference-url2.html')")
-//	sql.execute('INSERT INTO foi_off VALUES (?, ?)', [foiId, 'GAUGE_HEIGHT'])
-//	sql.execute('INSERT INTO proc_foi VALUES (?, ?)', ['urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', foiId])
-//}
-
 private void removeFoi(String foiId, String[] attrs) {
 	sql.execute("DELETE FROM proc_foi WHERE procedure_id='urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1' and feature_of_interest_id='"+foiId+"'")
 	sql.execute("DELETE FROM foi_off WHERE feature_of_interest_id='"+foiId+"' and offering_id='GAUGE_HEIGHT' ")
@@ -238,10 +227,6 @@ private void removeFoi(String foiId, String[] attrs) {
 }
 
 private void removeFromFoi(String foiId, String[] attrs) {
-	// INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id,phenomenon_id,offering_id,numeric_value) values ('2013-04-20 01:16', 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', 'foi_1001','urn:ogc:def:phenomenon:OGC:1.0.30:waterlevel','GAUGE_HEIGHT','50.0');
-	// INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'mm', '1','category', 'accuracy');
-	// INSERT INTO quality(observation_id, quality_unit, quality_value, quality_type, quality_name) values (currval(pg_get_serial_sequence('observation','observation_id')),'percent', '10','quantity', 'completeness');
-
 	def timestamp = "${attrs[DATE]} ${attrs[TIME]}"
 
 	for (phenomenon in WATER_TEMPERATURE..VERTLOC_COMMENT) {
