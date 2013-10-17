@@ -275,6 +275,8 @@ private boolean addToFoi(String foiId, String[] attrs) {
 			else if (phenomenaDataType[phenomenon] == 'textType') {
 				sql.execute("INSERT INTO observation (time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id, text_value) VALUES (to_timestamp('" + timestamp + "', 'DD/MM/YYYY HH24:MI:SS'), 'urn:ogc:object:feature:Sensor:IFGI:ifgi-sensor-1', '" + foiId + "','" + phenomena[phenomenon] + "', 'GAUGE_HEIGHT', '" + (attrs[phenomenon] ?: '') + "')")
 			}
+			isDuplicatedRecord = false
+
 		}
     }
 
