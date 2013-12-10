@@ -63,6 +63,9 @@ Portal.details.AnimationControlsPanel = Ext.extend(Ext.Panel, {
 		this.TIME_FORMAT = 'H:i:s (P)';
 		this.DATE_TIME_FORMAT = this.DATE_FORMAT + ' ' + this.TIME_FORMAT;
 		this.STEP_LABEL_DATE_TIME_FORMAT = this.DATE_FORMAT + " H:i:s";
+		
+		dt = new Date();
+		this.TIMEZONE_OFFSET = dt.getTimezoneOffset();
 
 		this.BASE_SPEED = 500;
 		this.MAX_SPEED_MULTIPLIER = 32;
@@ -912,7 +915,9 @@ Portal.details.AnimationControlsPanel = Ext.extend(Ext.Panel, {
 		var splitDates = dim.extent.split(",");
 		if (splitDates.length > 0) {
 			var startDate = this._parseIso8601Date(splitDates[0]);
+			startDate = this.asUTCDate(startDate);
 			var endDate = this._parseIso8601Date(splitDates.last());
+			endDate = this.asUTCDate(endDate);
 			
 					
 
@@ -924,8 +929,10 @@ Portal.details.AnimationControlsPanel = Ext.extend(Ext.Panel, {
 			this._setMissingDays(splitDates);
 
 			var defaultStart = this._getTimeComboStartDate(splitDates);
+			defaultStart = this.asUTCDate(defaultStart);
 			//endDate gets stuffed up by the picker when we setDateRange, hence redoing the retrieval
 			var defaultEnd = this._parseIso8601Date(splitDates.last());
+			defaultEnd = this.asUTCDate(defaultEnd);
 			
 			this._setTime(this.startDatePicker, this.startTimeCombo, defaultStart);
 			this._setTime(this.endDatePicker, this.endTimeCombo, defaultEnd);
@@ -936,7 +943,7 @@ Portal.details.AnimationControlsPanel = Ext.extend(Ext.Panel, {
 		this.allTimes = {};
 
 		for (var j = 0; j < dateStringsArray.length; j++) {
-			var date = Date.parseDate(dateStringsArray[j], "c");
+			var date = this.asUTCDate(Date.parseDate(dateStringsArray[j], "c"));
 			var dayString = this._toDateString(date);
 			var timeString = this._toTimeString(date);
 			var timeRoundedString = this._toTimeString(this
@@ -956,8 +963,8 @@ Portal.details.AnimationControlsPanel = Ext.extend(Ext.Panel, {
 		}
 
 		var missingDays = [];
-		var curDate = this._parseIso8601Date(dateStringsArray[0]);
-		var endDate = this._parseIso8601Date(dateStringsArray.last());
+		var curDate = this.asUTCDate(this._parseIso8601Date(dateStringsArray[0]));
+		var endDate = this.asUTCDate(this._parseIso8601Date(dateStringsArray.last()));
 		while (curDate < endDate) {
 			var day = this._toDateString(curDate);
 			if (this.allTimes[day] == null) {
@@ -1084,9 +1091,9 @@ Portal.details.AnimationControlsPanel = Ext.extend(Ext.Panel, {
 
 	_toUtcIso8601DateString : function(date, timeString) {
 		if (timeString) {
-			return this._toUtcIso8601DateString(Date.parseDate(date
+			return this._toUtcIso8601DateString(this.asLocalDate(Date.parseDate(date
 							.format(this.DATE_FORMAT)
-							+ ' ' + timeString, this.DATE_TIME_FORMAT));
+							+ ' ' + timeString, this.DATE_TIME_FORMAT)));
 		}
 		return this._toUtcDateString(date) + 'T' + this._toUtcTimeString(date);
 	},
@@ -1096,7 +1103,7 @@ Portal.details.AnimationControlsPanel = Ext.extend(Ext.Panel, {
 	},
 
 	_setTimeAsStepLabelText : function(dateTimeString) {
-		this._setStepLabelText(this._parseIso8601Date(dateTimeString)
+		this._setStepLabelText(this.asUTCDate(this._parseIso8601Date(dateTimeString))
 				.format(this.STEP_LABEL_DATE_TIME_FORMAT));
 	},
 
@@ -1130,6 +1137,14 @@ Portal.details.AnimationControlsPanel = Ext.extend(Ext.Panel, {
 			displayField : 'roundedTime',
 			width : 110
 		};
+	},
+	
+	asUTCDate: function(date) {
+		return date.add(Date.MINUTE, this.TIMEZONE_OFFSET);
+	},
+	
+	asLocalDate: function(date) {
+		return date.add(Date.MINUTE, -1 * this.TIMEZONE_OFFSET);
 	}
 
 });

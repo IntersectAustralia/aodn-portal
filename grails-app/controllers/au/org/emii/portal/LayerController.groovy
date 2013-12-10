@@ -305,7 +305,7 @@ class LayerController {
 
         log.info "Capabilities data length: ${params.capabilitiesData?.length()}"
         log.debug "metadata: ${params.metadata}"
-		log.debug "capabalitiesData: ${params.capabilitiesData}"
+		log.debug "capabilitiesData: ${params.capabilitiesData}"
 		
         // Check credentials
         try {
