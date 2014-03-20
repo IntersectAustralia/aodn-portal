@@ -128,7 +128,7 @@ class MetadataService {
 					location() {
 						address() {
 							electronic(type:"url") {
-								value("www.sydney.edu.au/sho")
+								value("http://sho.sydney.edu.au/")
 							}
 						}
 					}
@@ -159,7 +159,7 @@ class MetadataService {
 
 					// Hard Code for USYD
 					relatedObject() {
-						key("http://nla.gov.au/nla.collector-593941")
+						key("http://nla.gov.au/nla.party-593941")
 						relation(type:"isManagerBy")
 					}
 
