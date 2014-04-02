@@ -160,7 +160,7 @@ class MetadataService {
 					// Hard Code for USYD
 					relatedObject() {
 						key("http://nla.gov.au/nla.party-593941")
-						relation(type:"isManagerBy")
+						relation(type:"isManagedBy")
 					}
 
 					// Data Custodian
